@@ -1,9 +1,8 @@
 #include <naiveConsole.h>
 
 char get_call(void);
-//void write();
 
-void write()
+void int80()
 {
 	char c = get_call();
 	ncPrintChar(c);	

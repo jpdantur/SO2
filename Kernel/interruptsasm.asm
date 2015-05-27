@@ -1,12 +1,12 @@
-global _sysCall
+global _int80Handler
 global _timerTick
 global _keyboard
-extern write
+extern int80
 extern timerTick
 extern keyboard
 
-_sysCall:
-	call write
+_int80Handler:
+	call int80
 	iretq
 
 ;_timerTick:

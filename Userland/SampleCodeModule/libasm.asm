@@ -4,8 +4,8 @@ sys_write:
 	push rbp
 	mov rbp,rsp
 	push rbx
-	mov rbx,1	
-	mov rax,4
+	mov rbx,1 ;STDOUT	
+	mov rax,4 ;write
 	mov rcx,rdi ;char
 	mov rdx,1 ;len
 	int 80h

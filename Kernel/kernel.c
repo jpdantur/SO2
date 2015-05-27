@@ -17,7 +17,7 @@ static const uint64_t PageSize = 0x1000;
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
 
-void _sysCall(void);
+void _int80Handler(void);
 //void _timerTick(void);
 //void _keyboard(void);
 
@@ -116,7 +116,7 @@ void set_interrupts()
 {	
 	DESCR_INT* idt;
 	idt=0;
-	setup_IDT_entry(idt,0x80,0x08,&_sysCall,0x8E);
+	setup_IDT_entry(idt,0x80,0x08,&_int80Handler,0x8E);
 	//setup_IDT_entry(idt,0x20,0x08,&_timerTick,0x8E);
 	//setup_IDT_entry(idt,0x21,0x08,&_keyboard,0x8E);
 }
