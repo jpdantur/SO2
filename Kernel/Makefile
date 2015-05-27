@@ -4,17 +4,21 @@ KERNEL=kernel.bin
 SOURCES=$(wildcard *.c)
 OBJECTS=$(SOURCES:.c=.o)
 LOADERSRC=loader.asm
+ASMSOURCES=$(filter-out $(LOADERSRC), $(wildcard *.asm))
+ASMOBJECTS=$(ASMSOURCES:.asm=.o)
 
 LOADEROBJECT=$(LOADERSRC:.asm=.o)
 STATICLIBS=
 
 all: $(KERNEL)
 
-$(KERNEL): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS)
-	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL) $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS)
+$(KERNEL): $(LOADEROBJECT) $(OBJECTS) $(ASMOBJECTS) $(STATICLIBS)
+	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL) $(LOADEROBJECT) $(ASMOBJECTS) $(OBJECTS) $(STATICLIBS)
 
 %.o: %.c
 	$(GCC) $(GCCFLAGS) -I./include -c $< -o $@
+%.o: %.asm
+	$(ASM) $(ASMFLAGS) $< -o $@
 
 $(LOADEROBJECT):
 	$(ASM) $(ASMFLAGS) $(LOADERSRC) -o $(LOADEROBJECT)

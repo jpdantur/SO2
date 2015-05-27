@@ -27,6 +27,13 @@
 *.i*86
 *.x86_64
 *.hex
+*.gitignore~
 
+*.c~
+*.asm~
+*.h~
+*.sh~
+*.img
+*.bin
 # Debug files
 *.dSYM/

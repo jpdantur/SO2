@@ -3,6 +3,7 @@
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
+#include <types.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -15,6 +16,12 @@ static const uint64_t PageSize = 0x1000;
 
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
+
+void _sysCall(void);
+//void _timerTick(void);
+//void _keyboard(void);
+
+void setup_IDT_entry (DESCR_INT* idt,int index, word selector, ddword offset, byte access);
 
 typedef int (*EntryPoint)();
 
@@ -76,7 +83,7 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	ncPrint("[Kernel Main]");
+	/*ncPrint("[Kernel Main]");
 	ncNewline();
 	ncPrint("  Sample code module at 0x");
 	ncPrintHex((uint64_t)sampleCodeModuleAddress);
@@ -94,5 +101,33 @@ int main()
 	ncNewline();
 
 	ncPrint("[Finished]");
+        */
+	ncClear();
+	set_interrupts();
+	((EntryPoint)sampleCodeModuleAddress)();
+	//ncClear();
+	//set_interrupts();
+	while(1){
+	}
 	return 0;
+}
+
+void set_interrupts()
+{	
+	DESCR_INT* idt;
+	idt=0;
+	setup_IDT_entry(idt,0x80,0x08,&_sysCall,0x8E);
+	//setup_IDT_entry(idt,0x20,0x08,&_timerTick,0x8E);
+	//setup_IDT_entry(idt,0x21,0x08,&_keyboard,0x8E);
+}
+
+void setup_IDT_entry (DESCR_INT* idt,int index, word selector, ddword offset, byte access)
+{
+	idt[index].selector = selector;
+	idt[index].offset_l = offset & 0xFFFF;
+	idt[index].offset_m = offset >> 16;
+	idt[index].offset_h = offset >> 32;
+	idt[index].access = access;
+	idt[index].cero = 0;
+	idt[index].zero = 0;
 }

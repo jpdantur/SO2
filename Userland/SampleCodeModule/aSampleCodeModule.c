@@ -8,6 +8,8 @@ extern char endOfBinary;
 static int var1 = 0;
 static int var2 = 0;
 
+void print(char * str);
+
 void * memset(void * destiny, int32_t c, uint64_t length);
 
 int main() {
@@ -15,7 +17,9 @@ int main() {
 	memset(&bss, 0, &endOfBinary - &bss);
 
 	//All the following code may be removed 
-	*v = 'X';
+	//*v = 'X';
+	//char str[]="GDSGFDSGFDSGFDSGDF";
+	print("ASDASDASD");
 
 	//Test if BSS is properly set up
 	if (var1 == 0 && var2 == 0)
