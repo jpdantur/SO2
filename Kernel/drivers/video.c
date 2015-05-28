@@ -1,4 +1,5 @@
-#include "video.h"
+#include <video.h>
+#include <stdint.h>
 
 char * video = VIDEO_START;
 static const uint32_t width = 80;

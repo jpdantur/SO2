@@ -1,13 +1,7 @@
-global get_call
-
 global get_rax
 global get_rbx
 global get_rcx
 global get_rdx
-
-get_call:
-	mov rax, rcx
-	ret
 
 get_rax:
 	ret
