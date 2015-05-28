@@ -4,7 +4,6 @@ char * video = VIDEO_START;
 
 void video_write_byte(char c)
 {
-	char c = get_rcx();
 	*video = c;
 	video_next_char();
 }
