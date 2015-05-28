@@ -28,6 +28,9 @@
 *.x86_64
 *.hex
 *.gitignore~
+*.qcow2
+*.vmdk
+/Image/*
 
 *.c~
 *.asm~
