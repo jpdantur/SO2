@@ -15,7 +15,7 @@ void int80()
 	{
 		case SYSCALL_WRITE:
 			char c = get_rcx();
-			video_write_byte(char c);
+			video_write_byte(c);
 			break;
 
 		default:
