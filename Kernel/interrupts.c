@@ -24,3 +24,8 @@ void int80()
 	}
 }
 
+void timerTick()
+{
+	//video_write_byte('f');
+}
+

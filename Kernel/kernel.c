@@ -16,12 +16,18 @@ static const uint64_t PageSize = 0x1000;
 
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
-
+//DESCR_INT idt[0x81];
+//IDTR idtr;
 void _int80Handler(void);
-//void _timerTick(void);
-//void _keyboard(void);
+void _timerTick(void);
+void _keyboard(void);
+void picMasterMask(char flag);
+void picSlaveMask(char flag);
+void _sti(void);
 
-void setup_IDT_entry (DESCR_INT* idt,int index, word selector, ddword offset, byte access);
+void write_port(int port,char data);
+
+void setup_IDT_entry (DESCR_INT* idt, int index, word selector, ddword offset, byte access);
 
 typedef int (*EntryPoint)();
 
@@ -114,19 +120,26 @@ int main()
 
 void set_interrupts()
 {	
+	//idtr.base = 0;  
+	//idtr.base +=(ddword) &idt;
+	//idtr.limit = sizeof(idt)-1;
+	//_lidt (&idtr);
 	DESCR_INT* idt;
 	idt=0;
-	setup_IDT_entry(idt,0x80,0x08,&_int80Handler,0x8E);
-	//setup_IDT_entry(idt,0x20,0x08,&_timerTick,0x8E);
-	//setup_IDT_entry(idt,0x21,0x08,&_keyboard,0x8E);
+	setup_IDT_entry(idt, 0x80,0x08,&_int80Handler,0x8E);
+	setup_IDT_entry(idt, 0x20,0x08,&_timerTick,0x8E);
+	setup_IDT_entry(idt, 0x21,0x08,&_keyboard,0x8E);
+	picMasterMask(0xFC);
+	picSlaveMask(0xFF);
+	_sti();
 }
 
-void setup_IDT_entry (DESCR_INT* idt,int index, word selector, ddword offset, byte access)
+void setup_IDT_entry (DESCR_INT *idt,int index, word selector, ddword offset, byte access)
 {
 	idt[index].selector = selector;
 	idt[index].offset_l = offset & 0xFFFF;
-	idt[index].offset_m = offset >> 16;
-	idt[index].offset_h = offset >> 32;
+	idt[index].offset_m = (offset & 0xFFFF0000) >> 16;
+	idt[index].offset_h = (offset & 0xFFFFFFFF00000000)>> 32;
 	idt[index].access = access;
 	idt[index].cero = 0;
 	idt[index].zero = 0;
