@@ -83,9 +83,9 @@ void video_scroll()
 void video_backspace(){
 	if (video_bff_counter > 0){
 		video_bff_counter--;
+		video_prev_char();
 		*video = 0;
 	}
-	video_prev_char();
 }
 
 void video_reset_bff_counter(){
