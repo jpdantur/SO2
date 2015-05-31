@@ -5,7 +5,7 @@
 char get_call(void);
 char get_rax(void);
 char get_rcx(void);
-
+char i='A';
 
 void int80()
 {
@@ -26,6 +26,7 @@ void int80()
 
 void timerTick()
 {
-	//video_write_byte('f');
+	video_write_byte(i);
+	i++;
 }
 
