@@ -5,9 +5,11 @@ char * video = VIDEO_START;
 static const uint32_t width = 80;
 static const uint32_t height = 25;
 
+char * video_end = VIDEO_START + (height*width*2) - 2;
+
 void video_write_byte(char c)
 {
-	if (video == VIDEO_START + (height*width*2))
+	if (video == video_end))
 		video_scroll();
 	
 	*video = c;
@@ -40,14 +42,18 @@ void video_new_line()
 
 void video_scroll()
 {
-	char * next_line = VIDEO_START + width * 2;
+	char * copy_to = VIDEO_START + width * 2;
 	video = VIDEO_START;
 
 	do
 	{
-		video_write_byte(next_line);
+		*video = *copy_from;
+		video += 2;
+		copy_from += 2;
 	}
-	while ((uint64_t)next_line != VIDEO_START + (height * width * 2));
+	while ((uint64_t)copy_from != video_end;
 
 	video = VIDEO_START + (width * (height-1) * 2);
+
+
 }
