@@ -6,6 +6,9 @@ static const uint32_t height = 25;
 
 void video_write_byte(char c)
 {
+	if (video == VIDEO_START + (height*width*2))
+		video_scroll();
+	
 	*video = c;
 	video_next_char();
 }
