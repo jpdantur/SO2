@@ -19,7 +19,7 @@ int main() {
 	//All the following code may be removed 
 	//*v = 'X';
 	//char str[]="GDSGFDSGFDSGFDSGDF";
-	print("ASDASDASD");
+	print("Dimusa6$ Hola, este es el mejor sistema operativo del mundo, los otros son caca, aguante Visual Basic");
 
 	//Test if BSS is properly set up
 	if (var1 == 0 && var2 == 0)

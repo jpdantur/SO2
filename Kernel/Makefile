@@ -1,10 +1,10 @@
 include Makefile.inc
 
 KERNEL=kernel.bin
-SOURCES=$(wildcard *.c)
+SOURCES=drivers/keyboard.c $(wildcard *.c) drivers/video.c 
 OBJECTS=$(SOURCES:.c=.o)
 LOADERSRC=loader.asm
-ASMSOURCES=$(filter-out $(LOADERSRC), $(wildcard *.asm))
+ASMSOURCES=$(filter-out $(LOADERSRC), $(wildcard *.asm)) drivers/driversasm.asm
 ASMOBJECTS=$(ASMSOURCES:.asm=.o)
 
 LOADEROBJECT=$(LOADERSRC:.asm=.o)
