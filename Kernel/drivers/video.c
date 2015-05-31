@@ -23,6 +23,7 @@ void video_write_byte(char c)
 	
 	*video = c;
 	video_next_char();
+	video_buffer_counter_inc();
 }
 
 void video_next_char()
@@ -90,6 +91,9 @@ void video_backspace(){
 
 void video_reset_bff_counter(){
 	video_bff_counter = 0;
+}
+void video_bff_counter_inc(){
+	video_bff_counter++;
 }
 
 void __video_debug(char c)
