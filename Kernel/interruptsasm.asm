@@ -3,25 +3,32 @@ global _timerTick
 global _keyboard
 extern int80
 extern timerTick
-extern keyboard
+extern keyboard_buffer_write
 global picMasterMask
 global picSlaveMask
 global _sti
 
+setParams:
+	mov rdi,rcx
+	ret
+
 _int80Handler:
+	call setParams
 	call int80
 	iretq
 
 _timerTick:
 	call timerTick
+	push rax
 	mov al,0x20
 	out 0x20,al
+	pop rax
 	iretq
 
 _keyboard:
-	call keyboard
-	mov al,0x20
-	out 0x20,al
+	call keyboard_buffer_write
+	mov al,0x20 ;EOI
+	out 0x20,al ;
 	iretq
 
 picMasterMask:

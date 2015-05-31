@@ -2,6 +2,7 @@
 #include <stdint.h>
 
 char * video = VIDEO_START;
+char * video_debug = VIDEO_LAST_LINE_START;
 
 void video_write_byte(char c)
 {
@@ -60,4 +61,19 @@ void video_scroll()
 	video = VIDEO_START + (VIDEO_WIDTH * (VIDEO_HEIGHT-1) * 2);
 
 
+}
+void __video_debug(char c)
+{
+	*video_debug = c;
+	video_debug += 2;
+	if (video_debug == VIDEO_END){
+		video_debug = VIDEO_LAST_LINE_START;
+		while (video_debug != VIDEO_END){
+			*video_debug = 0;
+			video_debug += 2;
+		}
+		video_debug = VIDEO_LAST_LINE_START;
+	}
+
+	
 }

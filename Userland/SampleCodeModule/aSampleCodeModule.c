@@ -9,6 +9,7 @@ static int var1 = 0;
 static int var2 = 0;
 
 void print(char * str);
+void sys_read(char * p);
 
 void * memset(void * destiny, int32_t c, uint64_t length);
 
@@ -20,6 +21,17 @@ int main() {
 	//*v = 'X';
 	//char str[]="GDSGFDSGFDSGFDSGDF";
 	print("Dimusa6$ Hola, este es el mejor sistema operativo del mundo, los otros son caca, aguante Visual Basic");
+	//putchar(-1);
+
+	while(1){
+		char c;
+		sys_read(&c);
+
+		if (c != -1){
+			putchar(c);
+			//*((char*)0xB800C)=c;
+		}
+	}
 
 	//Test if BSS is properly set up
 	if (var1 == 0 && var2 == 0)
