@@ -50,9 +50,10 @@ void keyboard_buffer_write(){
 	status = read_port(0x64);
 	if (status & 0x01) {
 		keycode = read_port(0x60);
-		if(keycode > 0 && w<256)
+		if(keycode > 0)
 		{
-			buffer[w++]=keyboard_map[keycode];
+			buffer[w%256]=keyboard_map[keycode];
+      w++;
       //__video_debug(keyboard_map[keycode]);
 			//*((char*)0xB8000)=w+'0';
 		}
@@ -64,12 +65,13 @@ char keyboard_buffer_read(){
 	if (r==w)
 	{
 		//*((char*)0xB8004)='R';
-		r=w=0;
 		return EOF;
 	}
   //__video_debug('N');
 	//*((char*)0xB8004)='N';
 	//*((char*)0xB8002)=r+'0';
   //*((char*)0xB800A)=buffer[r];
-	return buffer[r++];
+	char ret = buffer[r%256];
+  r++;
+  return ret;
 }

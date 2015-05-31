@@ -13,18 +13,23 @@ void video_write_byte(char c)
 	}
 
 	if (c == '\n'){
+		//__video_debug('B');
 		video_new_line();
 		video_reset_bff_counter();
 		return;
 	}
 
-	if (c == '\0'){
+
+	if (c == -1){
 		video_reset_bff_counter();
 		return;
 	}
 
 	if (video == VIDEO_END)
+	{
+		//__video_debug(video-0xB8000+'0');
 		video_scroll();
+	}
 	
 	*video = c;
 	video_next_char();
@@ -54,13 +59,18 @@ void video_new_line()
 {
 	do
 	{
-		video_write_byte(0);
+		*video = 0;
+		video += 2;
 	}
 	while((uint64_t)(video - VIDEO_START) % (VIDEO_WIDTH * 2) != 0);
+
+	if (video == VIDEO_END)
+		video_scroll();
 }
 
 void video_scroll()
 {
+	//__video_debug('X');
 	char * copy_from = VIDEO_START + VIDEO_WIDTH * 2;
 	video = VIDEO_START;
 

@@ -4,7 +4,7 @@
 #define VIDEO_END (VIDEO_START+VIDEO_HEIGHT*VIDEO_WIDTH*2-2)
 #define VIDEO_LAST_LINE_START (VIDEO_START + ((VIDEO_HEIGHT - 1) * VIDEO_WIDTH * 2))
 
-#define BACKSPACE_BYTE 8
+#define BACKSPACE_BYTE '\b'
 
 void video_write_byte(char c);
 void __video_debug(char c);

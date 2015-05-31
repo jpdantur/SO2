@@ -20,19 +20,17 @@ int main() {
 	//All the following code may be removed 
 	//*v = 'X';
 	//char str[]="GDSGFDSGFDSGFDSGDF";
-	print("Dimusa6$ Hola, este es el mejor sistema operativo del mundo, los otros son caca, aguante Visual Basic");
+	while (1)
+	{
+		print("Mister Poronga>");
 	//putchar(-1);
-
-	while(1){
 		char c;
-		sys_read(&c);
-
-		if (c != -1){
-			putchar(c);
-			//*((char*)0xB800C)=c;
-		}
+		do
+		{
+			c=getchar();
+			//putchar('7');
+		} while(c!='\n');
 	}
-
 	//Test if BSS is properly set up
 	if (var1 == 0 && var2 == 0)
 		return 0xDEADC0DE;
