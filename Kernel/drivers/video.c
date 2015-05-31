@@ -3,9 +3,21 @@
 
 char * video = VIDEO_START;
 char * video_debug = VIDEO_LAST_LINE_START;
+int video_bff_counter = 0;
 
 void video_write_byte(char c)
 {
+	if (c == BACKSPACE_BYTE){
+		video_backspace();
+		return;
+	}
+
+	if (c == '\n'){
+		video_new_line();
+		video_reset_bff_counter();
+		return;
+	}
+
 	if (video == VIDEO_END)
 		video_scroll();
 	
@@ -16,6 +28,10 @@ void video_write_byte(char c)
 void video_next_char()
 {
 	video += 2;
+}
+
+void video_prev_char(){
+	video -= 2;
 }
 
 void video_clear_screen()
@@ -62,6 +78,18 @@ void video_scroll()
 	video = VIDEO_START + (VIDEO_WIDTH * (VIDEO_HEIGHT-1) * 2);
 
 
+}
+
+void video_backspace(){
+	if (video_bff_counter > 0){
+		video_bff_counter--;
+		*video = 0;
+	}
+	video_prev_char();
+}
+
+void video_reset_bff_counter(){
+	video_bff_counter = 0;
 }
 
 void __video_debug(char c)
