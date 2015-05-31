@@ -56,12 +56,14 @@ void video_scroll()
 	{
 		*video = 0;
 		video += 2;
-	}while(video != VIDEO_END);
+	}
+	while(video != VIDEO_END);
 
 	video = VIDEO_START + (VIDEO_WIDTH * (VIDEO_HEIGHT-1) * 2);
 
 
 }
+
 void __video_debug(char c)
 {
 	*video_debug = c;
@@ -75,5 +77,4 @@ void __video_debug(char c)
 		video_debug = VIDEO_LAST_LINE_START;
 	}
 
-	
 }
