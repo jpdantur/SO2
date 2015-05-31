@@ -18,8 +18,10 @@ void video_write_byte(char c)
 		return;
 	}
 
-	if (c == '\0')
+	if (c == '\0'){
 		video_reset_bff_counter();
+		return;
+	}
 
 	if (video == VIDEO_END)
 		video_scroll();
