@@ -25,7 +25,7 @@ void video_write_byte(char c)
 		return;
 	}
 
-	if (video == VIDEO_END)
+	if (video >= VIDEO_END)
 	{
 		//__video_debug(video-0xB8000+'0');
 		video_scroll();
