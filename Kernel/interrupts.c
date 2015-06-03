@@ -5,17 +5,20 @@
 #define SYSCALL_READ 3
 #define SYSCALL_WRITE 4
 #define SYSCALL_TIME_READ 2
+#define SYSCALL_TIME_WRITE 5
 
 char get_call(void);
 char get_rax(void);
 char get_rcx(void);
 void set_rax(char c);
 
+void set_time(char time, char offset);
+
 char get_hours();
 char i='A';
 
 
-void int80(char *p, int type)
+void int80(char *p, int type, int value)
 {
 	char call = get_rax();
 	char c;
@@ -35,6 +38,10 @@ void int80(char *p, int type)
 			*p = get_time(type);
 			break;
 
+		case SYSCALL_TIME_WRITE:
+			set_time(value, type);
+			break;
+
 		default:
 	 		break;
 	}
@@ -42,7 +49,6 @@ void int80(char *p, int type)
 
 void timerTick()
 {
-	//video_write_byte(i);
-	//i++;
+	// __do_nothing
 }
 

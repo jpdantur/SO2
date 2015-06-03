@@ -32,6 +32,11 @@ char time(int type)
 	return c;
 }
 
+void set_time(char type, char value)
+{
+    sys_time_write(type, value);
+}
+
 char* itoa(int i, char b[], int len){
     char const digit[] = "0123456789ABCDEF";
     char* p = b;

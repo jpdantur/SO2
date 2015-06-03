@@ -1,9 +1,27 @@
 #include <stdint.h>
 
+#define SECONDS 	0
+#define MINUTES 	1
+#define HOUR 		2
+#define WEEKDAY 	3
+#define MONTHDAY 	4
+#define MONTH 		5
+#define YEAR 		6
+
+#define TIME__TYPE_SECONDS 	0x00
+#define TIME__TYPE_MINUTES 	0x02
+#define TIME__TYPE_HOUR 	0x04
+#define TIME__TYPE_WEEKDAY 	0x06
+#define TIME__TYPE_MONTHDAY 0x07
+#define TIME__TYPE_MONTH 	0x08
+#define TIME__TYPE_YEAR 	0x09
+
 char get_hours();
 char get_seconds();
 char get_minutes();
+void write_time(char time, char type);
 
+//TODO: Timefile
 char get_time(char type)
 {
 	char t;
@@ -19,6 +37,38 @@ char get_time(char type)
 			break;
 	}
 	return t;
+}
+
+void set_time(char time, char offset)
+{
+	char write_type;
+
+	switch (offset)
+	{
+		case SECONDS:
+			write_type = TIME__TYPE_SECONDS;
+			break;
+		case MINUTES:
+			write_type = TIME__TYPE_MINUTES;
+			break;
+		case HOUR:
+			write_type = TIME__TYPE_HOUR;
+			break;
+		case WEEKDAY:
+			write_type = TIME__TYPE_WEEKDAY;
+			break;
+		case MONTHDAY:
+			write_type = TIME__TYPE_MONTHDAY;
+			break;
+		case MONTH:
+			write_type = TIME__TYPE_MONTH;
+			break;
+		case YEAR:
+			write_type = TIME__TYPE_YEAR;
+			break;
+	}
+
+	write_time(time, write_type);
 }
 
 void * memset(void * destination, int32_t c, uint64_t length)
