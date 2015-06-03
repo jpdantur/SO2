@@ -18,20 +18,17 @@ int main() {
 	memset(&bss, 0, &endOfBinary - &bss);
 	char aux[2];
 	aux[0]=aux[1]='0';
-	//aux[2]='\0';
-	//All the following code may be removed 
-	//*v = 'X';
-	//char str[]="GDSGFDSGFDSGFDSGDF";
+
 	while (1)
 	{
-		print("Mister Poronga>");
-	//putchar(-1);
+		print("TODO: add prompt$ ");
 		char c;
 		do
 		{
 			c=getchar();
-			//putchar('7');
+
 		} while(c!='\n');
+		
 		print(itoa(time(2),aux,2));
 		putchar(':');
 		print(itoa(time(1),aux,2));

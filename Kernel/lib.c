@@ -1,5 +1,26 @@
 #include <stdint.h>
 
+char get_hours();
+char get_seconds();
+char get_minutes();
+
+char get_time(char type)
+{
+	char t;
+	switch (type){
+		case 0:
+			t = get_seconds();
+			break;
+		case 1:
+			t = get_minutes();
+			break;
+		case 2:
+			t = get_hours();
+			break;
+	}
+	return t;
+}
+
 void * memset(void * destination, int32_t c, uint64_t length)
 {
 	uint8_t chr = (uint8_t)c;

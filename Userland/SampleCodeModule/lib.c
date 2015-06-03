@@ -6,7 +6,7 @@ void print(char * str)
 		putchar(*str);
 		str++;
 	}
-	putchar(-1);
+	putchar(0);
 }
 
 void putchar(char c)
@@ -24,7 +24,7 @@ char getchar()
 	putchar(c);
 	return c;
 }
-
+//TODO: Move from here
 char time(int type)
 {
 	char c;

@@ -20,7 +20,7 @@ void video_write_byte(char c)
 	}
 
 
-	if (c == -1){
+	if (c == 0){
 		video_reset_bff_counter();
 		return;
 	}

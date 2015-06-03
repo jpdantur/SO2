@@ -26,6 +26,10 @@ set_rax:
 	mov rax, rdi
 	ret
 
+;;
+;;	Time
+;;
+
 get_seconds:
 	mov rax,0
 	out 70h,al

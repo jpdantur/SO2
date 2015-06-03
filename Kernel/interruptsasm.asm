@@ -21,8 +21,8 @@ _int80Handler:
 _timerTick:
 	call timerTick
 	push rax
-	mov al,0x20
-	out 0x20,al
+	mov al,0x20	;EOI
+	out 0x20,al ; 
 	pop rax
 	iretq
 
