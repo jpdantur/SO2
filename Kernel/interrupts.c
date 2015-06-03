@@ -14,6 +14,8 @@ char get_seconds();
 char get_minutes();
 char get_hours();
 char i='A';
+int sleep=0;
+char sleeping=0;
 
 
 void int80(char *p, int type)
@@ -54,7 +56,21 @@ void int80(char *p, int type)
 
 void timerTick()
 {
-	//video_write_byte(i);
-	//i++;
+	sleep++;
+	if (sleep==100)
+	{
+		screen_saver();
+		sleeping=1;
+	}
 }
 
+void keyboard()
+{
+	if (sleeping)
+	{
+		sleeping=0;
+		restore();
+	}
+	sleep=0;
+	keyboard_buffer_write();
+}
