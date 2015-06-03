@@ -16,7 +16,9 @@ void * memset(void * destiny, int32_t c, uint64_t length);
 int main() {
 	//Clean BSS
 	memset(&bss, 0, &endOfBinary - &bss);
-	char aux[4];
+	char aux[2];
+	aux[0]=aux[1]='0';
+	//aux[2]='\0';
 	//All the following code may be removed 
 	//*v = 'X';
 	//char str[]="GDSGFDSGFDSGFDSGDF";
@@ -30,11 +32,11 @@ int main() {
 			c=getchar();
 			//putchar('7');
 		} while(c!='\n');
-		print(itoa(time(2),aux));
+		print(itoa(time(2),aux,2));
 		putchar(':');
-		print(itoa(time(1),aux));
+		print(itoa(time(1),aux,2));
 		putchar(':');
-		print(itoa(time(0),aux));
+		print(itoa(time(0),aux,2));
 		putchar('\n');
 	}
 	//Test if BSS is properly set up
