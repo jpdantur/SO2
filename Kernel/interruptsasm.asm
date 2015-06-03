@@ -10,6 +10,7 @@ global _sti
 
 setParams:
 	mov rdi,rcx
+	mov rsi,rbx
 	ret
 
 _int80Handler:
