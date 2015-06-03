@@ -15,16 +15,24 @@ setParams:
 	ret
 
 _int80Handler:
+	sti
 	call setParams
 	call int80
 	iretq
 
 _timerTick:
-	call timerTick
+	push rbp
+	mov rbp,rsp
 	push rax
+	push rbx
+	call timerTick
+	
 	mov al,0x20
 	out 0x20,al
+	pop rbx
 	pop rax
+	mov rsp,rbp
+	pop rbp
 	iretq
 
 _keyboard:

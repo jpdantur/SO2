@@ -1,3 +1,4 @@
+char * vid = (char*)0xB8000 + 79 * 2;
 void print(char * str)
 {
 	char * aux=str;
@@ -8,6 +9,7 @@ void print(char * str)
 		len++;
 	}
 	sys_write(str,len);
+	putchar(-1);
 }
 
 void putchar(char c)
@@ -18,12 +20,17 @@ void putchar(char c)
 char getchar()
 {
 	char c;
-	do
-	{
-		sys_read(&c);
-	} while (c == -1);
-	putchar(c);
+	//do
+	//{
+	sys_read(&c,1);
+	//} while (c == -1);
+	//putchar(c);
+	//*vid=c;
 	return c;
+}
+int scan(char * str)
+{
+
 }
 
 char time(int type)

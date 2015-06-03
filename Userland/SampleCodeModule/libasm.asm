@@ -22,6 +22,7 @@ sys_read:
 	push rbx
 
 	mov rcx, rdi
+	mov rdx,rsi ;len
 	mov rax,3 ;syscall read
 	int 80h
 

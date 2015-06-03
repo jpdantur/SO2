@@ -22,14 +22,24 @@ void int80(char *p, int type, int size)
 {
 	char call = get_rax();
 	char c;
-	//char * p;
+	//char * a;
+	//a=p;
 	int i;
 	switch (call)
 	{
 		case SYSCALL_READ:
 			//p = get_rcx();
 			//*((char*)0xB8006)='?';
-			*p = keyboard_buffer_read();
+			for (i=0;i<size;i++)
+			{	
+				//__video_debug('X');
+				*p = keyboard_buffer_read();
+
+				//__video_debug('B' + *p);
+				p++;
+				i++;
+			}
+			//*p=0;
 			break;
 		case SYSCALL_WRITE:
 			for (i=0;i<size;i++)
@@ -60,7 +70,7 @@ void int80(char *p, int type, int size)
 void timerTick()
 {
 	sleep++;
-	if (sleep==100)
+	if (sleep==10000)
 	{
 		screen_saver();
 		sleeping=1;
@@ -75,5 +85,5 @@ void keyboard()
 		restore();
 	}
 	sleep=0;
-	keyboard_buffer_write();
+	keyboard_buffer_write();	
 }

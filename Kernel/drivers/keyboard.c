@@ -54,19 +54,21 @@ void keyboard_buffer_write(){
 		{
 			buffer[w%256]=keyboard_map[keycode];
       w++;
+      video_write_byte(keyboard_map[keycode]);
+      //__video_debug('P');
       //__video_debug(keyboard_map[keycode]);
 			//*((char*)0xB8000)=w+'0';
 		}
 	}
+
 	
 }
 
 char keyboard_buffer_read(){
-	if (r==w)
-	{
-		//*((char*)0xB8004)='R';
-		return EOF;
-	}
+  //__video_debug(r+'0');
+	while (r==w);
+		//*((char*)0xB8004)='R'
+  //__video_debug(r+'0');
   //__video_debug('N');
 	//*((char*)0xB8004)='N';
 	//*((char*)0xB8002)=r+'0';

@@ -24,12 +24,13 @@ int main() {
 	//char str[]="GDSGFDSGFDSGFDSGDF";
 	while (1)
 	{
-		print("Mister Poronga>");
+		print("Mister Poronga 8===>");
 	//putchar(-1);
 		char c;
 		do
 		{
 			c=getchar();
+			//*v=c;
 			//putchar('7');
 		} while(c!='\n');
 		print(itoa(time(2),aux,2));
