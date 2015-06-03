@@ -9,7 +9,7 @@ sys_write:
 	mov rbx,1 ;STDOUT	
 	mov rax,4 ;write
 	mov rcx,rdi ;char
-	mov rdx,1 ;len
+	mov rdx,rsi ;len
 	int 80h
 	pop rbx
 	mov rsp,rbp

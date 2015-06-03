@@ -18,12 +18,12 @@ int sleep=0;
 char sleeping=0;
 
 
-void int80(char *p, int type)
+void int80(char *p, int type, int size)
 {
 	char call = get_rax();
 	char c;
 	//char * p;
-
+	int i;
 	switch (call)
 	{
 		case SYSCALL_READ:
@@ -32,8 +32,11 @@ void int80(char *p, int type)
 			*p = keyboard_buffer_read();
 			break;
 		case SYSCALL_WRITE:
-			c = get_rcx();
-			video_write_byte(c);
+			for (i=0;i<size;i++)
+			{
+				video_write_byte(*p);
+				p++;
+			}
 			break;
 		case SYSCALL_TIME:
 			switch(type)

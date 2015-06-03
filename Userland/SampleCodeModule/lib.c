@@ -1,17 +1,18 @@
 void print(char * str)
 {
-	while(*str)
+	char * aux=str;
+	int len=0;
+	while(*aux)
 	{
-		//*v=i+'0';
-		putchar(*str);
-		str++;
+		aux++;
+		len++;
 	}
-	putchar(-1);
+	sys_write(str,len);
 }
 
 void putchar(char c)
 {
-	sys_write(c);
+	sys_write(&c,1);
 }
 
 char getchar()
