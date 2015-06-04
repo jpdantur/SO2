@@ -28,9 +28,36 @@ char getchar()
 	//*vid=c;
 	return c;
 }
-int scan(char * str)
+int scan(char * str, int len)
 {
-
+	char scan_bff[256];
+	sys_read(scan_bff,len);
+	int i=0;
+	int j=0;
+	while(scan_bff[i]!='\n')
+	{
+		if (scan_bff[i]=='\b')
+		{
+			if(j>0)
+				j--;
+			str[j]=0;
+		}
+		else
+		{
+			str[j++]=scan_bff[i];
+		}
+		i++;
+	}
+	if (j!=0)
+	{
+		str[j]='\n';
+		str[j+1]=0;
+	}
+	else
+	{
+		str[j]=0;
+	}
+	return j;
 }
 
 char time(int type)

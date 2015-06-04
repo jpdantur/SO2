@@ -25,16 +25,18 @@ void int80(char *p, int type, int size)
 	//char * a;
 	//a=p;
 	int i;
+	char enter=1;
 	switch (call)
 	{
 		case SYSCALL_READ:
 			//p = get_rcx();
 			//*((char*)0xB8006)='?';
-			for (i=0;i<size;i++)
+			for (i=0;i<size && enter;i++)
 			{	
 				//__video_debug('X');
 				*p = keyboard_buffer_read();
-
+				if (*p=='\n')
+					enter=0;
 				//__video_debug('B' + *p);
 				p++;
 				i++;
