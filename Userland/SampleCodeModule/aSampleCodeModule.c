@@ -20,13 +20,13 @@ int main() {
 	char aux[2];
 	aux[0]=aux[1]='0';
 
-	set_time(0, 0x40);
+	set_time(0, 0x45);
 	set_time(1, 0x59);
 	set_time(2, 0x23);
 
 	while (1)
 	{
-		print("TODO: add prompt$ ");
+		print("NoPrompt OS$ ");
 		char c;
 		do
 		{

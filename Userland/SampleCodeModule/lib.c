@@ -2,7 +2,6 @@ void print(char * str)
 {
 	while(*str)
 	{
-		//*v=i+'0';
 		putchar(*str);
 		str++;
 	}
