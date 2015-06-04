@@ -31,9 +31,16 @@ char time(int type)
 	return c;
 }
 
-void set_time(char type, char value)
+void set_time(int hour, int min, int sec)
 {
-    sys_time_write(type, value);
+    set_time_att(0, dtoh(sec));
+    set_time_att(1, dtoh(min));
+    set_time_att(2, dtoh(hour));
+}
+
+void set_time_att(char type, char att)
+{
+    sys_time_write(type, att);
 }
 
 char* itoa(int i, char b[], int len){
@@ -56,4 +63,31 @@ char* itoa(int i, char b[], int len){
         i = i/16;
     }while(p!=b);
     return b;
+}
+
+
+int pow(int x, int y)
+{
+    int ret = 1;
+
+    for (int i = 0; i < y; i++)
+        ret *= x;
+
+    return ret;
+}
+
+
+int dtoh(int h)
+{
+    int ret = 0;
+    int count = 0;
+    do
+    {
+        ret += (h % 10) * pow(16, count);
+        h = h / 10;
+        count++;
+
+    } while(h != 0);
+
+    return ret;
 }

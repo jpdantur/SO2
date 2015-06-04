@@ -10,7 +10,7 @@ static int var2 = 0;
 
 void print(char * str);
 void sys_read(char * p);
-void set_time(char type, char value);
+void set_time_att(char type, char value);
 
 void * memset(void * destiny, int32_t c, uint64_t length);
 
@@ -20,9 +20,8 @@ int main() {
 	char aux[2];
 	aux[0]=aux[1]='0';
 
-	set_time(0, 0x45);
-	set_time(1, 0x59);
-	set_time(2, 0x23);
+	set_time(4,20,0);
+
 
 	while (1)
 	{
