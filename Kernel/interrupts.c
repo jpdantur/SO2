@@ -16,22 +16,39 @@ void set_time(char time, char offset);
 
 char get_hours();
 char i='A';
+int sleep=0;
+char sleeping=0;
 
 
-void int80(char *p, int type, int value)
+void int80(char *p, int type, int size)
 {
 	char call = get_rax();
 	char c;
-
+	//char * a;
+	//a=p;
+	int i;
 	switch (call)
 	{
 		case SYSCALL_READ:
-			*p = keyboard_buffer_read();
+			//p = get_rcx();
+			//*((char*)0xB8006)='?';
+			for (i=0;i<size;i++)
+			{	
+				//__video_debug('X');
+				*p = keyboard_buffer_read();
+
+				//__video_debug('B' + *p);
+				p++;
+				i++;
+			}
 			break;
 
 		case SYSCALL_WRITE:
-			c = get_rcx();
-			video_write_byte(c);
+			for (i=0;i<size;i++)
+			{
+				video_write_byte(*p);
+				p++;
+			}
 			break;
 
 		case SYSCALL_TIME_READ:
@@ -39,7 +56,7 @@ void int80(char *p, int type, int value)
 			break;
 
 		case SYSCALL_TIME_WRITE:
-			set_time(value, type);
+			set_time(size, type);
 			break;
 
 		default:
@@ -49,6 +66,21 @@ void int80(char *p, int type, int value)
 
 void timerTick()
 {
-	// __do_nothing
+	sleep++;
+	if (sleep==10000)
+	{
+		screen_saver();
+		sleeping=1;
+	}
 }
 
+void keyboard()
+{
+	if (sleeping)
+	{
+		sleeping=0;
+		restore();
+	}
+	sleep=0;
+	keyboard_buffer_write();	
+}

@@ -10,10 +10,6 @@ read_port:
 	mov edx, edi
 	in al, dx
 
-;	mov rdx, 0xB8000;
-;	mov rcx, 'H';
-;	mov [rdx], rcx;
-
 	mov rsp,rbp
 	pop rbp
 	ret

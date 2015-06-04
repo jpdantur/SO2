@@ -10,7 +10,7 @@ static int var2 = 0;
 
 void print(char * str);
 void sys_read(char * p);
-void set_time_att(char type, char value);
+void set_time(int hour, int min, int sec);
 
 void * memset(void * destiny, int32_t c, uint64_t length);
 
@@ -29,17 +29,18 @@ int main() {
 		char c;
 		do
 		{
-			c=getchar();
+			c = getchar();
 
-		} while(c!='\n');
+		} while(c != '\n');
 		
-		print(itoa(time(2),aux,2));
+		print(itoa(time(2), aux, 2));
 		putchar(':');
-		print(itoa(time(1),aux,2));
+		print(itoa(time(1), aux, 2));
 		putchar(':');
-		print(itoa(time(0),aux,2));
+		print(itoa(time(0), aux, 2));
 		putchar('\n');
 	}
+
 	//Test if BSS is properly set up
 	if (var1 == 0 && var2 == 0)
 		return 0xDEADC0DE;
@@ -47,12 +48,12 @@ int main() {
 	return 0xDEADBEEF;
 }
 
-void * memset(void * destiation, int32_t c, uint64_t length) {
+void * memset(void * destination, int32_t c, uint64_t length) {
 	uint8_t chr = (uint8_t)c;
-	char * dst = (char*)destiation;
+	char * dst = (char*)destination;
 
 	while(length--)
 		dst[length] = chr;
 
-	return destiation;
+	return destination;
 }

@@ -10,7 +10,7 @@ sys_write:
 	mov rbx,1 ;STDOUT	
 	mov rax,4 ;write
 	mov rcx,rdi ;char
-	mov rdx,1 ;len
+	mov rdx,rsi ;len
 	int 80h
 	pop rbx
 	mov rsp,rbp
@@ -23,6 +23,7 @@ sys_read:
 	push rbx
 
 	mov rcx, rdi
+	mov rdx,rsi ;len
 	mov rax,3 ;syscall read
 	int 80h
 

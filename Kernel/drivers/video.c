@@ -4,6 +4,36 @@
 char * video = VIDEO_START;
 char * video_debug = VIDEO_LAST_LINE_START;
 int video_bff_counter = 0;
+char backup[VIDEO_HEIGHT*VIDEO_WIDTH*2];
+
+void backup_screen()
+{
+	int i;
+	for (i=0;i<VIDEO_HEIGHT*VIDEO_WIDTH*2;i++)
+	{
+		backup[i]=*((char*)(VIDEO_START+i));
+	}
+}
+
+void restore()
+{
+	int i;
+	for (i=0;i<VIDEO_HEIGHT*VIDEO_WIDTH*2;i++)
+	{
+		*((char*)(VIDEO_START+i))=backup[i];
+	}
+}
+
+void screen_saver()
+{
+	backup_screen();
+	int i;
+	for (i=0;i<VIDEO_HEIGHT*VIDEO_WIDTH*2;i++)
+	{
+		*((char*)(VIDEO_START+i))='F';
+	}
+
+}
 
 void video_write_byte(char c)
 {
