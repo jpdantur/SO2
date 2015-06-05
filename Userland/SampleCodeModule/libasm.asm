@@ -7,11 +7,13 @@ sys_write:
 	push rbp
 	mov rbp,rsp
 	push rbx
-	mov rbx,1 ;STDOUT	
-	mov rax,4 ;write
-	mov rcx,rdi ;char
-	mov rdx,rsi ;len
+
+	mov rbx,1 	; STDOUT	
+	mov rax,4 	; sys_call write
+	mov rcx,rdi ; char
+	mov rdx,rsi ; len
 	int 80h
+
 	pop rbx
 	mov rsp,rbp
 	pop rbp
@@ -23,8 +25,8 @@ sys_read:
 	push rbx
 
 	mov rcx, rdi
-	mov rdx,rsi ;len
-	mov rax,3 ;syscall read
+	mov rdx,rsi ; len
+	mov rax,3 	; sys_call read
 	int 80h
 
 	pop rbx
@@ -39,7 +41,7 @@ sys_time:
 
 	mov rbx,rsi
 	mov rcx, rdi
-	mov rax,2 ;syscall time
+	mov rax,2 	; sys_call get_time
 	int 80h
 
 	pop rbx
@@ -52,10 +54,9 @@ sys_time_write:
 	push rbx
 	push rdx
 
-	mov rax, 5
+	mov rax, 5	; sys_call write_time 
 	mov rbx, rdi
 	mov rdx, rsi
-
 	int 80h
 
 	pop rdx

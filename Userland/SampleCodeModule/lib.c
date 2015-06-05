@@ -1,103 +1,92 @@
-char * vid = (char*)0xB8000 + 79 * 2;
+#include <lib.h>
+
 void print(char * str)
 {
 	char * aux = str;
 	int len = 0;
-	while(*aux)
+	
+    while(*aux)
 	{
 		aux++;
 		len++;
 	}
-	sys_write(str,len);
+
+	sys_write(str, len);
 	putchar(0);
 }
 
 void putchar(char c)
 {
-	sys_write(&c,1);
+	sys_write(&c, 1);
 }
 
 char getchar()
 {
 	char c;
-	sys_read(&c,1);
+	sys_read(&c, 1);
 	return c;
 }
 
 int scan(char * str, int len)
 {
 	char scan_bff[256];
-	sys_read(scan_bff,len);
-	int i=0;
-	int j=0;
-	while(scan_bff[i]!='\n')
+	sys_read(scan_bff, len);
+	
+    int i = 0;
+	int j = 0;
+
+	while(scan_bff[i] != '\n')
 	{
-		*vid='X';
-		if (scan_bff[i]=='\b')
+		if (scan_bff[i] == '\b')
 		{
-			if(j>0)
+			if(j > 0)
 				j--;
-			str[j]=0;
+			str[j] = 0;
 		}
-		else
+        else
 		{
-			str[j++]=scan_bff[i];
+			str[j++] = scan_bff[i];
 		}
-		//*vid='X';
-		i++;
+		
+        i++;
 	}
-	//*vid='X';
-	if (j!=0)
+
+    if (j != 0)
 	{
-		str[j]='\n';
-		str[j+1]=0;
+		str[j] = '\n';
+		str[j+1] = 0;
 	}
 	else
 	{
-		str[j]=0;
+		str[j] = 0;
 	}
 	return j;
 }
 
-//TODO: Move from here
-char time(int type)
-{
-	char c;
-	sys_time(&c,type);
-	return c;
-}
-
-void set_time(int hour, int min, int sec)
-{
-    set_time_att(0, dtoh(sec));
-    set_time_att(1, dtoh(min));
-    set_time_att(2, dtoh(hour));
-}
-
-void set_time_att(char type, char att)
-{
-    sys_time_write(type, att);
-}
 
 char* itoa(int i, char b[], int len){
     char const digit[] = "0123456789ABCDEF";
     char* p = b;
-    int a=0;
-    if(i<0){
+    int a = 0;
+    
+    if(i < 0){
         *p++ = '-';
         i *= -1;
     }
+    
     int shifter = i;
     do{ //Move to where representation ends
         ++p;
         ++a;
         shifter = shifter/16;
-    }while(a<len);
+    }while(a < len);
+    
     *p = '\0';
+    
     do{ //Move back, inserting digits as u go
         *--p = digit[i%16];
         i = i/16;
-    }while(p!=b);
+    }while(p != b);
     return b;
 }
 
