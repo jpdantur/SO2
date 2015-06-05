@@ -27,19 +27,26 @@ void int80(char *p, int type, int size)
 	//char * a;
 	//a=p;
 	int i;
+	char enter=0;
 	switch (call)
 	{
 		case SYSCALL_READ:
 			//p = get_rcx();
 			//*((char*)0xB8006)='?';
-			for (i=0;i<size;i++)
+			for (i=0;i<size-1 && !enter;i++)
 			{	
 				//__video_debug('X');
 				*p = keyboard_buffer_read();
-
-				//__video_debug('B' + *p);
+				if (*p=='\n')
+					enter=1;
+				//__video_debug(*p);
 				p++;
-				i++;
+				//i++;
+			}
+			if (!enter)
+			{
+				*p='\n';
+				video_new_line();
 			}
 			break;
 
@@ -62,16 +69,19 @@ void int80(char *p, int type, int size)
 		default:
 	 		break;
 	}
+	//__video_debug('X');
 }
 
 void timerTick()
 {
 	sleep++;
-	if (sleep==10000)
+	if (sleep==1000)
 	{
 		screen_saver();
 		sleeping=1;
 	}
+	if (sleeping)
+		video_screen_saver_draw();
 }
 
 void keyboard()

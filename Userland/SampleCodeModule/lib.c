@@ -24,9 +24,39 @@ char getchar()
 	return c;
 }
 
-int scan(char * str)
+int scan(char * str, int len)
 {
-
+	char scan_bff[256];
+	sys_read(scan_bff,len);
+	int i=0;
+	int j=0;
+	while(scan_bff[i]!='\n')
+	{
+		*vid='X';
+		if (scan_bff[i]=='\b')
+		{
+			if(j>0)
+				j--;
+			str[j]=0;
+		}
+		else
+		{
+			str[j++]=scan_bff[i];
+		}
+		//*vid='X';
+		i++;
+	}
+	//*vid='X';
+	if (j!=0)
+	{
+		str[j]='\n';
+		str[j+1]=0;
+	}
+	else
+	{
+		str[j]=0;
+	}
+	return j;
 }
 
 //TODO: Move from here

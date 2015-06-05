@@ -23,10 +23,26 @@ int main() {
 	set_time(4,20,0);
 
 
+	char bff[256];
+	int a;
+	//aux[2]='\0';
+	//All the following code may be removed 
+	//*v = 'X';
+	//char str[]="GDSGFDSGFDSGFDSGDF";
 	while (1)
 	{
 		print("NoPrompt OS$ ");
-		char c;
+		a=scan(bff,256);
+		//*v='X';
+		print(bff);
+		//putchar(a+'0');
+			//print("TuMama");
+		//putchar('\n');
+		//print("TuMama");
+		
+	//putchar(-1);
+		/*char c;
+>>>>>>> scan
 		do
 		{
 			c = getchar();
@@ -39,6 +55,7 @@ int main() {
 		putchar(':');
 		print(itoa(time(0), aux, 2));
 		putchar('\n');
+		*/
 	}
 
 	//Test if BSS is properly set up
@@ -57,3 +74,4 @@ void * memset(void * destination, int32_t c, uint64_t length) {
 
 	return destination;
 }
+
