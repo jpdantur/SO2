@@ -91,8 +91,8 @@ unsigned int w = 0;
 unsigned int r = 0;
 int shift1=0;
 int shift2=0;
-int control=0;
-int alt=0;
+int control1=0;
+int alt1=0;
 int capslock=0;
 
 void keyboard_buffer_write(){
@@ -109,9 +109,17 @@ void keyboard_buffer_write(){
             shift1 = 0;
         }
 
-        if ((unsigned char)keycode==(0x36|0x80))
+        else if ((unsigned char)keycode==(0x36|0x80))
         {
             shift2 = 0;
+        }
+        else if ((unsigned char)keycode==(0x1d|0x80))
+        {
+            control1 = 0;
+        }
+        else if ((unsigned char)keycode==(0x38|0x80))
+        {
+            alt1 = 0;
         }
         else if (keycode > 0)
         {
@@ -123,7 +131,12 @@ void keyboard_buffer_write(){
                 case 0x2a:
                     shift1 = 1;
                     break;
-
+                case 0x1d:
+                    control1=1;
+                    break;
+                case 0x38:
+                    alt1=1;
+                    break;
                 case 0x36:
                     shift2 = 1;
                     break;
@@ -135,13 +148,16 @@ void keyboard_buffer_write(){
                     break;
               */
                 default:
-                    if (shift1 || shift2 || capslock)
-                        buffer[w%256] = shift_map[keycode];
-                    else
-                        buffer[w%256] = keyboard_map[keycode];
+                    if (keyboard_map[keycode]!=0)
+                    {
+                      if (shift1 || shift2 || capslock)
+                          buffer[w%256] = shift_map[keycode];
+                      else
+                          buffer[w%256] = keyboard_map[keycode];
             
-                    video_write_byte(buffer[w%256]);
-                    w++;
+                      video_write_byte(buffer[w%256]);
+                      w++;
+                    }
                     break;
             }
             

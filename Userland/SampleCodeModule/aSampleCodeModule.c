@@ -34,6 +34,7 @@ int main() {
 		print("Mister Poronga>");
 		a = scan(bff,256);
 		print(bff);
+		//putchar('X');
 	}
 
 	//Test if BSS is properly set up
