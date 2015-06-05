@@ -112,7 +112,7 @@ void video_write_byte(char c)
 		return;
 	}
 
-	if (video >= VIDEO_END)
+	if (video > VIDEO_END)
 	{
 		video_scroll();
 	}
@@ -156,7 +156,6 @@ void video_new_line()
 
 void video_scroll()
 {
-	//__video_debug('X');
 	char * copy_from = (char *) (VIDEO_START + VIDEO_WIDTH * 2);
 	video = (char *)VIDEO_START;
 
@@ -166,7 +165,7 @@ void video_scroll()
 		video += 2;
 		copy_from += 2;
 	}
-	while ((uint64_t)copy_from != VIDEO_END);
+	while ((uint64_t)copy_from != FIRST_POS_AFTER_VIDEO);
 
 	video = (char *) (VIDEO_START + (VIDEO_HEIGHT - 1)*VIDEO_WIDTH * 2);
 
@@ -175,7 +174,7 @@ void video_scroll()
 		*video = 0;
 		video += 2;
 	}
-	while(video != (char *)VIDEO_END);
+	while(video != FIRST_POS_AFTER_VIDEO);
 
 	video = (char *) (VIDEO_START + (VIDEO_WIDTH * (VIDEO_HEIGHT-1) * 2));
 
