@@ -1,7 +1,9 @@
 #include <keyboard.h>
 #include <video.h>
 
+#define is_letter(x) (((x)>='a'&&(x)<='z')||(x>='A'&&x<='Z')?1:0)
 char read_port(char * port);
+
 
 unsigned char keyboard_map[128] =
 {
@@ -44,27 +46,60 @@ unsigned char keyboard_map[128] =
 };
 
 char buffer[256];
-int w = 0;
-int r = 0;
+
+unsigned int w = 0;
+unsigned int r = 0;
+int shift1=0;
+int shift2=0;
+int control=0;
+int alt=0;
 
 void keyboard_buffer_write(){
-	unsigned char status;
-	char keycode;
+  unsigned char status;
+  char keycode;
 
-	status = read_port(0x64);
+  status = read_port(0x64);
 
-	if (status & 0x01) {
-		keycode = read_port(0x60);
-		
-    if(keycode > 0)
-		{
-			buffer[w%256] = keyboard_map[keycode];
-      w++;
-      video_write_byte(keyboard_map[keycode]);
-		}
-	}
+    if (status & 0x01) {
+        keycode = read_port(0x60);
 
-	
+        if((unsigned char)keycode == (0x2a|0x80))
+        {
+            shift1 = 0;
+        }
+
+        if ((unsigned char)keycode==(0x36|0x80))
+        {
+            shift2 = 0;
+        }
+        else if (keycode > 0)
+        {
+            switch (keycode)
+            {
+                case 0x2a:
+                    shift1 = 1;
+                    break;
+
+                case 0x36:
+                    shift2 = 1;
+                    break;
+
+                default:
+                    if ((shift1 || shift2) && is_letter(keyboard_map[keycode]))
+                        buffer[w%256] = keyboard_map[keycode] - ('a'-'A');
+                    else
+                        buffer[w%256] = keyboard_map[keycode];
+            
+                    video_write_byte(buffer[w%256]);
+                    w++;
+                    break;
+            }
+            
+
+        }
+  }
+
+  
 }
 
 char keyboard_buffer_read(){
