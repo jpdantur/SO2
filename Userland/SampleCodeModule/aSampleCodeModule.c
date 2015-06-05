@@ -28,6 +28,7 @@ int main() {
 	{
 		print("Mister Poronga>");
 		a=scan(bff,256);
+		//*v='X';
 		print(bff);
 		//putchar(a+'0');
 			//print("TuMama");

@@ -52,11 +52,11 @@ setParams:
 	ret
 
 _int80Handler:
-	pushaq
+	;pushaq
 	sti
 	call setParams
 	call int80
-	popaq
+	;popaq
 	iretq
 
 _timerTick:

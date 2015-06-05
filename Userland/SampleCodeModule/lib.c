@@ -36,6 +36,7 @@ int scan(char * str, int len)
 	int j=0;
 	while(scan_bff[i]!='\n')
 	{
+		*vid='X';
 		if (scan_bff[i]=='\b')
 		{
 			if(j>0)
@@ -46,8 +47,10 @@ int scan(char * str, int len)
 		{
 			str[j++]=scan_bff[i];
 		}
+		//*vid='X';
 		i++;
 	}
+	//*vid='X';
 	if (j!=0)
 	{
 		str[j]='\n';

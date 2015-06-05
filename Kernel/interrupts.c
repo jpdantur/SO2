@@ -25,22 +25,28 @@ void int80(char *p, int type, int size)
 	//char * a;
 	//a=p;
 	int i;
-	char enter=1;
+	char enter=0;
 	switch (call)
 	{
 		case SYSCALL_READ:
 			//p = get_rcx();
 			//*((char*)0xB8006)='?';
-			for (i=0;i<size && enter;i++)
+			for (i=0;i<size-1 && !enter;i++)
 			{	
 				//__video_debug('X');
 				*p = keyboard_buffer_read();
 				if (*p=='\n')
-					enter=0;
-				//__video_debug('B' + *p);
+					enter=1;
+				//__video_debug(*p);
 				p++;
-				i++;
+				//i++;
 			}
+			if (!enter)
+			{
+				*p='\n';
+				video_new_line();
+			}
+			//__video_debug('X');
 			//*p=0;
 			break;
 		case SYSCALL_WRITE:
@@ -67,6 +73,7 @@ void int80(char *p, int type, int size)
 		default:
 	 		break;
 	}
+	//__video_debug('X');
 }
 
 void timerTick()
