@@ -1,35 +1,82 @@
+char * vid = (char*)0xB8000 + 79 * 2;
 void print(char * str)
 {
-	while(*str)
+	char * aux = str;
+	int len = 0;
+	while(*aux)
 	{
-		//*v=i+'0';
-		putchar(*str);
-		str++;
+		aux++;
+		len++;
 	}
-	putchar(-1);
+	sys_write(str,len);
+	putchar(0);
 }
 
 void putchar(char c)
 {
-	sys_write(c);
+	sys_write(&c,1);
 }
 
 char getchar()
 {
 	char c;
-	do
-	{
-		sys_read(&c);
-	} while (c == -1);
-	putchar(c);
+	sys_read(&c,1);
 	return c;
 }
 
+int scan(char * str, int len)
+{
+	char scan_bff[256];
+	sys_read(scan_bff,len);
+	int i=0;
+	int j=0;
+	while(scan_bff[i]!='\n')
+	{
+		*vid='X';
+		if (scan_bff[i]=='\b')
+		{
+			if(j>0)
+				j--;
+			str[j]=0;
+		}
+		else
+		{
+			str[j++]=scan_bff[i];
+		}
+		//*vid='X';
+		i++;
+	}
+	//*vid='X';
+	if (j!=0)
+	{
+		str[j]='\n';
+		str[j+1]=0;
+	}
+	else
+	{
+		str[j]=0;
+	}
+	return j;
+}
+
+//TODO: Move from here
 char time(int type)
 {
 	char c;
 	sys_time(&c,type);
 	return c;
+}
+
+void set_time(int hour, int min, int sec)
+{
+    set_time_att(0, dtoh(sec));
+    set_time_att(1, dtoh(min));
+    set_time_att(2, dtoh(hour));
+}
+
+void set_time_att(char type, char att)
+{
+    sys_time_write(type, att);
 }
 
 char* itoa(int i, char b[], int len){
@@ -52,4 +99,31 @@ char* itoa(int i, char b[], int len){
         i = i/16;
     }while(p!=b);
     return b;
+}
+
+
+int pow(int x, int y)
+{
+    int ret = 1;
+
+    for (int i = 0; i < y; i++)
+        ret *= x;
+
+    return ret;
+}
+
+
+int dtoh(int h)
+{
+    int ret = 0;
+    int count = 0;
+    do
+    {
+        ret += (h % 10) * pow(16, count);
+        h = h / 10;
+        count++;
+
+    } while(h != 0);
+
+    return ret;
 }

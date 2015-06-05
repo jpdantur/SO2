@@ -8,3 +8,4 @@
 
 void video_write_byte(char c);
 void __video_debug(char c);
+void video_screen_saver_draw();

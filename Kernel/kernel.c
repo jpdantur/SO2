@@ -16,7 +16,7 @@ static const uint64_t PageSize = 0x1000;
 
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
-//DESCR_INT idt[0x81];
+DESCR_INT *idt=0;
 //IDTR idtr;
 void _int80Handler(void);
 void _timerTick(void);
@@ -27,7 +27,7 @@ void _sti(void);
 
 void write_port(int port,char data);
 
-void setup_IDT_entry (DESCR_INT* idt, int index, word selector, ddword offset, byte access);
+void setup_IDT_entry (int index, word selector, ddword offset, byte access);
 
 typedef int (*EntryPoint)();
 
@@ -124,17 +124,17 @@ void set_interrupts()
 	//idtr.base +=(ddword) &idt;
 	//idtr.limit = sizeof(idt)-1;
 	//_lidt (&idtr);
-	DESCR_INT* idt;
-	idt=0;
-	setup_IDT_entry(idt, 0x80,0x08,&_int80Handler,0x8E);
-	setup_IDT_entry(idt, 0x20,0x08,&_timerTick,0x8E);
-	setup_IDT_entry(idt, 0x21,0x08,&_keyboard,0x8E);
+	//DESCR_INT* idt;
+	//idt=0;
+	setup_IDT_entry(0x80,0x08,&_int80Handler,0x8E);
+	setup_IDT_entry(0x20,0x08,&_timerTick,0x8E);
+	setup_IDT_entry(0x21,0x08,&_keyboard,0x8E);
 	picMasterMask(0xFC);
 	picSlaveMask(0xFF);
 	_sti();
 }
 
-void setup_IDT_entry (DESCR_INT *idt,int index, word selector, ddword offset, byte access)
+void setup_IDT_entry (int index, word selector, ddword offset, byte access)
 {
 	idt[index].selector = selector;
 	idt[index].offset_l = offset & 0xFFFF;

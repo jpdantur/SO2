@@ -4,6 +4,50 @@
 char * video = VIDEO_START;
 char * video_debug = VIDEO_LAST_LINE_START;
 int video_bff_counter = 0;
+char backup[VIDEO_HEIGHT*VIDEO_WIDTH*2];
+
+int screen_saver_drawer = 0;
+
+void backup_screen()
+{
+	int i;
+	for (i=0;i<VIDEO_HEIGHT*VIDEO_WIDTH*2;i++)
+	{
+		backup[i]=*((char*)(VIDEO_START+i));
+	}
+}
+
+void restore()
+{
+	int i;
+	for (i=0;i<VIDEO_HEIGHT*VIDEO_WIDTH*2;i++)
+	{
+		*((char*)(VIDEO_START+i))=backup[i];
+	}
+	screen_saver_reset();
+}
+
+void screen_saver_reset()
+{
+	screen_saver_drawer = 0;
+}
+
+void screen_saver()
+{
+	backup_screen();
+	int i;
+	for (i=0;i<VIDEO_HEIGHT*VIDEO_WIDTH*2;i++)
+	{
+		*((char*)(VIDEO_START+i))='F';
+	}
+}
+
+void video_screen_saver_draw()
+{
+	screen_saver_drawer = screen_saver_drawer % (VIDEO_HEIGHT * VIDEO_WIDTH * 2);
+	((char*)VIDEO_START)[screen_saver_drawer] = screen_saver_drawer;
+	screen_saver_drawer++;
+}
 
 void video_write_byte(char c)
 {
@@ -20,7 +64,7 @@ void video_write_byte(char c)
 	}
 
 
-	if (c == -1){
+	if (c == 0){
 		video_reset_bff_counter();
 		return;
 	}
