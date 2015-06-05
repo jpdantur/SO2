@@ -13,10 +13,6 @@ char get_rax(void);
 char get_rcx(void);
 void set_rax(char c);
 
-char i='A';
-int sleep=0;
-char sleeping=0;
-
 
 void int80(char *p, int type, int size)
 {
@@ -67,24 +63,12 @@ void int80(char *p, int type, int size)
 
 void timerTick()
 {
-	sleep++;
-
-	if (sleep == 1000)
-	{
-		screen_saver();
-		sleeping = 1;
-	}
-	if (sleeping)
-		video_screen_saver_draw();
+	video_screen_saver_check_count();
 }
 
 void keyboard()
 {
-	if (sleeping)
-	{
-		sleeping = 0;
-		restore();
-	}
-	sleep = 0;
+	video_screen_saver_check_restore();
+
 	keyboard_buffer_write();	
 }

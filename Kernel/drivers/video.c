@@ -6,6 +6,8 @@ char * video_debug = VIDEO_LAST_LINE_START;
 int video_bff_counter = 0;
 char backup[VIDEO_HEIGHT*VIDEO_WIDTH*2];
 
+char screen_saver_active = 0;
+int screen_saver_counter = 0;
 int screen_saver_drawer = 0;
 
 void backup_screen()
@@ -13,18 +15,60 @@ void backup_screen()
 	int i;
 	for (i = 0; i < VIDEO_SIZE; i++)
 	{
-		backup[i] = *((char *)(VIDEO_START + i));
+		backup[i] = *(VIDEO_START + i);
 	}
 }
 
-void restore()
+void restore(void)
 {
 	int i;
 	for (i = 0; i < VIDEO_SIZE; i++)
 	{
-		*((char *)(VIDEO_START + i)) = backup[i];
+		*((VIDEO_START + i)) = backup[i];
 	}
 	screen_saver_reset();
+}
+
+void video_screen_saver_check_count(void)
+{
+	screen_saver_count();
+
+	if (screen_saver_counter == 1000)
+	{
+		screen_saver_enable();
+	}
+	if (screen_saver_active)
+		screen_saver_draw();
+}
+
+void video_screen_saver_check_restore(void)
+{
+	if (screen_saver_active)
+	{
+		screen_saver_disable();
+	}
+	screen_saver_reset_counter();
+}
+
+void screen_saver_reset_counter(void){
+	screen_saver_counter = 0;
+}
+
+void screen_saver_enable(void)
+{
+	screen_saver_active = 1;
+	screen_saver();
+}
+
+void screen_saver_disable(void)
+{
+	screen_saver_active = 0;
+	restore();
+}
+
+void screen_saver_count(void)
+{
+	screen_saver_counter++;
 }
 
 void screen_saver_reset()
@@ -38,14 +82,14 @@ void screen_saver()
 	int i;
 	for (i = 0; i < VIDEO_SIZE; i++)
 	{
-		*((char*)(VIDEO_START + i)) = 'F';
+		*((VIDEO_START + i)) = 'F';
 	}
 }
 
-void video_screen_saver_draw()
+void screen_saver_draw()
 {
 	screen_saver_drawer = screen_saver_drawer % (VIDEO_HEIGHT * VIDEO_WIDTH * 2);
-	((char*)VIDEO_START)[screen_saver_drawer] = screen_saver_drawer;
+	VIDEO_START[screen_saver_drawer] = screen_saver_drawer;
 	screen_saver_drawer++;
 }
 
@@ -113,8 +157,8 @@ void video_new_line()
 void video_scroll()
 {
 	//__video_debug('X');
-	char * copy_from = VIDEO_START + VIDEO_WIDTH * 2;
-	video = VIDEO_START;
+	char * copy_from = (char *) (VIDEO_START + VIDEO_WIDTH * 2);
+	video = (char *)VIDEO_START;
 
 	do
 	{
@@ -124,16 +168,16 @@ void video_scroll()
 	}
 	while ((uint64_t)copy_from != VIDEO_END);
 
-	video = VIDEO_START + (VIDEO_HEIGHT-1)*VIDEO_WIDTH*2;
+	video = (char *) (VIDEO_START + (VIDEO_HEIGHT - 1)*VIDEO_WIDTH * 2);
 
 	do
 	{
 		*video = 0;
 		video += 2;
 	}
-	while(video != VIDEO_END);
+	while(video != (char *)VIDEO_END);
 
-	video = VIDEO_START + (VIDEO_WIDTH * (VIDEO_HEIGHT-1) * 2);
+	video = (char *) (VIDEO_START + (VIDEO_WIDTH * (VIDEO_HEIGHT-1) * 2));
 
 
 }
