@@ -53,6 +53,7 @@ int shift1=0;
 int shift2=0;
 int control=0;
 int alt=0;
+int capslock=0;
 
 void keyboard_buffer_write(){
   unsigned char status;
@@ -76,6 +77,9 @@ void keyboard_buffer_write(){
         {
             switch (keycode)
             {
+                case 0x3a:
+                    capslock=!capslock;
+                    break;
                 case 0x2a:
                     shift1 = 1;
                     break;
@@ -83,9 +87,15 @@ void keyboard_buffer_write(){
                 case 0x36:
                     shift2 = 1;
                     break;
-
+               /* case 0x0E:
+                    w--;
+                    r--;
+                    buffer[w%256]=0;
+                    video_write_byte('\b');
+                    break;
+              */
                 default:
-                    if ((shift1 || shift2) && is_letter(keyboard_map[keycode]))
+                    if ((shift1 || shift2 || capslock) && is_letter(keyboard_map[keycode]))
                         buffer[w%256] = keyboard_map[keycode] - ('a'-'A');
                     else
                         buffer[w%256] = keyboard_map[keycode];
@@ -106,6 +116,7 @@ char keyboard_buffer_read(){
 
 	while (r == w);
 	char ret = buffer[r%256];
+  //__video_debug(ret);
   r++;
   return ret;
   

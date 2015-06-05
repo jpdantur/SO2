@@ -21,20 +21,37 @@ char sleeping=0;
 void int80(char *p, int type, int size)
 {
 	char call = get_rax();
-	
+	char *aux=p;
 	char c;
-	int i;
+	int i=0;
 	
 	char enter = 0;
 	switch (call)
 	{
 		case SYSCALL_READ:
-			for (i = 0; i < size - 1 && !enter; i++)
+			while (i < size - 1 && !enter)
 			{	
 				*p = keyboard_buffer_read();
 				if (*p == '\n')
+				{
 					enter = 1;
-				p++;
+					p++;
+				}
+				else if (*p=='\b')
+				{
+					*p=0;
+					if (p>aux)
+					{
+						p--;
+						*p=0;
+						i--;
+					}
+				}
+				else{
+					i++;
+					p++;
+				}
+
 			}
 
 			if (!enter)

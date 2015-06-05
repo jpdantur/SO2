@@ -31,7 +31,7 @@ int main() {
 
 	while (1)
 	{
-		print("NoPrompt OS$ ");
+		print("Mister Poronga>");
 		a = scan(bff,256);
 		print(bff);
 	}
