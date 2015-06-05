@@ -40,9 +40,11 @@ unsigned char keyboard_map[128] =
     0,	/* F12 Key */
     0,	/* All other keys are undefined */
 };
+
 char buffer[256];
 int w = 0;
 int r = 0;
+
 void keyboard_buffer_write(){
 	unsigned char status;
 	char keycode;
@@ -52,7 +54,7 @@ void keyboard_buffer_write(){
 		keycode = read_port(0x60);
 		if(keycode > 0)
 		{
-			buffer[w%256]=keyboard_map[keycode];
+			buffer[w%256] = keyboard_map[keycode];
       w++;
       video_write_byte(keyboard_map[keycode]);
 		}
@@ -63,7 +65,7 @@ void keyboard_buffer_write(){
 
 char keyboard_buffer_read(){
 
-	while (r==w);
+	while (r == w);
 	char ret = buffer[r%256];
   r++;
   return ret;

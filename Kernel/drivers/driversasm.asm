@@ -19,10 +19,12 @@ read_port:
 write_port:
 	push rbp
 	mov rbp, rsp
+
 	mov	edx, edi    
 	mov	rax, rsi
 	and	rax, 0FFFFh  
 	out	dx, al
+	
 	mov	rsp,rbp
 	pop rbp  
 	ret

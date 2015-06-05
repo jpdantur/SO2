@@ -11,18 +11,18 @@ int screen_saver_drawer = 0;
 void backup_screen()
 {
 	int i;
-	for (i=0;i<VIDEO_HEIGHT*VIDEO_WIDTH*2;i++)
+	for (i = 0; i < VIDEO_SIZE; i++)
 	{
-		backup[i]=*((char*)(VIDEO_START+i));
+		backup[i] = *((char *)(VIDEO_START + i));
 	}
 }
 
 void restore()
 {
 	int i;
-	for (i=0;i<VIDEO_HEIGHT*VIDEO_WIDTH*2;i++)
+	for (i = 0; i < VIDEO_SIZE; i++)
 	{
-		*((char*)(VIDEO_START+i))=backup[i];
+		*((char *)(VIDEO_START + i)) = backup[i];
 	}
 	screen_saver_reset();
 }
@@ -36,9 +36,9 @@ void screen_saver()
 {
 	backup_screen();
 	int i;
-	for (i=0;i<VIDEO_HEIGHT*VIDEO_WIDTH*2;i++)
+	for (i = 0; i < VIDEO_SIZE; i++)
 	{
-		*((char*)(VIDEO_START+i))='F';
+		*((char*)(VIDEO_START + i)) = 'F';
 	}
 }
 
@@ -57,7 +57,6 @@ void video_write_byte(char c)
 	}
 
 	if (c == '\n'){
-		//__video_debug('B');
 		video_new_line();
 		video_reset_bff_counter();
 		return;
@@ -71,7 +70,6 @@ void video_write_byte(char c)
 
 	if (video >= VIDEO_END)
 	{
-		//__video_debug(video-0xB8000+'0');
 		video_scroll();
 	}
 	
@@ -93,8 +91,8 @@ void video_clear_screen()
 {
 	int i;
 
-	for (i = 0; i < VIDEO_HEIGHT * VIDEO_WIDTH; i++)
-		video[i * 2] = 0;
+	for (i = 0; i < VIDEO_SIZE; i++)
+		video[i] = 0;
 
 	video = VIDEO_START;
 }
@@ -159,8 +157,10 @@ void __video_debug(char c)
 {
 	*video_debug = c;
 	video_debug += 2;
+
 	if (video_debug == VIDEO_END){
 		video_debug = VIDEO_LAST_LINE_START;
+
 		while (video_debug != VIDEO_END){
 			*video_debug = 0;
 			video_debug += 2;

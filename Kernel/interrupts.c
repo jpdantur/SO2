@@ -1,6 +1,7 @@
 #include <naiveConsole.h>
 #include <video.h>
 #include <keyboard.h>
+#include <CMOS.h>
 
 #define SYSCALL_READ 3
 #define SYSCALL_WRITE 4
@@ -12,9 +13,6 @@ char get_rax(void);
 char get_rcx(void);
 void set_rax(char c);
 
-void set_time(char time, char offset);
-
-char get_hours();
 char i='A';
 int sleep=0;
 char sleeping=0;
@@ -23,35 +21,31 @@ char sleeping=0;
 void int80(char *p, int type, int size)
 {
 	char call = get_rax();
+	
 	char c;
-	//char * a;
-	//a=p;
 	int i;
-	char enter=0;
+	
+	char enter = 0;
 	switch (call)
 	{
 		case SYSCALL_READ:
-			//p = get_rcx();
-			//*((char*)0xB8006)='?';
-			for (i=0;i<size-1 && !enter;i++)
+			for (i = 0; i < size - 1 && !enter; i++)
 			{	
-				//__video_debug('X');
 				*p = keyboard_buffer_read();
-				if (*p=='\n')
-					enter=1;
-				//__video_debug(*p);
+				if (*p == '\n')
+					enter = 1;
 				p++;
-				//i++;
 			}
+
 			if (!enter)
 			{
-				*p='\n';
+				*p = '\n';
 				video_new_line();
 			}
 			break;
 
 		case SYSCALL_WRITE:
-			for (i=0;i<size;i++)
+			for (i = 0; i < size; i++)
 			{
 				video_write_byte(*p);
 				p++;
@@ -69,16 +63,16 @@ void int80(char *p, int type, int size)
 		default:
 	 		break;
 	}
-	//__video_debug('X');
 }
 
 void timerTick()
 {
 	sleep++;
-	if (sleep==1000)
+
+	if (sleep == 1000)
 	{
 		screen_saver();
-		sleeping=1;
+		sleeping = 1;
 	}
 	if (sleeping)
 		video_screen_saver_draw();
@@ -88,9 +82,9 @@ void keyboard()
 {
 	if (sleeping)
 	{
-		sleeping=0;
+		sleeping = 0;
 		restore();
 	}
-	sleep=0;
+	sleep = 0;
 	keyboard_buffer_write();	
 }
