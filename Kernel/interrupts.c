@@ -79,11 +79,13 @@ void int80(char *p, int type, int size)
 void timerTick()
 {
 	sleep++;
-	if (sleep==10000)
+	if (sleep==1000)
 	{
 		screen_saver();
 		sleeping=1;
 	}
+	if (sleeping)
+		video_screen_saver_draw();
 }
 
 void keyboard()
