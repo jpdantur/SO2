@@ -1,6 +1,8 @@
-
 #include <keyboard.h>
 #include <video.h>
+
+char read_port(char * port);
+
 unsigned char keyboard_map[128] =
 {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8',	/* 9 */
@@ -50,9 +52,11 @@ void keyboard_buffer_write(){
 	char keycode;
 
 	status = read_port(0x64);
+
 	if (status & 0x01) {
 		keycode = read_port(0x60);
-		if(keycode > 0)
+		
+    if(keycode > 0)
 		{
 			buffer[w%256] = keyboard_map[keycode];
       w++;
