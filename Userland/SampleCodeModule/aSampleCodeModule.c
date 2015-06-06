@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <lib.h>
+#include <shell.h>
 
 char * v = (char*)0xB8000 + 79 * 2;
 
@@ -9,10 +10,6 @@ extern char endOfBinary;
 
 static int var1 = 0;
 static int var2 = 0;
-
-void print(char * str);
-void sys_read(char * p);
-void set_time(int hour, int min, int sec);
 
 void * memset(void * destiny, int32_t c, uint64_t length);
 
@@ -29,11 +26,36 @@ int main() {
 	char bff[256];
 	int a;
 
+	tCommand command;
+
 	while (1)
 	{
 		print("NoPrompt OS$ ");
-		a = scan(bff,256);
-		print(bff);
+		a = scan(bff, 256);
+		a = shell_buffer_parser(&command, bff, a);
+
+		if (a == -1)
+		{
+			print("Tiro un -1\n");
+		}
+		else
+		{
+			print(command.primary);
+			putchar('\n');
+
+			if (a > 0){
+				print(command.secondary);
+				putchar('\n');
+			}
+			if (a > 1){
+				print(command.args);
+				putchar('\n');
+			}
+
+			command.primary[0] = 0;
+			command.secondary[0] = 0;
+			command.args[0] = 0;
+		}
 	}
 
 	//Test if BSS is properly set up

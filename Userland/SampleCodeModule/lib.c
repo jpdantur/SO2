@@ -52,9 +52,9 @@ int scan(char * str, int len)
 	}
 
     if (j != 0)
-	{
+    {
 		str[j] = '\n';
-		str[j+1] = 0;
+		str[j + 1] = 0;
 	}
 	else
 	{
@@ -64,7 +64,7 @@ int scan(char * str, int len)
 }
 
 
-char* itoa(int i, char b[], int len){
+char * itoa(int i, char b[], int len){
     char const digit[] = "0123456789ABCDEF";
     char* p = b;
     int a = 0;
