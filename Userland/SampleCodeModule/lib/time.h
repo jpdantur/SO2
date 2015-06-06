@@ -5,7 +5,7 @@
 #define MINUTES 1
 #define HOUR 	2
 
-char time(int type);
+char get_time(int type);
 void set_time(int hour, int min, int sec);
 void set_time_att(char type, char att);
 

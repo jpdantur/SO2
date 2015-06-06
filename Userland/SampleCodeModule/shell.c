@@ -1,4 +1,5 @@
 #include <shell.h>
+#include <time.h>
 
 int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 {
@@ -54,16 +55,31 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 int shell_command_execute(tCommand * command)
 {
 	char * primary = command->primary;
-	print(command->primary);
-	print(command->primary);
-
 
 	if (strcmp("time", primary) == 0)
 	{
-		print("Congrats, llamaste a time.\n");
+		shell_print_time();
 	}
 	else
 	{
 		return -1;
 	}
+}
+
+void shell_print_time(void)
+{
+	int v_time[] = {get_time(HOUR), get_time(HOUR), get_time(SECONDS)};
+
+	for (int i = 0; i < 3; i++){
+		
+		if (v_time[i] < 10)
+			putchar('0');
+
+		printint(v_time[i]);
+
+		if (i != 2)
+			putchar(':');
+	}
+
+	putchar('\n');
 }

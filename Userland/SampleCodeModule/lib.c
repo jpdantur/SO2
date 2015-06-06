@@ -139,3 +139,47 @@ int dtoh(int h)
 
     return ret;
 }
+
+int htod(int h)
+{
+    int ret = 0;
+    int count = 0;
+
+    while (h != 0)
+    {
+        ret += (h % 16) * pow(10, count);
+        h = h / 16;
+        count++;
+    }
+
+    return ret;
+}
+
+void printint(int num)
+{
+    char numvec[MAX_NUMBER_PRINT_LEN] = {'0'};
+    int i = 0;
+    int len = 0;
+    char aux;
+
+    while (num != 0)
+    {
+        numvec[len++] = num % 10 + '0';
+        num /= 10;
+    }
+
+    numvec[len--] = 0;
+
+    while(i < len)
+    {
+        aux = numvec[i];
+        numvec[i] = numvec[len];
+        numvec[len] = aux;
+
+        i++;
+        len--;
+    }
+
+    print(numvec);
+
+}

@@ -41,7 +41,7 @@ int main() {
 		else
 		{
 			a = shell_command_execute(&command);
-			
+
 			if (a == INVALID_COMMAND)
 				print("Comando invalido.\n");
 		}

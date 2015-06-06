@@ -1,8 +1,11 @@
-char time(int type)
+#include <time.h>
+#include <lib.h>
+
+char get_time(int type)
 {
 	char c;
 	sys_time(&c, type);
-	return c;
+	return htod(c);
 }
 
 void set_time(int hour, int min, int sec)
