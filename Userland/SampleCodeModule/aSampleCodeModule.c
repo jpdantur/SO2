@@ -40,21 +40,10 @@ int main() {
 		}
 		else
 		{
-			print(command.primary);
-			putchar('\n');
-
-			if (a > 0){
-				print(command.secondary);
-				putchar('\n');
-			}
-			if (a > 1){
-				print(command.args);
-				putchar('\n');
-			}
-
-			command.primary[0] = 0;
-			command.secondary[0] = 0;
-			command.args[0] = 0;
+			a = shell_command_execute(&command);
+			
+			if (a == INVALID_COMMAND)
+				print("Comando invalido.\n");
 		}
 
 	}

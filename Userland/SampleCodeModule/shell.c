@@ -14,8 +14,9 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 		if (dispatcher > 2)
 			return -1;
 
-		if (bff[i] == '\n')
+		if (bff[i] == '\n'){
 			return dispatcher;
+		}
 
 		if (bff[i] == ' ')
 		{
@@ -48,4 +49,21 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 	}
 
 	return dispatcher;
+}
+
+int shell_command_execute(tCommand * command)
+{
+	char * primary = command->primary;
+	print(command->primary);
+	print(command->primary);
+
+
+	if (strcmp("time", primary) == 0)
+	{
+		print("Congrats, llamaste a time.\n");
+	}
+	else
+	{
+		return -1;
+	}
 }
