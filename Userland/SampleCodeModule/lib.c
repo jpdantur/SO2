@@ -162,6 +162,11 @@ void printint(int num)
     int len = 0;
     char aux;
 
+    if (num == 0){
+        putchar('0');
+        return;
+    }
+
     while (num != 0)
     {
         numvec[len++] = num % 10 + '0';

@@ -4,13 +4,13 @@ char get_time(char type)
 {
 	char t;
 	switch (type){
-		case 0:
+		case SECONDS:
 			t = get_seconds();
 			break;
-		case 1:
+		case MINUTES:
 			t = get_minutes();
 			break;
-		case 2:
+		case HOUR:
 			t = get_hours();
 			break;
 	}

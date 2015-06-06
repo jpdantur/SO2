@@ -21,7 +21,7 @@ int main() {
 	char aux[2];
 	aux[0] = aux[1] = '0';
 
-	set_time(4,20,0);
+	set_time(23, 59, 45);
 
 	char bff[256];
 	int a;

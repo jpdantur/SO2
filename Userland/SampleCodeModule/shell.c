@@ -68,7 +68,7 @@ int shell_command_execute(tCommand * command)
 
 void shell_print_time(void)
 {
-	int v_time[] = {get_time(HOUR), get_time(HOUR), get_time(SECONDS)};
+	int v_time[3] = {get_time(HOUR), get_time(MINUTES), get_time(SECONDS)};
 
 	for (int i = 0; i < 3; i++){
 		
