@@ -1,7 +1,7 @@
 #include <shell.h>
 #include <time.h>
 #define isnum(x) ((x)>='0' && (x)<='9'?1:0)
-
+char * video = (char*)0xB8000 + 79 * 2;
 
 int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 {
@@ -66,13 +66,39 @@ int shell_command_execute(tCommand * command)
 	}
 	else if (strcmp("set", primary) == 0)
 	{
+		int aux=-1;
 		if (strcmp("hour", secondary) == 0)
-			return shell_set_time(args, 2);
-		if (strcmp("min", secondary) == 0)
-			return shell_set_time(args, 1);
-		if (strcmp("sec", secondary) == 0)
-			return shell_set_time(args, 0);
-		return -1;
+		{
+			aux = shell_validate_time(args, 2);
+			if (aux!=-1)
+			{
+				set_time_att(2,dtoh(aux));
+				return 0;
+			}
+		}
+		else if (strcmp("min", secondary) == 0)
+		{
+			aux = shell_validate_time(args, 1);
+			if (aux!=-1)
+			{
+				set_time_att(1,dtoh(aux));
+				return 0;
+			}
+		}
+		else if (strcmp("sec", secondary) == 0)
+		{
+			aux = shell_validate_time(args, 0);
+			if (aux!=-1)
+			{
+				set_time_att(0,dtoh(aux));
+				return 0;
+			}
+		}
+		else if (strcmp("time", secondary) == 0)
+		{
+			return shell_set_whole_time(args);
+		}
+		return aux;
 	}
 	else
 	{
@@ -98,13 +124,13 @@ void shell_print_time(void)
 	putchar('\n');
 }
 
-int shell_set_time(char * value, int type)
+int shell_validate_time(char * value, int type)
 {
 	int i;
 	int res=0;
 	while (*value)
 	{
-		if (i>=2 || !isnum(*value))
+		if (!isnum(*value))
 			return -1;
 		res*=10;
 		res+=*value-'0';
@@ -113,6 +139,44 @@ int shell_set_time(char * value, int type)
 	}
 	if (res>=(type==2?24:60))
 		return -1;
-	set_time_att(type,dtoh(res));
-	return 0;
+	//set_time_att(type,dtoh(res));
+	return res;
+}
+
+int shell_set_whole_time(char * value)
+{
+	//int check=0;
+	int i;
+	//int j=0;
+	char aux[3];
+	int nums[3];
+	for (i=0;i<3;i++)
+	{
+		int j=0;
+		while ((*value!=0) && (*value!=','))
+		{
+			if (j>=2)
+			{
+				return -1;
+			}
+			aux[j]=*value;
+			value++;
+			j++;
+		}
+		if (j<2 || (*value == 0 && i!=2) || (*value != 0 && i==2))
+		{
+			return -1;
+		}
+		aux[2] = 0;
+		nums[i] = shell_validate_time(aux,2-i);
+		if (nums[i]==-1)
+		{
+			return -1;
+		}
+		value++;
+	}
+	set_time_att(0,dtoh(nums[2]));
+	set_time_att(1,dtoh(nums[1]));
+	set_time_att(2,dtoh(nums[0]));
+
 }
