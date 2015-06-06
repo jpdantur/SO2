@@ -1,5 +1,6 @@
 #include <shell.h>
 #include <time.h>
+void sys_screen_saver_set(int time);
 
 int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 {
@@ -55,10 +56,25 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 int shell_command_execute(tCommand * command)
 {
 	char * primary = command->primary;
+	char * secondary = command->secondary;
+	char * args = command->args;
 
 	if (strcmp("time", primary) == 0)
 	{
 		shell_print_time();
+		return 0;
+	}
+	else if (strcmp("set", primary) == 0)
+	{
+		if (strcmp("screensaver", secondary) == 0){
+			if (shell_set_screen_saver_time(args) == -1)
+				return -1;
+			print("Screen saver set to ");
+			print(args);
+			print(" min\n");
+			return 0;
+		}
+		return -1;
 	}
 	else
 	{
@@ -82,4 +98,23 @@ void shell_print_time(void)
 	}
 
 	putchar('\n');
+}
+
+//Receives time in min
+int shell_set_screen_saver_time(char * time)
+{
+	int num = 0;
+
+	while (*time){
+		if (*time < '0' || *time > '9')
+			return -1;
+
+		num *= 10;
+		num += *time - '0';
+
+		time++;
+	}
+
+	sys_screen_saver_set((int)(num * 18.18182 * 60));
+	return 0;
 }

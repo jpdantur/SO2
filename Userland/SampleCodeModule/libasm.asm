@@ -2,6 +2,7 @@ global sys_write
 global sys_read
 global sys_time
 global sys_time_write
+global sys_screen_saver_set
 
 sys_write:
 	push rbp
@@ -61,5 +62,17 @@ sys_time_write:
 
 	pop rdx
 	pop rbx
+	pop rax
+	ret
+
+sys_screen_saver_set:
+	push rax
+	push rdx
+
+	mov rax, 6 ; sys_call screen_saver_set
+	mov rdx, rdi
+	int 80h
+
+	pop rdx
 	pop rax
 	ret
