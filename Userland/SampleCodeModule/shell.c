@@ -74,9 +74,9 @@ int shell_command_execute(tCommand * command)
 		if (strcmp("screensaver", secondary) == 0){
 			if (shell_set_screen_saver_time(args) == -1)
 				return -1;
-			print("Screen saver set to ");
+			print("Screen saver will set after ");
 			print(args);
-			print(" min\n");
+			print(" sec of inactivity.\n");
 			return 0;
 		}
 		return -1;
@@ -115,7 +115,7 @@ void shell_print_time(void)
 	putchar('\n');
 }
 
-//Receives time in min
+//Receives time in sec
 int shell_set_screen_saver_time(char * time)
 {
 	int num = 0;
@@ -130,7 +130,7 @@ int shell_set_screen_saver_time(char * time)
 		time++;
 	}
 
-	sys_screen_saver_set((int)(num * 18.18182 * 60));
+	sys_screen_saver_set((int)(num * 18.18182));
 	return 0;
 }
 

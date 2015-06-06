@@ -199,6 +199,7 @@ void video_backspace(){
 void video_reset_bff_counter(){
 	video_bff_counter = 0;
 }
+
 void video_bff_counter_inc(){
 	video_bff_counter++;
 }
