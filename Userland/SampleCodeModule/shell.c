@@ -1,6 +1,11 @@
 #include <shell.h>
 #include <time.h>
+<<<<<<< HEAD
 void sys_screen_saver_set(int time);
+=======
+#define isnum(x) ((x)>='0' && (x)<='9'?1:0)
+
+>>>>>>> 1b99a26e92fa27706425b121c73f28cbd3150979
 
 int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 {
@@ -76,6 +81,16 @@ int shell_command_execute(tCommand * command)
 		}
 		return -1;
 	}
+	else if (strcmp("set", primary) == 0)
+	{
+		if (strcmp("hour", secondary) == 0)
+			return shell_set_time(args, 2);
+		if (strcmp("min", secondary) == 0)
+			return shell_set_time(args, 1);
+		if (strcmp("sec", secondary) == 0)
+			return shell_set_time(args, 0);
+		return -1;
+	}
 	else
 	{
 		return -1;
@@ -116,5 +131,26 @@ int shell_set_screen_saver_time(char * time)
 	}
 
 	sys_screen_saver_set((int)(num * 18.18182 * 60));
+	return 0;
+}
+
+int shell_set_time(char * value, int type)
+{
+	int i;
+	int res = 0;
+	while (*value)
+	{
+		if (i >= 2 || !isnum(*value))
+			return -1;
+		
+		res *= 10;
+		res += *value - '0';
+		i++;
+		value++;
+	}
+	if (res >= (type == 2? 24 : 60))
+		return -1;
+	
+	set_time_att(type, dtoh(res));
 	return 0;
 }
