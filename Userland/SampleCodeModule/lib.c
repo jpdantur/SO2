@@ -63,6 +63,29 @@ int scan(char * str, int len)
 	return j;
 }
 
+int strcmp(const char * str1, const char * str2)
+{
+    int sub;
+
+    while (*str1 && *str2)
+    {
+        sub = *str1 - *str2;
+
+        if (sub != 0)
+            return sub;
+        
+        str1++;
+        str2++;
+    }
+    
+    if (*str1)
+        return 1;
+
+    if (*str2)
+        return -1;
+
+    return 0;
+}
 
 char * itoa(int i, char b[], int len){
     char const digit[] = "0123456789ABCDEF";

@@ -56,6 +56,7 @@ int main() {
 			command.secondary[0] = 0;
 			command.args[0] = 0;
 		}
+
 	}
 
 	//Test if BSS is properly set up
