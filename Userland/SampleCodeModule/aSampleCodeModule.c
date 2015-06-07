@@ -18,16 +18,16 @@ int main() {
 	//Clean BSS
 	memset(&bss, 0, &endOfBinary - &bss);
 
-	char aux[2];
-	aux[0] = aux[1] = '0';
+	//char aux[2];
+	//aux[0] = aux[1] = '0';
 
 	set_time(23, 59, 45);
-
-	char bff[256];
+	shell();
+	/*char bff[256];
 	int a;
 
 	tCommand command;
-
+	//print("Bienvenido a la consola de arqui, la mejor consola de todas\n");
 	while (1)
 	{
 		print("NoPrompt OS$ ");
@@ -46,7 +46,7 @@ int main() {
 				print("Comando invalido.\n");
 		}
 
-	}
+	}*/
 
 	//Test if BSS is properly set up
 	if (var1 == 0 && var2 == 0)

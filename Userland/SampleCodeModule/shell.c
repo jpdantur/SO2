@@ -4,6 +4,34 @@ void sys_screen_saver_set(int time);
 #define isnum(x) ((x)>='0' && (x)<='9'?1:0)
 char * video = (char*)0xB8000 + 79 * 2;
 
+void shell()
+{
+	char bff[256];
+	int a;
+
+	tCommand command;
+	//print("Bienvenido a la consola de arqui, la mejor consola de todas\n");
+	while (1)
+	{
+		print("NoPrompt OS$ ");
+		a = scan(bff, 256);
+		a = shell_buffer_parser(&command, bff, a);
+
+		if (a == -1)
+		{
+			print("Tiro un -1\n");
+		}
+		else
+		{
+			a = shell_command_execute(&command);
+
+			if (a == INVALID_COMMAND)
+				print("Comando invalido.\n");
+		}
+
+	}
+}
+
 int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 {
 	char * p;

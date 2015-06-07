@@ -15,5 +15,6 @@ typedef struct
 
 int shell_buffer_parser(tCommand * command, char * bff, int bff_len);
 int shell_command_execute(tCommand * command);
+void shell(void);
 
 #endif
