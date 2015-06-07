@@ -1,16 +1,26 @@
 #include <shell.h>
 #include <time.h>
+
+
+extern char bss;
+extern char endOfBinary;
+
 void sys_screen_saver_set(int time);
 #define isnum(x) ((x)>='0' && (x)<='9'?1:0)
 char * video = (char*)0xB8000 + 79 * 2;
 
 void shell()
 {
+	memset(&bss, 0, &endOfBinary - &bss);
+	//Solve constant space problem
+	char * _sssss = "Bienvenido a la consola de arqui, la mejor consola de todas\n";
+
 	char bff[256];
 	int a;
 
 	tCommand command;
-	//print("Bienvenido a la consola de arqui, la mejor consola de todas\n");
+	
+	
 	while (1)
 	{
 		print("NoPrompt OS$ ");
