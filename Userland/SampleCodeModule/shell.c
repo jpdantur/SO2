@@ -1,5 +1,6 @@
 #include <shell.h>
 #include <time.h>
+void sys_screen_saver_set(int time);
 #define isnum(x) ((x)>='0' && (x)<='9'?1:0)
 char * video = (char*)0xB8000 + 79 * 2;
 
@@ -63,13 +64,21 @@ int shell_command_execute(tCommand * command)
 	if (strcmp("time", primary) == 0)
 	{
 		shell_print_time();
+		return 0;
 	}
 	else if (strcmp("set", primary) == 0)
 	{
-		int aux=-1;
-		if (strcmp("hour", secondary) == 0)
+		if (strcmp("screensaver", secondary) == 0){
+			if (shell_set_screen_saver_time(args) == -1)
+				return -1;
+			print("Screen saver will set after ");
+			print(args);
+			print(" sec of inactivity.\n");
+			return 0;
+		}
+		else if (strcmp("hour", secondary) == 0)
 		{
-			aux = shell_validate_time(args, 2);
+			int aux = shell_validate_time(args, 2);
 			if (aux!=-1)
 			{
 				set_time_att(2,dtoh(aux));
@@ -78,7 +87,7 @@ int shell_command_execute(tCommand * command)
 		}
 		else if (strcmp("min", secondary) == 0)
 		{
-			aux = shell_validate_time(args, 1);
+			int aux = shell_validate_time(args, 1);
 			if (aux!=-1)
 			{
 				set_time_att(1,dtoh(aux));
@@ -87,7 +96,7 @@ int shell_command_execute(tCommand * command)
 		}
 		else if (strcmp("sec", secondary) == 0)
 		{
-			aux = shell_validate_time(args, 0);
+			int aux = shell_validate_time(args, 0);
 			if (aux!=-1)
 			{
 				set_time_att(0,dtoh(aux));
@@ -96,9 +105,9 @@ int shell_command_execute(tCommand * command)
 		}
 		else if (strcmp("time", secondary) == 0)
 		{
+			//*video='A';
 			return shell_set_whole_time(args);
 		}
-		return aux;
 	}
 	else
 	{
@@ -124,20 +133,41 @@ void shell_print_time(void)
 	putchar('\n');
 }
 
+
+//Receives time in sec
+int shell_set_screen_saver_time(char * time)
+{
+	int num = 0;
+
+	while (*time){
+		if (*time < '0' || *time > '9')
+			return -1;
+
+		num *= 10;
+		num += *time - '0';
+
+		time++;
+	}
+
+	sys_screen_saver_set((int)(num * 18.18182));
+	return 0;
+}
+
 int shell_validate_time(char * value, int type)
 {
 	int i;
-	int res=0;
+	int res = 0;
 	while (*value)
 	{
 		if (!isnum(*value))
 			return -1;
-		res*=10;
-		res+=*value-'0';
+		
+		res *= 10;
+		res += *value - '0';
 		i++;
 		value++;
 	}
-	if (res>=(type==2?24:60))
+	if (res >= (type == 2? 24 : 60))
 		return -1;
 	//set_time_att(type,dtoh(res));
 	return res;
@@ -145,6 +175,7 @@ int shell_validate_time(char * value, int type)
 
 int shell_set_whole_time(char * value)
 {
+	//*video='A';
 	//int check=0;
 	int i;
 	//int j=0;
@@ -178,5 +209,4 @@ int shell_set_whole_time(char * value)
 	set_time_att(0,dtoh(nums[2]));
 	set_time_att(1,dtoh(nums[1]));
 	set_time_att(2,dtoh(nums[0]));
-
 }

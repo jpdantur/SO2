@@ -7,6 +7,7 @@
 #define SYSCALL_WRITE 4
 #define SYSCALL_TIME_READ 2
 #define SYSCALL_TIME_WRITE 5
+#define SYSCALL_SCREEN_SAVER_SET 6
 
 char get_call(void);
 char get_rax(void);
@@ -54,6 +55,10 @@ void int80(char *p, int type, int size)
 
 		case SYSCALL_TIME_WRITE:
 			set_time(size, type);
+			break;
+
+		case SYSCALL_SCREEN_SAVER_SET:
+			video_set_screen_saver_timer(size);
 			break;
 
 		default:

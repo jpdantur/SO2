@@ -10,6 +10,8 @@ char screen_saver_active = 0;
 int screen_saver_counter = 0;
 int screen_saver_drawer = 0;
 
+int screen_saver_timer = DEFAULT_SCREEN_SAVER_TIMER;
+
 void backup_screen()
 {
 	int i;
@@ -33,12 +35,17 @@ void video_screen_saver_check_count(void)
 {
 	screen_saver_count();
 
-	if (screen_saver_counter == 1000)
+	if (screen_saver_counter == screen_saver_timer)
 	{
 		screen_saver_enable();
 	}
 	if (screen_saver_active)
 		screen_saver_draw();
+}
+
+void video_set_screen_saver_timer(int s_time)
+{
+	screen_saver_timer = s_time;
 }
 
 void video_screen_saver_check_restore(void)
@@ -192,6 +199,7 @@ void video_backspace(){
 void video_reset_bff_counter(){
 	video_bff_counter = 0;
 }
+
 void video_bff_counter_inc(){
 	video_bff_counter++;
 }
