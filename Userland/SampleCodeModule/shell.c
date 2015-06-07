@@ -61,20 +61,25 @@ int shell_command_execute(tCommand * command)
 	char * secondary = command->secondary;
 	char * args = command->args;
 
+	int retval;
+
 	if (strcmp("time", primary) == 0)
 	{
 		shell_print_time();
-		return 0;
+		retval = 0;
 	}
 	else if (strcmp("set", primary) == 0)
 	{
+		print("Entre a set\n");
 		if (strcmp("screensaver", secondary) == 0){
-			if (shell_set_screen_saver_time(args) == -1)
-				return -1;
-			print("Screen saver will set after ");
-			print(args);
-			print(" sec of inactivity.\n");
-			return 0;
+			if (shell_set_screen_saver_time(args) == -1){
+				retval = -1;
+			}else{
+				print("Screen saver will set after ");
+				print(args);
+				print(" sec of inactivity.\n");
+				retval = 0;
+			}
 		}
 		else if (strcmp("hour", secondary) == 0)
 		{
@@ -82,7 +87,7 @@ int shell_command_execute(tCommand * command)
 			if (aux!=-1)
 			{
 				set_time_att(2,dtoh(aux));
-				return 0;
+				retval = 0;
 			}
 		}
 		else if (strcmp("min", secondary) == 0)
@@ -91,7 +96,7 @@ int shell_command_execute(tCommand * command)
 			if (aux!=-1)
 			{
 				set_time_att(1,dtoh(aux));
-				return 0;
+				retval = 0;
 			}
 		}
 		else if (strcmp("sec", secondary) == 0)
@@ -100,19 +105,35 @@ int shell_command_execute(tCommand * command)
 			if (aux!=-1)
 			{
 				set_time_att(0,dtoh(aux));
-				return 0;
+				retval = 0;
 			}
 		}
 		else if (strcmp("time", secondary) == 0)
 		{
 			//*video='A';
-			return shell_set_whole_time(args);
+			print("Entre a time\n");
+			retval = shell_set_whole_time(args);
 		}
+		else
+		{
+			retval = -1;
+		}
+
 	}
 	else
 	{
-		return -1;
+		retval = -1;
 	}
+
+	flush(command);
+	return retval;
+}
+
+void flush(tCommand * command){
+	*(command->primary) = 0;
+	*(command->secondary) = 0;
+	*(command->args) = 0;
+	print("Entre a flush\n");
 }
 
 void shell_print_time(void)
@@ -209,8 +230,7 @@ int shell_set_whole_time(char * value)
 	set_time_att(0,dtoh(nums[2]));
 	set_time_att(1,dtoh(nums[1]));
 	set_time_att(2,dtoh(nums[0]));
-<<<<<<< HEAD
+
+	return 0;
+
 }
-=======
-}
->>>>>>> cba771229d768e53ed57deed2ccf881fa8cb9b12
