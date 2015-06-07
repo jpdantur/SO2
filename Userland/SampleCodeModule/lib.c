@@ -37,16 +37,16 @@ int scan(char * str, int len)
 
 	while(scan_bff[i] != '\n')
 	{
-		if (scan_bff[i] == '\b')
+		/*if (scan_bff[i] == '\b')
 		{
 			if(j > 0)
 				j--;
 			str[j] = 0;
 		}
         else
-		{
+		{*/
 			str[j++] = scan_bff[i];
-		}
+		//}
 		
         i++;
 	}

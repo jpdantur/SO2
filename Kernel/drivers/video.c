@@ -104,6 +104,8 @@ void video_write_byte(char c)
 {
 	if (c == BACKSPACE_BYTE){
 		video_backspace();
+		*(video)='_';
+		*(video+2)=0;
 		return;
 	}
 
@@ -125,6 +127,7 @@ void video_write_byte(char c)
 	}
 	
 	*video = c;
+	*(video+2)='_';
 	video_next_char();
 	video_bff_counter_inc();
 }
