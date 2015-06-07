@@ -209,4 +209,8 @@ int shell_set_whole_time(char * value)
 	set_time_att(0,dtoh(nums[2]));
 	set_time_att(1,dtoh(nums[1]));
 	set_time_att(2,dtoh(nums[0]));
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> cba771229d768e53ed57deed2ccf881fa8cb9b12
