@@ -46,27 +46,31 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 {
 	char * p;
 	int dispatcher = 0;
-	int struct_index[3] = {0, 0, 0};
+	int struct_index[2] = {0, 0};
 
 	if (bff[0] == 0 || bff[0] == ' ')
 		return -1;
 
 	for (int i = 0; i < bff_len; i++)
 	{
-		if (dispatcher > 2)
-			return -1;
+		//if (dispatcher > 2)
+		//	return -1;
 
 		if (bff[i] == '\n'){
 			return dispatcher;
 		}
 
-		if (bff[i] == ' ')
+		if (bff[i] == ' ' && dispatcher == 0)
 		{
 			dispatcher++;
 		}
 		else
 		{
-			switch (dispatcher){
+			if (dispatcher == 0)
+				p=command->primary;
+			else
+				p=command->args;
+		 /*switch (dispatcher){
 				case 0:
 					p = command->primary; 
 					break;
@@ -78,14 +82,14 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 				case 2:
 					p = command->args;
 					break;
-			}
+			}*/
 
 			p[struct_index[dispatcher]] = bff[i];
 			struct_index[dispatcher]++;
 			p[struct_index[dispatcher]] = 0;
 		}
 
-		if (struct_index[dispatcher] > MAX_PARAMS_LEN)
+		if (struct_index[dispatcher] > GET_MAX_LEN(dispatcher))
 			return -1;
 
 	}
@@ -96,7 +100,7 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 int shell_command_execute(tCommand * command)
 {
 	char * primary = command->primary;
-	char * secondary = command->secondary;
+	//char * secondary = command->secondary;
 	char * args = command->args;
 
 	int retval;
@@ -106,57 +110,59 @@ int shell_command_execute(tCommand * command)
 		shell_print_time();
 		retval = 0;
 	}
-	else if (strcmp("set", primary) == 0)
+	else if (strcmp("set_screensaver", primary) == 0)
 	{
-		print("Entre a set\n");
-		if (strcmp("screensaver", secondary) == 0){
-			if (shell_set_screen_saver_time(args) == -1){
-				retval = -1;
-			}else{
-				print("Screen saver will set after ");
-				print(args);
-				print(" sec of inactivity.\n");
-				retval = 0;
-			}
-		}
-		else if (strcmp("hour", secondary) == 0)
-		{
-			int aux = shell_validate_time(args, 2);
-			if (aux!=-1)
-			{
-				set_time_att(2,dtoh(aux));
-				retval = 0;
-			}
-		}
-		else if (strcmp("min", secondary) == 0)
-		{
-			int aux = shell_validate_time(args, 1);
-			if (aux!=-1)
-			{
-				set_time_att(1,dtoh(aux));
-				retval = 0;
-			}
-		}
-		else if (strcmp("sec", secondary) == 0)
-		{
-			int aux = shell_validate_time(args, 0);
-			if (aux!=-1)
-			{
-				set_time_att(0,dtoh(aux));
-				retval = 0;
-			}
-		}
-		else if (strcmp("time", secondary) == 0)
-		{
-			//*video='A';
-			print("Entre a time\n");
-			retval = shell_set_whole_time(args);
-		}
-		else
+		//print("Entre a set\n");
+		//if (strcmp("screensaver", secondary) == 0){
+		if (shell_set_screen_saver_time(args) == -1)
 		{
 			retval = -1;
 		}
-
+		else
+		{
+			print("Screen saver will set after ");
+			print(args);
+			print(" sec of inactivity.\n");
+			retval = 0;
+		}
+	}
+	else if (strcmp("set_hour", primary) == 0)
+	{
+		int aux = shell_validate_time(args, 2);
+		if (aux!=-1)
+		{
+			set_time_att(2,dtoh(aux));
+			retval = 0;
+		}
+	}
+	else if (strcmp("set_min", primary) == 0)
+	{
+		int aux = shell_validate_time(args, 1);
+		if (aux!=-1)
+		{
+			set_time_att(1,dtoh(aux));
+			retval = 0;
+		}
+	}
+	else if (strcmp("set_sec", primary) == 0)
+	{
+		int aux = shell_validate_time(args, 0);
+		if (aux!=-1)
+		{
+			set_time_att(0,dtoh(aux));
+			retval = 0;
+		}
+	}
+	else if (strcmp("set_time", primary) == 0)
+	{
+		//*video='A';
+		print("Entre a time\n");
+		retval = shell_set_whole_time(args);
+	}
+	else if (strcmp("echo", primary) == 0)
+	{
+		print(args);
+		putchar('\n');
 	}
 	else
 	{
@@ -169,7 +175,6 @@ int shell_command_execute(tCommand * command)
 
 void flush(tCommand * command){
 	*(command->primary) = 0;
-	*(command->secondary) = 0;
 	*(command->args) = 0;
 	print("Entre a flush\n");
 }
@@ -207,7 +212,8 @@ int shell_set_screen_saver_time(char * time)
 
 		time++;
 	}
-
+	if (num == 0)
+		return -1;
 	sys_screen_saver_set((int)(num * 18.18182));
 	return 0;
 }
@@ -243,7 +249,7 @@ int shell_set_whole_time(char * value)
 	for (i=0;i<3;i++)
 	{
 		int j=0;
-		while ((*value!=0) && (*value!=','))
+		while ((*value!=0) && (*value!=':'))
 		{
 			if (j>=2)
 			{

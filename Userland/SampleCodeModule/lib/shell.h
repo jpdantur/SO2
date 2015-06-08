@@ -1,15 +1,16 @@
 #ifndef _SHELL_H
 #define _SHELL_H
 
-#define MAX_PARAMS_LEN 	20
+#define MAX_COMMAND_LEN 	20
+#define MAX_ARGS_LEN		100
+#define GET_MAX_LEN(x)	(x==0?MAX_COMMAND_LEN:MAX_ARGS_LEN)
 
 #define INVALID_COMMAND -1
 
 typedef struct
 {
-	char primary[MAX_PARAMS_LEN + 1];
-	char secondary[MAX_PARAMS_LEN + 1];
-	char args[MAX_PARAMS_LEN + 1];
+	char primary[MAX_COMMAND_LEN + 1];
+	char args[MAX_ARGS_LEN + 1];
 
 } tCommand;
 
