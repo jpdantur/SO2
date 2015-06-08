@@ -158,6 +158,15 @@ int shell_command_execute(tCommand * command)
 		}
 
 	}
+	else if (strcmp("help", primary) == 0)
+	{
+		print("Ayuda\n");
+		print("Setear screensaver: set screensaver [segs]\n");
+		print("Ver la hora del sistema: time\n");
+		print("Setear el tiempo del sistema: set time [hora - HH:MM:SS]\n");
+		print("Setear hora/minutos/segundos del sistema: set [hour | min | sec] [value]\n");
+		retval = 0;
+	}
 	else
 	{
 		retval = -1;
