@@ -16,14 +16,21 @@ void shell()
 	char * _sssss = "Bienvenido a la consola de arqui, la mejor consola de todas\n";
 
 	char bff[256];
+	char name[21];
+	print ("Con quien tengo el gusto? (Max 20 caracteres)>");
 	int a;
-
+	do
+	{
+		a=scan(name,21);
+	} while (a==0);
+	remove_new_line(name);
 	tCommand command;
 	
 	
 	while (1)
 	{
-		print("NoPrompt OS$ ");
+		print(name);
+		putchar('>');
 		a = scan(bff, 256);
 		a = shell_buffer_parser(&command, bff, a);
 
@@ -41,7 +48,15 @@ void shell()
 
 	}
 }
-
+void remove_new_line(char * value)
+{
+	while(*value)
+	{
+		if (*value=='\n')
+			*value=0;
+		value++;
+	}
+}
 int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 {
 	char * p;
@@ -167,10 +182,11 @@ int shell_command_execute(tCommand * command)
 	else if (strcmp("help", primary) == 0)
 	{
 		print("Ayuda\n");
-		print("Setear screensaver: set screensaver [segs]\n");
+		print("Setear screensaver: set_screensaver [segs]\n");
 		print("Ver la hora del sistema: time\n");
-		print("Setear el tiempo del sistema: set time [hora - HH:MM:SS]\n");
-		print("Setear hora/minutos/segundos del sistema: set [hour | min | sec] [value]\n");
+		print("Setear el tiempo del sistema: set_time [hora - HH:MM:SS]\n");
+		print("Setear hora/minutos/segundos del sistema: set_[hour| min|sec] [value]\n");
+		print("Imprimir: echo [value] (max 100 caracteres)\n");
 		retval = 0;
 	}
 	else
