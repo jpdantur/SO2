@@ -14,6 +14,7 @@ void shell()
 	memset(&bss, 0, &endOfBinary - &bss);
 	//Solve constant space problem
 	char * _sssss = "Bienvenido a la consola de arqui, la mejor consola de todas\n";
+	print(_sssss);
 
 	char bff[256];
 	char name[21];
@@ -104,7 +105,10 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 		}
 
 		if (struct_index[dispatcher] > GET_MAX_LEN(dispatcher))
+		{
+			//print("Largo");
 			return -1;
+		}
 
 	}
 
@@ -122,7 +126,7 @@ int shell_command_execute(tCommand * command)
 	char string[]="Hola";
 	int retval;
 
-	if (strcmp("time", primary) == 0)
+	if (strcmp("time", primary) == 0 && *args==0)
 	{
 		shell_print_time();
 		retval = 0;
@@ -181,20 +185,19 @@ int shell_command_execute(tCommand * command)
 		print(args);
 		putchar('\n');
 	}
-	else if (strcmp("test", primary) == 0)
+	else if (strcmp("test", primary) == 0 && *args==0)
 	{
-		print(test_int);
+		print("Pruebo int: ");
 		printint(20);
 		putchar('\n');
-		print(test_string);
-		print(string);
-		putchar('\n');
-		print(test_hex);
+		print("Pruebo String: ");
+		print("Hola como va, todo bien? gfdsgfdsgfdsgfdsgfdsgfdsgfdgdsXX\n");
+		print("Pruebo un hex: ");
 		printhex(0x32);
 		putchar('\n');
 		retval=0;
 	}
-	else if (strcmp("help", primary) == 0)
+	else if (strcmp("help", primary) == 0 && *args==0)
 	{
 		print("Ayuda\n");
 		print("Setear screensaver: set_screensaver [segs]\n");

@@ -2,7 +2,7 @@
 #define _SHELL_H
 
 #define MAX_COMMAND_LEN 	20
-#define MAX_ARGS_LEN		100
+#define MAX_ARGS_LEN		255
 #define GET_MAX_LEN(x)	(x==0?MAX_COMMAND_LEN:MAX_ARGS_LEN)
 
 #define INVALID_COMMAND -1
