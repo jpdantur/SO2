@@ -59,6 +59,7 @@ void remove_new_line(char * value)
 }
 int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 {
+	flush(command);
 	char * p;
 	int dispatcher = 0;
 	int struct_index[2] = {0, 0};
@@ -120,10 +121,10 @@ int shell_command_execute(tCommand * command)
 	char * primary = command->primary;
 	//char * secondary = command->secondary;
 	char * args = command->args;
-	char test_int[]="Pruebo int: ";
-	char test_hex[]="Pruebo hex: ";
-	char test_string[]="Pruebo string: ";
-	char string[]="Hola";
+	//char test_int[]="Pruebo int: ";
+	//char test_hex[]="Pruebo hex: ";
+	//char test_string[]="Pruebo string: ";
+	//char string[]="Hola";
 	int retval;
 
 	if (strcmp("time", primary) == 0 && *args==0)
@@ -213,7 +214,7 @@ int shell_command_execute(tCommand * command)
 		retval = -1;
 	}
 
-	flush(command);
+	//flush(command);
 	return retval;
 }
 
