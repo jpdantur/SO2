@@ -10,6 +10,7 @@ char get_time(int type)
 
 void set_time(int hour, int min, int sec)
 {
+	printint(sec);
     set_time_att(0, dtoh(sec));
     set_time_att(1, dtoh(min));
     set_time_att(2, dtoh(hour));

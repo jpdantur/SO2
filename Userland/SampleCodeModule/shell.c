@@ -26,11 +26,10 @@ void shell()
 	remove_new_line(name);
 	tCommand command;
 	
-	
 	while (1)
 	{
 		print(name);
-		putchar('>');
+		print(">");
 		a = scan(bff, 256);
 		a = shell_buffer_parser(&command, bff, a);
 
@@ -117,7 +116,10 @@ int shell_command_execute(tCommand * command)
 	char * primary = command->primary;
 	//char * secondary = command->secondary;
 	char * args = command->args;
-
+	char test_int[]="Pruebo int: ";
+	char test_hex[]="Pruebo hex: ";
+	char test_string[]="Pruebo string: ";
+	char string[]="Hola";
 	int retval;
 
 	if (strcmp("time", primary) == 0)
@@ -179,6 +181,19 @@ int shell_command_execute(tCommand * command)
 		print(args);
 		putchar('\n');
 	}
+	else if (strcmp("test", primary) == 0)
+	{
+		print(test_int);
+		printint(20);
+		putchar('\n');
+		print(test_string);
+		print(string);
+		putchar('\n');
+		print(test_hex);
+		printhex(0x32);
+		putchar('\n');
+		retval=0;
+	}
 	else if (strcmp("help", primary) == 0)
 	{
 		print("Ayuda\n");
@@ -187,6 +202,7 @@ int shell_command_execute(tCommand * command)
 		print("Setear el tiempo del sistema: set_time [hora - HH:MM:SS]\n");
 		print("Setear hora/minutos/segundos del sistema: set_[hour| min|sec] [value]\n");
 		print("Imprimir: echo [value] (max 100 caracteres)\n");
+		print("Probar todo: test\n");
 		retval = 0;
 	}
 	else
@@ -203,7 +219,18 @@ void flush(tCommand * command){
 	*(command->args) = 0;
 	print("Entre a flush\n");
 }
-
+/*void test()
+{
+	print("Pruebo int: ");
+	printint(20);
+	putchar('\n');
+	print("String: ");
+	print("aa");
+	putchar('\n');
+	print("Hex: ");
+	printhex(0x32);
+	putchar('\n');
+}*/
 void shell_print_time(void)
 {
 	int v_time[3] = {get_time(HOUR), get_time(MINUTES), get_time(SECONDS)};

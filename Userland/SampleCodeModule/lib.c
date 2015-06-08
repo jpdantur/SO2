@@ -188,3 +188,9 @@ void printint(int num)
     print(numvec);
 
 }
+
+void printhex(int num)
+{
+    print("0x");
+    printint(htod(num));
+}

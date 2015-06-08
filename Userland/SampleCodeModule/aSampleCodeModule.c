@@ -20,8 +20,7 @@ int main() {
 
 	//char aux[2];
 	//aux[0] = aux[1] = '0';
-
-	set_time(23, 59, 45);
+	//set_time(2,2,2);
 	shell();
 	/*char bff[256];
 	int a;
