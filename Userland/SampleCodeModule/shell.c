@@ -14,7 +14,7 @@ void shell()
 	memset(&bss, 0, &endOfBinary - &bss);
 	//Solve constant space problem
 	char * _sssss = "Bienvenido a la consola de arqui, la mejor consola de todas\n";
-	print(_sssss);
+	//print(_sssss);
 
 	char bff[256];
 	char name[21];
