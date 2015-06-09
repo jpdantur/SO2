@@ -15,7 +15,7 @@ char get_rcx(void);
 void set_rax(char c);
 
 
-void int80(char *p, int type, int size)
+void int80(char *p, int rbx, int rdx)
 {
 	char call = get_rax();
 	char *aux = p;
@@ -27,7 +27,7 @@ void int80(char *p, int type, int size)
 	switch (call)
 	{
 		case SYSCALL_READ:
-			while (i < size - 1 && !enter)
+			while (i < rdx - 1 && !enter)
 			{	
 				*p = keyboard_buffer_read();
 				if (*p == '\n')
@@ -60,7 +60,7 @@ void int80(char *p, int type, int size)
 			break;
 
 		case SYSCALL_WRITE:
-			for (i = 0; i < size; i++)
+			for (i = 0; i < rdx; i++)
 			{
 				video_write_byte(*p);
 				p++;
@@ -68,15 +68,15 @@ void int80(char *p, int type, int size)
 			break;
 
 		case SYSCALL_TIME_READ:
-			*p = get_time(type);
+			*p = get_time(rbx);
 			break;
 
 		case SYSCALL_TIME_WRITE:
-			set_time(size, type);
+			set_time(rdx, rbx);
 			break;
 
 		case SYSCALL_SCREEN_SAVER_SET:
-			video_set_screen_saver_timer(size);
+			video_set_screen_saver_timer(rdx);
 			break;
 
 		default:
