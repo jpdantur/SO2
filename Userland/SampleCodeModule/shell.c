@@ -78,6 +78,12 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 
 		if (bff[i] == ' ' && dispatcher == 0)
 		{
+			if (bff[i+1]=='\n')
+			{
+				p[struct_index[dispatcher]] = bff[i];
+				struct_index[dispatcher]++;
+				p[struct_index[dispatcher]] = 0;
+			}
 			dispatcher++;
 		}
 		else
