@@ -15,15 +15,17 @@ void shell()
 
 	char bff[256];
 	char name[21];
+	int a;
 
 	print ("Introducir nombre de usuario (Max 20 caracteres)>");
+	a = scan(name, 21);
 	
-	int a;
-	do
+	while(a==0)
 	{
+		print("Tiene que introducir un nombre!\n");
+		print ("Introducir nombre de usuario (Max 20 caracteres)>");
 		a = scan(name, 21);
-	} while (a == 0);
-
+	}
 	remove_new_line(name);
 	tCommand command;
 	
