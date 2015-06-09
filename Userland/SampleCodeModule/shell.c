@@ -173,11 +173,11 @@ int shell_command_execute(tCommand * command)
 	}
 	else if (strcmp("test", primary) == 0 && *args==0)
 	{
-		print("Pruebo int: ");
+		print("Prueba int: ");
 		printint(20);
 		putchar('\n');
-		print("Pruebo String: ");
-		print("Hola como va, todo bien? gfdsgfdsgfdsgfdsgfdsgfdsgfdgdsXX\n");
+		print("Prueba String: ");
+		print("Esto es un string constante de prueba enviado mediante print.\n");
 		print("Pruebo un hex: ");
 		printhex(0x32);
 		putchar('\n');
