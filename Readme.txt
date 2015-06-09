@@ -9,4 +9,4 @@ nasm qemu gcc make
   user@linux:$ ./run.sh
 
 
-Authors: Mister Poronga (jpdantur), Juan Pascale (jpascale)
+Authors: Wally Dantur (jpdantur), Juan Pascale (jpascale)
