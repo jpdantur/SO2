@@ -6,54 +6,56 @@ extern char bss;
 extern char endOfBinary;
 
 void sys_screen_saver_set(int time);
-#define isnum(x) ((x)>='0' && (x)<='9'?1:0)
-char * video = (char*)0xB8000 + 79 * 2;
 
 void shell()
 {
 	memset(&bss, 0, &endOfBinary - &bss);
-	//Solve constant space problem
+	//Solves constant space problem
 	char * _sssss = "Bienvenido a la consola de arqui, la mejor consola de todas\n";
-	//print(_sssss);
 
 	char bff[256];
 	char name[21];
-	print ("Con quien tengo el gusto? (Max 20 caracteres)>");
+
+	print ("Introducir nombre de usuario (Max 20 caracteres)>");
+	
 	int a;
 	do
 	{
-		a=scan(name,21);
-	} while (a==0);
+		a = scan(name, 21);
+	} while (a == 0);
+
 	remove_new_line(name);
 	tCommand command;
 	
 	while (1)
 	{
+		//Print prompt
 		print(name);
 		print(">");
+
 		a = scan(bff, 256);
-		a = shell_buffer_parser(&command, bff, a);
 
-		if (a == -1)
-		{
-			print("Tiro un -1\n");
-		}
-		else
-		{
-			a = shell_command_execute(&command);
+		if (a != 0){
 
-			if (a == INVALID_COMMAND)
+			a = shell_buffer_parser(&command, bff, a);
+
+			if (a != -1){
+				a = shell_command_execute(&command);
+
+				if (a == INVALID_COMMAND)
+					print("Comando invalido.\n");
+			}else{
 				print("Comando invalido.\n");
+			}
 		}
-
 	}
 }
 void remove_new_line(char * value)
 {
 	while(*value)
 	{
-		if (*value=='\n')
-			*value=0;
+		if (*value == '\n')
+			*value = 0;
 		value++;
 	}
 }
@@ -69,8 +71,6 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 
 	for (int i = 0; i < bff_len; i++)
 	{
-		//if (dispatcher > 2)
-		//	return -1;
 
 		if (bff[i] == '\n'){
 			return dispatcher;
@@ -92,19 +92,6 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 				p=command->primary;
 			else
 				p=command->args;
-		 /*switch (dispatcher){
-				case 0:
-					p = command->primary; 
-					break;
-
-				case 1:
-					p = command->secondary;
-					break;
-
-				case 2:
-					p = command->args;
-					break;
-			}*/
 
 			p[struct_index[dispatcher]] = bff[i];
 			struct_index[dispatcher]++;
@@ -113,7 +100,6 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 
 		if (struct_index[dispatcher] > GET_MAX_LEN(dispatcher))
 		{
-			//print("Largo");
 			return -1;
 		}
 
@@ -125,12 +111,7 @@ int shell_buffer_parser(tCommand * command, char * bff, int bff_len)
 int shell_command_execute(tCommand * command)
 {
 	char * primary = command->primary;
-	//char * secondary = command->secondary;
 	char * args = command->args;
-	//char test_int[]="Pruebo int: ";
-	//char test_hex[]="Pruebo hex: ";
-	//char test_string[]="Pruebo string: ";
-	//char string[]="Hola";
 	int retval;
 
 	if (strcmp("time", primary) == 0 && *args==0)
@@ -157,7 +138,7 @@ int shell_command_execute(tCommand * command)
 	else if (strcmp("set_hour", primary) == 0)
 	{
 		int aux = shell_validate_time(args, 2);
-		if (aux!=-1)
+		if (aux != -1)
 		{
 			set_time_att(2,dtoh(aux));
 			retval = 0;
@@ -166,7 +147,7 @@ int shell_command_execute(tCommand * command)
 	else if (strcmp("set_min", primary) == 0)
 	{
 		int aux = shell_validate_time(args, 1);
-		if (aux!=-1)
+		if (aux != -1)
 		{
 			set_time_att(1,dtoh(aux));
 			retval = 0;
@@ -175,7 +156,7 @@ int shell_command_execute(tCommand * command)
 	else if (strcmp("set_sec", primary) == 0)
 	{
 		int aux = shell_validate_time(args, 0);
-		if (aux!=-1)
+		if (aux != -1)
 		{
 			set_time_att(0,dtoh(aux));
 			retval = 0;
@@ -183,8 +164,6 @@ int shell_command_execute(tCommand * command)
 	}
 	else if (strcmp("set_time", primary) == 0)
 	{
-		//*video='A';
-		print("Entre a time\n");
 		retval = shell_set_whole_time(args);
 	}
 	else if (strcmp("echo", primary) == 0)
@@ -220,27 +199,14 @@ int shell_command_execute(tCommand * command)
 		retval = -1;
 	}
 
-	//flush(command);
 	return retval;
 }
 
 void flush(tCommand * command){
 	*(command->primary) = 0;
 	*(command->args) = 0;
-	print("Entre a flush\n");
 }
-/*void test()
-{
-	print("Pruebo int: ");
-	printint(20);
-	putchar('\n');
-	print("String: ");
-	print("aa");
-	putchar('\n');
-	print("Hex: ");
-	printhex(0x32);
-	putchar('\n');
-}*/
+
 void shell_print_time(void)
 {
 	int v_time[3] = {get_time(HOUR), get_time(MINUTES), get_time(SECONDS)};
@@ -296,46 +262,44 @@ int shell_validate_time(char * value, int type)
 	}
 	if (res >= (type == 2? 24 : 60))
 		return -1;
-	//set_time_att(type,dtoh(res));
+
 	return res;
 }
 
 int shell_set_whole_time(char * value)
 {
-	//*video='A';
-	//int check=0;
 	int i;
-	//int j=0;
 	char aux[3];
 	int nums[3];
-	for (i=0;i<3;i++)
+
+	for (i = 0; i < 3; i++)
 	{
-		int j=0;
-		while ((*value!=0) && (*value!=':'))
+		int j = 0;
+		while ((*value != 0) && (*value != ':'))
 		{
-			if (j>=2)
+			if (j >= 2)
 			{
 				return -1;
 			}
-			aux[j]=*value;
+			aux[j] =* value;
 			value++;
 			j++;
 		}
-		if (j<2 || (*value == 0 && i!=2) || (*value != 0 && i==2))
+		if (j < 2 || (*value == 0 && i != 2) || (*value != 0 && i == 2))
 		{
 			return -1;
 		}
 		aux[2] = 0;
 		nums[i] = shell_validate_time(aux,2-i);
-		if (nums[i]==-1)
+		if (nums[i] == -1)
 		{
 			return -1;
 		}
 		value++;
 	}
-	set_time_att(0,dtoh(nums[2]));
-	set_time_att(1,dtoh(nums[1]));
-	set_time_att(2,dtoh(nums[0]));
+	set_time_att(0, dtoh(nums[2]));
+	set_time_att(1, dtoh(nums[1]));
+	set_time_att(2, dtoh(nums[0]));
 
 	return 0;
 

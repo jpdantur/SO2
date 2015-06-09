@@ -26,21 +26,27 @@ void set_time(char time, char offset)
 		case SECONDS:
 			write_type = TIME__TYPE_SECONDS;
 			break;
+			
 		case MINUTES:
 			write_type = TIME__TYPE_MINUTES;
 			break;
+
 		case HOUR:
 			write_type = TIME__TYPE_HOUR;
 			break;
+
 		case WEEKDAY:
 			write_type = TIME__TYPE_WEEKDAY;
 			break;
+
 		case MONTHDAY:
 			write_type = TIME__TYPE_MONTHDAY;
 			break;
+
 		case MONTH:
 			write_type = TIME__TYPE_MONTH;
 			break;
+
 		case YEAR:
 			write_type = TIME__TYPE_YEAR;
 			break;

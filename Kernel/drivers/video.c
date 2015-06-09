@@ -4,7 +4,7 @@
 char * video = VIDEO_START;
 char * video_debug = VIDEO_LAST_LINE_START;
 int video_bff_counter = 0;
-char backup[VIDEO_HEIGHT*VIDEO_WIDTH*2];
+char backup[VIDEO_HEIGHT * VIDEO_WIDTH * 2];
 
 char screen_saver_active = 0;
 int screen_saver_counter = 0;
@@ -104,8 +104,8 @@ void video_write_byte(char c)
 {
 	if (c == BACKSPACE_BYTE){
 		video_backspace();
-		*(video)='_';
-		*(video+2)=0;
+		*(video) = '_';
+		*(video + 2) = 0;
 		return;
 	}
 
@@ -127,7 +127,7 @@ void video_write_byte(char c)
 	}
 	
 	*video = c;
-	*(video+2)='_';
+	*(video + 2)='_';
 	video_next_char();
 	video_bff_counter_inc();
 }
@@ -177,7 +177,7 @@ void video_scroll()
 	}
 	while ((uint64_t)copy_from != FIRST_POS_AFTER_VIDEO);
 
-	video = (char *) (VIDEO_START + (VIDEO_HEIGHT - 1)*VIDEO_WIDTH * 2);
+	video = (char *) (VIDEO_START + (VIDEO_HEIGHT - 1) * VIDEO_WIDTH * 2);
 
 	do
 	{
@@ -186,7 +186,7 @@ void video_scroll()
 	}
 	while(video != FIRST_POS_AFTER_VIDEO);
 
-	video = (char *) (VIDEO_START + (VIDEO_WIDTH * (VIDEO_HEIGHT-1) * 2));
+	video = (char *) (VIDEO_START + (VIDEO_WIDTH * (VIDEO_HEIGHT - 1) * 2));
 
 
 }

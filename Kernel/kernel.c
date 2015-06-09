@@ -17,8 +17,9 @@ static const uint64_t PageSize = 0x1000;
 
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
+
 DESCR_INT *idt=0;
-//IDTR idtr;
+
 void _int80Handler(void);
 void _timerTick(void);
 void _keyboard(void);
@@ -26,7 +27,6 @@ void picMasterMask(char flag);
 void picSlaveMask(char flag);
 void _sti(void);
 
-void write_port(int port,char data);
 
 void setup_IDT_entry (int index, word selector, ddword offset, byte access);
 
@@ -90,30 +90,17 @@ void * initializeKernelBinary()
 
 int main()
 {	
-	/*ncPrint("[Kernel Main]");
-	ncNewline();
-	ncPrint("  Sample code module at 0x");
-	ncPrintHex((uint64_t)sampleCodeModuleAddress);
-	ncNewline();
-	ncPrint("  Calling the sample code module returned: ");
-	ncPrintHex(((EntryPoint)sampleCodeModuleAddress)());
-	ncNewline();
-	ncNewline();
 
-	ncPrint("  Sample data module at 0x");
-	ncPrintHex((uint64_t)sampleDataModuleAddress);
-	ncNewline();
-	ncPrint("  Sample data module contents: ");
-	ncPrint((char*)sampleDataModuleAddress);
-	ncNewline();
-
-	ncPrint("[Finished]");
-        */
 	video_clear_screen();
+
 	set_interrupts();
+
+	picMasterMask(0xFC);
+	picSlaveMask(0xFF);
+	_sti();
+
 	((EntryPoint)sampleCodeModuleAddress)();
-	//ncClear();
-	//set_interrupts();
+
 	while(1){
 	}
 	return 0;
@@ -121,18 +108,9 @@ int main()
 
 void set_interrupts()
 {	
-	//idtr.base = 0;  
-	//idtr.base +=(ddword) &idt;
-	//idtr.limit = sizeof(idt)-1;
-	//_lidt (&idtr);
-	//DESCR_INT* idt;
-	//idt=0;
-	setup_IDT_entry(0x80,0x08,&_int80Handler,0x8E);
-	setup_IDT_entry(0x20,0x08,&_timerTick,0x8E);
-	setup_IDT_entry(0x21,0x08,&_keyboard,0x8E);
-	picMasterMask(0xFC);
-	picSlaveMask(0xFF);
-	_sti();
+	setup_IDT_entry(0x80, 0x08, &_int80Handler, 0x8E);
+	setup_IDT_entry(0x20, 0x08, &_timerTick, 0x8E);
+	setup_IDT_entry(0x21, 0x08, &_keyboard, 0x8E);
 }
 
 void setup_IDT_entry (int index, word selector, ddword offset, byte access)

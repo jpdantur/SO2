@@ -18,11 +18,12 @@ void set_rax(char c);
 void int80(char *p, int type, int size)
 {
 	char call = get_rax();
-	char *aux=p;
+	char *aux = p;
 	char c;
-	int i=0;
+	int i = 0;
 	
 	char enter = 0;
+	
 	switch (call)
 	{
 		case SYSCALL_READ:
@@ -34,13 +35,13 @@ void int80(char *p, int type, int size)
 					enter = 1;
 					p++;
 				}
-				else if (*p=='\b')
+				else if (*p == '\b')
 				{
-					*p=0;
-					if (p>aux)
+					*p = 0;
+					if (p > aux)
 					{
 						p--;
-						*p=0;
+						*p = 0;
 						i--;
 					}
 				}
