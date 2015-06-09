@@ -95,6 +95,10 @@ int control1 = 0;
 int alt1 = 0;
 int capslock = 0;
 
+/*
+Based on code from this link
+http://arjunsreedharan.org/post/99370248137/kernel-201-lets-write-a-kernel-with-keyboard
+*/
 void keyboard_buffer_write(){
   unsigned char status;
   char keycode;
