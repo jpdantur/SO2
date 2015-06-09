@@ -1,4 +1,7 @@
 #include <stdint.h>
+#include <time.h>
+#include <lib.h>
+#include <shell.h>
 
 char * v = (char*)0xB8000 + 79 * 2;
 
@@ -8,55 +11,41 @@ extern char endOfBinary;
 static int var1 = 0;
 static int var2 = 0;
 
-void print(char * str);
-void sys_read(char * p);
-void set_time(int hour, int min, int sec);
-
 void * memset(void * destiny, int32_t c, uint64_t length);
 
 int main() {
+
 	//Clean BSS
 	memset(&bss, 0, &endOfBinary - &bss);
-	char aux[2];
-	aux[0]=aux[1]='0';
 
-	set_time(4,20,0);
-
-
-	char bff[256];
+	//char aux[2];
+	//aux[0] = aux[1] = '0';
+	//set_time(2,2,2);
+	shell();
+	/*char bff[256];
 	int a;
-	//aux[2]='\0';
-	//All the following code may be removed 
-	//*v = 'X';
-	//char str[]="GDSGFDSGFDSGFDSGDF";
+
+	tCommand command;
+	//print("Bienvenido a la consola de arqui, la mejor consola de todas\n");
 	while (1)
 	{
 		print("NoPrompt OS$ ");
-		a=scan(bff,256);
-		//*v='X';
-		print(bff);
-		//putchar(a+'0');
-			//print("TuMama");
-		//putchar('\n');
-		//print("TuMama");
-		
-	//putchar(-1);
-		/*char c;
->>>>>>> scan
-		do
-		{
-			c = getchar();
+		a = scan(bff, 256);
+		a = shell_buffer_parser(&command, bff, a);
 
-		} while(c != '\n');
-		
-		print(itoa(time(2), aux, 2));
-		putchar(':');
-		print(itoa(time(1), aux, 2));
-		putchar(':');
-		print(itoa(time(0), aux, 2));
-		putchar('\n');
-		*/
-	}
+		if (a == -1)
+		{
+			print("Tiro un -1\n");
+		}
+		else
+		{
+			a = shell_command_execute(&command);
+
+			if (a == INVALID_COMMAND)
+				print("Comando invalido.\n");
+		}
+
+	}*/
 
 	//Test if BSS is properly set up
 	if (var1 == 0 && var2 == 0)
