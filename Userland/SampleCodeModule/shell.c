@@ -129,9 +129,9 @@ int shell_command_execute(tCommand * command)
 		}
 		else
 		{
-			print("Screen saver will set after ");
+			print("El protector de pantalla se activara despues de ");
 			print(args);
-			print(" sec of inactivity.\n");
+			print(" segundos de inactividad.\n");
 			retval = 0;
 		}
 	}
