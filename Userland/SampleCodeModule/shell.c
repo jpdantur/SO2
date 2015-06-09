@@ -178,20 +178,20 @@ int shell_command_execute(tCommand * command)
 		putchar('\n');
 		print("Prueba String: ");
 		print("Esto es un string constante de prueba enviado mediante print.\n");
-		print("Pruebo un hex: ");
+		print("Prueba hexadecimal: ");
 		printhex(0x32);
 		putchar('\n');
 		retval=0;
 	}
 	else if (strcmp("help", primary) == 0 && *args==0)
 	{
-		print("Ayuda\n");
-		print("Setear screensaver: set_screensaver [segs]\n");
+		print("Menu de Ayuda\n");
+		print("Configurar screensaver: set_screensaver [segs]\n");
 		print("Ver la hora del sistema: time\n");
-		print("Setear el tiempo del sistema: set_time [hora - HH:MM:SS]\n");
-		print("Setear hora/minutos/segundos del sistema: set_[hour| min|sec] [value]\n");
-		print("Imprimir: echo [value] (max 100 caracteres)\n");
-		print("Probar todo: test\n");
+		print("Setear la hora del sistema: set_time [hora - HH:MM:SS]\n");
+		print("Setear hora/min/seg del sistema (Por separado): set_[hour| min|sec] [value]\n");
+		print("Imprimir en pantalla: echo [value]\n");
+		print("Probar funciones de impresion: test\n");
 		retval = 0;
 	}
 	else
