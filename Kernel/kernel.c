@@ -4,6 +4,7 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <types.h>
+#include <video.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -108,7 +109,7 @@ int main()
 
 	ncPrint("[Finished]");
         */
-	ncClear();
+	video_clear_screen();
 	set_interrupts();
 	((EntryPoint)sampleCodeModuleAddress)();
 	//ncClear();

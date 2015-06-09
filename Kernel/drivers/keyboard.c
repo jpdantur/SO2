@@ -154,7 +154,6 @@ void keyboard_buffer_write(){
                           buffer[w%256] = shift_map[keycode];
                       else
                           buffer[w%256] = keyboard_map[keycode];
-            
                       video_write_byte(buffer[w%256]);
                       w++;
                     }

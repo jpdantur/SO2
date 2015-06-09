@@ -145,8 +145,8 @@ void video_clear_screen()
 {
 	int i;
 
-	for (i = 0; i < VIDEO_SIZE; i++)
-		video[i] = 0;
+	for (i = 0; i < VIDEO_SIZE; i+=2)
+		video[i] = ' ';
 
 	video = VIDEO_START;
 }
