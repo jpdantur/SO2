@@ -89,11 +89,11 @@ char buffer[256];
 
 unsigned int w = 0;
 unsigned int r = 0;
-int shift1=0;
-int shift2=0;
-int control1=0;
-int alt1=0;
-int capslock=0;
+int shift1 = 0;
+int shift2 = 0;
+int control1 = 0;
+int alt1 = 0;
+int capslock = 0;
 
 void keyboard_buffer_write(){
   unsigned char status;
@@ -109,15 +109,15 @@ void keyboard_buffer_write(){
             shift1 = 0;
         }
 
-        else if ((unsigned char)keycode==(0x36|0x80))
+        else if ((unsigned char)keycode == (0x36|0x80))
         {
             shift2 = 0;
         }
-        else if ((unsigned char)keycode==(0x1d|0x80))
+        else if ((unsigned char)keycode == (0x1d|0x80))
         {
             control1 = 0;
         }
-        else if ((unsigned char)keycode==(0x38|0x80))
+        else if ((unsigned char)keycode == (0x38|0x80))
         {
             alt1 = 0;
         }
@@ -126,27 +126,25 @@ void keyboard_buffer_write(){
             switch (keycode)
             {
                 case 0x3a:
-                    capslock=!capslock;
+                    capslock =! capslock;
                     break;
+
                 case 0x2a:
                     shift1 = 1;
                     break;
+
                 case 0x1d:
-                    control1=1;
+                    control1 = 1;
                     break;
+
                 case 0x38:
-                    alt1=1;
+                    alt1 = 1;
                     break;
+
                 case 0x36:
                     shift2 = 1;
                     break;
-               /* case 0x0E:
-                    w--;
-                    r--;
-                    buffer[w%256]=0;
-                    video_write_byte('\b');
-                    break;
-              */
+
                 default:
                     if (keyboard_map[keycode]!=0)
                     {
@@ -154,8 +152,8 @@ void keyboard_buffer_write(){
                           buffer[w%256] = shift_map[keycode];
                       else
                           buffer[w%256] = keyboard_map[keycode];
-            
-                      video_write_byte(buffer[w%256]);
+                        
+                      video_write_byte(buffer[w % 256]);
                       w++;
                     }
                     break;
@@ -171,8 +169,7 @@ void keyboard_buffer_write(){
 char keyboard_buffer_read(){
 
 	while (r == w);
-	char ret = buffer[r%256];
-  //__video_debug(ret);
+	char ret = buffer[r % 256];
   r++;
   return ret;
   
