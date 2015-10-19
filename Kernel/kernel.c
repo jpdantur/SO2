@@ -59,7 +59,9 @@ void * initializeKernelBinary()
 		sampleDataModuleAddress
 	};
 
-	loadModules(&endOfKernelBinary, moduleAddresses);
+
+	memcpy(&endOfKernel, &endOfKernelBinary, 1024 * 1024);
+	loadModules(&endOfKernel, moduleAddresses);
 	ncPrint("[Done]");
 	ncNewline();
 	ncNewline();

@@ -16,6 +16,7 @@ void loadModules(void * payloadStart, void ** targetModuleAddress)
 		loadModule(&currentModule, targetModuleAddress[i]);
 }
 
+
 static void loadModule(uint8_t ** module, void * targetModuleAddress)
 {
 	uint32_t moduleSize = readUint32(module);
@@ -25,7 +26,7 @@ static void loadModule(uint8_t ** module, void * targetModuleAddress)
 	ncPrint(" to 0x");
 	ncPrintHex((uint64_t)targetModuleAddress);
 	ncPrint(" (");
-	ncPrintDec(moduleSize);
+	ncPrintDec(moduleSize+19);
 	ncPrint(" bytes)");
 
 	memcpy(targetModuleAddress, *module, moduleSize);

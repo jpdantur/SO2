@@ -9,10 +9,12 @@ void sys_screen_saver_set(int time);
 
 void shell()
 {
-	memset(&bss, 0, &endOfBinary - &bss);
 	//Solves constant space problem
 	char * _sssss = "Bienvenido a la consola de arqui, la mejor consola de todas\n";
-
+	print(_sssss);
+	//print("\nsss"); printhex((int)_sssss);
+	//print("\nbss"); printhex((int)&bss);
+	//print("\neob"); printhex((int)&endOfBinary);
 	char bff[256];
 	char name[21];
 	int a;
