@@ -12,5 +12,7 @@ int pow(int x, int y);
 int dtoh(int h);
 int htod(int h);
 int strcmp(const char * str1, const char * str2);
+void *malloc();
+void free(void* p);
 
 #endif

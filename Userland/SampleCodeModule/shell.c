@@ -18,7 +18,20 @@ void shell()
 	char bff[256];
 	char name[21];
 	int a;
-
+	int hh=malloc();
+	printhex(hh);
+	print("\n");
+	int h2=malloc();
+	printhex(h2);
+	print("\n");
+	int h3=malloc();
+	printhex(h3);
+	print("\n");
+	free(hh);
+	int h4 = malloc();
+	printhex(h4);
+	print("\n");
+	//while(1);
 	print ("Introducir nombre de usuario (Max 20 caracteres)>");
 	a = scan(name, 21);
 	

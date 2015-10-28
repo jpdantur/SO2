@@ -3,6 +3,8 @@ global sys_read
 global sys_time
 global sys_time_write
 global sys_screen_saver_set
+global sys_malloc
+global sys_free
 
 sys_write:
 	push rbp
@@ -75,4 +77,32 @@ sys_screen_saver_set:
 
 	pop rdx
 	pop rax
+	ret
+
+sys_malloc:
+	push rbp
+	mov rbp,rsp
+	push rbx
+	
+	mov rax,7 ;malloc sys_call
+	mov rcx,rdi
+	int 80h
+	
+	pop rbx
+	mov rsp,rbp
+	pop rbp
+	ret
+
+sys_free:
+	push rbp
+	mov rbp,rsp
+	push rbx
+	
+	mov rax,8 ;free sys_call
+	mov rcx,rdi
+	int 80h
+	
+	pop rbx
+	mov rsp,rbp
+	pop rbp
 	ret

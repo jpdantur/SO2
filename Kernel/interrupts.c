@@ -2,12 +2,15 @@
 #include <video.h>
 #include <keyboard.h>
 #include <CMOS.h>
+#include <alloc.h>
 
 #define SYSCALL_READ 3
 #define SYSCALL_WRITE 4
 #define SYSCALL_TIME_READ 2
 #define SYSCALL_TIME_WRITE 5
 #define SYSCALL_SCREEN_SAVER_SET 6
+#define SYSCALL_MALLOC 7
+#define SYSCALL_FREE 8
 
 char get_call(void);
 char get_rax(void);
@@ -15,9 +18,10 @@ char get_rcx(void);
 void set_rax(char c);
 
 
-void int80(char *p, int rbx, int rdx)
+void int80(int *p1, int rbx, int rdx)
 {
 	char call = get_rax();
+	char *p = (char*)p1;
 	char *aux = p;
 	char c;
 	int i = 0;
@@ -79,6 +83,13 @@ void int80(char *p, int rbx, int rdx)
 			video_set_screen_saver_timer(rdx);
 			break;
 
+		case SYSCALL_MALLOC:
+			*p1=allocate();
+			//video_write_byte(*p);
+			break;
+		case SYSCALL_FREE:
+			free((void *)p1);
+			break;
 		default:
 	 		break;
 	}

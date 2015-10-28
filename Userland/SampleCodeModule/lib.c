@@ -194,3 +194,16 @@ void printhex(int num)
     print("0x");
     printint(htod(num));
 }
+
+void * malloc()
+{
+    void *ret;
+    sys_malloc(&ret);
+    return ret;
+}
+
+void free(void *p)
+{
+    sys_free(p);
+    return;
+}
