@@ -31,6 +31,11 @@ void shell()
 	int h4 = malloc();
 	printhex(h4);
 	print("\n");
+	int *h5 = malloc();
+	printhex(h5);
+	print("\n");
+	*h5=2;
+	printint(*h5);
 	//while(1);
 	print ("Introducir nombre de usuario (Max 20 caracteres)>");
 	a = scan(name, 21);
