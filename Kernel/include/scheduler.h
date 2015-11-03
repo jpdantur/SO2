@@ -1,3 +1,6 @@
+#define SLEEPING 0
+#define ACTIVE 1
+
 typedef struct
 {
 	uint64_t gs;
@@ -29,6 +32,8 @@ typedef struct
 {
 	void * entry;
 	stack_frame * regs;
+	stack_frame * kernel;
+	int state;
 } Process;
 
 typedef struct
@@ -36,3 +41,8 @@ typedef struct
 	Process * process;
 	ProcessSlot * next;
 } ProcessSlot;
+
+
+void next_process();
+void enqueue(ProcessSlot *p);
+void remove_process(ProcessSlot * process);
