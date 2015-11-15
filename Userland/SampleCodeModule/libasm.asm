@@ -5,6 +5,7 @@ global sys_time_write
 global sys_screen_saver_set
 global sys_malloc
 global sys_free
+global sys_newproc
 
 sys_write:
 	push rbp
@@ -100,6 +101,20 @@ sys_free:
 	
 	mov rax,8 ;free sys_call
 	mov rcx,rdi
+	int 80h
+	
+	pop rbx
+	mov rsp,rbp
+	pop rbp
+	ret
+sys_newproc:
+	push rbp
+	mov rbp,rsp
+	push rbx
+	
+	mov rax,9 ;new process
+	mov rcx,rdi
+	mov rdx,rsi
 	int 80h
 	
 	pop rbx

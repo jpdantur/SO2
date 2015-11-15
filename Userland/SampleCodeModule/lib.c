@@ -1,5 +1,8 @@
 #include <lib.h>
-
+void newproc(void *entry, int pid)
+{
+    sys_newproc(entry, pid);
+}
 void print(char * str)
 {
 	char * aux = str;

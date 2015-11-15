@@ -15,8 +15,10 @@ int main() {
 
 	//Clean BSS
 	memset(&bss, 0, &endOfBinary - &bss);
-
-	shell();
+	newproc(&shell,0);
+	//while(1)
+	//	print("Hola");
+	//shell();
 
 	//Test if BSS is properly set up
 	if (var1 == 0 && var2 == 0)

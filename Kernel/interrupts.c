@@ -3,6 +3,7 @@
 #include <keyboard.h>
 #include <CMOS.h>
 #include <alloc.h>
+#include <scheduler.h>
 
 #define SYSCALL_READ 3
 #define SYSCALL_WRITE 4
@@ -11,6 +12,7 @@
 #define SYSCALL_SCREEN_SAVER_SET 6
 #define SYSCALL_MALLOC 7
 #define SYSCALL_FREE 8
+#define SYSCALL_NEWPROC 9
 
 char get_call(void);
 char get_rax(void);
@@ -25,11 +27,17 @@ void int80(int *p1, int rbx, int rdx)
 	char *aux = p;
 	char c;
 	int i = 0;
+	Process *newpr;
 	
 	char enter = 0;
 	
 	switch (call)
 	{
+		case SYSCALL_NEWPROC:
+			//__video_debug('h');
+			newpr = new_process((void*)p1,rdx);
+			enqueue(newpr);
+			break;
 		case SYSCALL_READ:
 			while (i < rdx - 1 && !enter)
 			{	

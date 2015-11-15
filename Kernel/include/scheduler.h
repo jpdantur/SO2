@@ -1,6 +1,7 @@
 #define SLEEPING 0
 #define ACTIVE 1
-
+typedef unsigned long uint64_t;
+typedef unsigned char uint8_t;
 typedef struct
 {
 	uint64_t gs;
@@ -33,16 +34,28 @@ typedef struct
 	void * entry;
 	stack_frame * regs;
 	stack_frame * kernel;
+	stack_frame * regs_page;
+	stack_frame * kernel_page;
 	int state;
+	int pid;
 } Process;
 
-typedef struct
+typedef struct slot
 {
 	Process * process;
-	ProcessSlot * next;
-} ProcessSlot;
+	struct slot * next;
+} process_slot;
 
 
 void next_process();
-void enqueue(ProcessSlot *p);
-void remove_process(ProcessSlot * process);
+void enqueue(Process *p);
+void remove_process(Process * process);
+void * switch_kernel_to_user();
+void * switch_user_to_kernel(void * esp);
+void * to_stack_address(void * page);
+Process *new_process(void * entry_point, int pid);
+process_slot * new_process_slot(Process *p);
+void * fill_stack_frame(void * entry_point, void * user_stack);
+int get_forepid();
+void set_forepid (int p);
+void delete(process_slot *p);

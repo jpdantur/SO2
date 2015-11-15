@@ -5,6 +5,8 @@ extern int80
 extern timerTick
 ;extern keyboard_buffer_write
 extern keyboard
+extern switch_kernel_to_user
+extern switch_user_to_kernel
 global picMasterMask
 global picSlaveMask
 global _sti
@@ -25,9 +27,13 @@ global _sti
     push r13      ;save current r13
     push r14      ;save current r14
     push r15      ;save current r15
+    push fs
+    push gs
 %endmacro
 
 %macro popaq 0
+	pop gs
+	pop fs
         pop r15
         pop r14
         pop r13
@@ -61,7 +67,19 @@ _int80Handler:
 
 _timerTick:
 	pushaq
-	call timerTick
+	mov rdi, rsp
+	call switch_user_to_kernel
+
+	mov rsp, rax
+
+	; schedule, get new process's RSP and load it
+	call switch_kernel_to_user
+	;xchg bx, bx
+	cmp rax,0
+	je .end
+	mov rsp, rax
+.end:
+	;call timerTick
 	
 	mov al,0x20
 	out 0x20,al

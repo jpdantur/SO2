@@ -14,5 +14,6 @@ int htod(int h);
 int strcmp(const char * str1, const char * str2);
 void *malloc();
 void free(void* p);
+void newproc(void * entry, int pid);
 
 #endif
