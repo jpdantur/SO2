@@ -1,5 +1,6 @@
 #include <shell.h>
 #include <time.h>
+#include <processes.h>
 
 
 extern char bss;
@@ -18,7 +19,7 @@ void shell()
 	char bff[256];
 	char name[21];
 	int a;
-	int hh=malloc();
+	/*int hh=malloc();
 	printhex(hh);
 	print("\n");
 	int h2=malloc();
@@ -35,7 +36,7 @@ void shell()
 	printhex(h5);
 	print("\n");
 	*h5=2;
-	printint(*h5);
+	printint(*h5);*/
 	//while(1);
 	print ("Introducir nombre de usuario (Max 20 caracteres)>");
 	a = scan(name, 21);
@@ -48,7 +49,7 @@ void shell()
 	}
 	remove_new_line(name);
 	tCommand command;
-	
+	newproc(&proc1,1);
 	while (1)
 	{
 		//Print prompt

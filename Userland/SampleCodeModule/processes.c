@@ -5,9 +5,6 @@
 void proc1()
 {
 	char * buf = malloc();
-	while(1)
-	{
-		print("Estoy en el proceso 1");
-		scan(buf,20);
-	}
+	print("Estoy en el proceso1");
+	while(1);
 }

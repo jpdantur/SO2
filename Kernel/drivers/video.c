@@ -223,3 +223,13 @@ void __video_debug(char c)
 	}
 
 }
+void __print_debug(char * str)
+{
+	char * aux = str;
+	
+    while(*aux)
+	{
+		__video_debug(*aux);
+		aux++;
+	}
+}

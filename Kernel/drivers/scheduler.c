@@ -11,7 +11,7 @@ void enqueue(Process *p)
 	process_slot* proc = new_process_slot(p);
 	if (current==NULL)
 	{
-		__video_debug('m');
+		//__video_debug('m');
 		current=proc;
 		current->next=proc;
 	}
@@ -56,10 +56,10 @@ void next_process()
 void * switch_kernel_to_user() {
 	if (current==NULL)
 	{
-		__video_debug('l');
+		//__video_debug('l');
 		return 0;
 	}
-	__video_debug('o');
+	//__video_debug('o');
 	next_process();
 	return current->process->regs;
 }
@@ -67,7 +67,7 @@ void * switch_kernel_to_user() {
 void * switch_user_to_kernel(void * esp) {
 	if (current==NULL)
 		return esp;
-	__video_debug('h');
+	//__video_debug('h');
 	Process * process = current->process;
 	process->regs = esp;
 	return process->kernel;

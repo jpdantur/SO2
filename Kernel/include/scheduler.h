@@ -1,7 +1,8 @@
 #define SLEEPING 0
 #define ACTIVE 1
-typedef unsigned long uint64_t;
-typedef unsigned char uint8_t;
+#include <stdint.h>
+//typedef unsigned long uint64_t;
+//typedef unsigned char uint8_t;
 typedef struct
 {
 	uint64_t gs;
