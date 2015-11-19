@@ -13,6 +13,9 @@
 #define SYSCALL_MALLOC 7
 #define SYSCALL_FREE 8
 #define SYSCALL_NEWPROC 9
+#define SYSCALL_FORE 10
+#define SYSCALL_KILL 11
+#define SYSCALL_LIST 12
 
 char get_call(void);
 char get_rax(void);
@@ -33,12 +36,23 @@ void int80(int *p1, int rbx, int rdx)
 	
 	switch (call)
 	{
+		case SYSCALL_LIST:
+			while(get_current()->process->pid!=get_forepid());
+			list();
+			break;
+		case SYSCALL_KILL:
+			kill((int)p1);
+			break;
+		case SYSCALL_FORE:
+			set_current_fore();
+			break;
 		case SYSCALL_NEWPROC:
 			//__video_debug('h');
-			newpr = new_process((void*)p1,rdx);
-			enqueue(newpr);
+			newpr = new_process((void*)p1);
+			*((int *)rdx)=enqueue(newpr);
 			break;
 		case SYSCALL_READ:
+			while(get_current()->process->pid!=get_forepid());
 			while (i < rdx - 1 && !enter)
 			{	
 				*p = keyboard_buffer_read();
@@ -72,6 +86,7 @@ void int80(int *p1, int rbx, int rdx)
 			break;
 
 		case SYSCALL_WRITE:
+			while(get_current()->process->pid!=get_forepid());
 			for (i = 0; i < rdx; i++)
 			{
 				video_write_byte(*p);

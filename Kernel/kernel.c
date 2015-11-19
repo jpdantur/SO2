@@ -5,6 +5,7 @@
 #include <naiveConsole.h>
 #include <types.h>
 #include <video.h>
+#include <scheduler.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -101,6 +102,9 @@ int main()
 	picSlaveMask(0xFF);
 	_sti();
 
+	
+	Process *entry =new_process(sampleCodeModuleAddress);
+	enqueue(entry);
 	((EntryPoint)sampleCodeModuleAddress)();
 
 	while(1){

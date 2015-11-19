@@ -1,7 +1,21 @@
 #include <lib.h>
-void newproc(void *entry, int pid)
+int newproc(void *entry)
 {
-    sys_newproc(entry, pid);
+    int pid;
+    sys_newproc(entry, &pid);
+    return pid;
+}
+void kill(int pid)
+{
+    sys_kill(pid);
+}
+void list()
+{
+    sys_list();
+}
+void fore()
+{
+    sys_fore();
 }
 void print(char * str)
 {

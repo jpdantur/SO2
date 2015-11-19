@@ -1,12 +1,29 @@
 #include <alloc.h>
 #include <scheduler.h>
+#include <video.h>
 
 //Aca va el scheduler
 process_slot *current=NULL;
 int forepid=0;
+int nextpid=0;
 
-
-void enqueue(Process *p)
+process_slot * get_current()
+{
+	return current;
+}
+void list()
+{
+	process_slot * this = current;
+	do
+	{
+		video_write_byte(this->process->pid+'0');
+		video_write_byte(' ');
+		video_write_byte(this->process->state+'0');
+		video_write_byte('\n');
+		this=this->next;
+	}while(this!=current);
+}
+int enqueue(Process *p)
 {
 	process_slot* proc = new_process_slot(p);
 	if (current==NULL)
@@ -21,6 +38,7 @@ void enqueue(Process *p)
 		current->next=proc;
 		proc->next=aux;
 	}
+	return p->pid;
 }
 
 void remove_process(Process * process) {
@@ -42,6 +60,21 @@ void remove_process(Process * process) {
 
 	prev_slot->next = slot_to_remove->next;
 	delete(slot_to_remove);
+}
+void kill(int pid)
+{
+	int flag=0;
+	process_slot * start = current;
+	process_slot * this = current;
+	do
+	{
+		if (this->process->pid==pid)
+		{
+			remove_process(this->process);
+			flag=1;
+		}
+		this=this->next;
+	}while (this != current && flag == 0);
 }
 
 void next_process()
@@ -77,7 +110,7 @@ void * to_stack_address(void * page) {
 	return (uint8_t*)page + 4096 - 0x10;
 }
 
-Process *new_process(void * entry_point, int pid) {
+Process *new_process(void * entry_point) {
 	Process *p = allocate();
 	p->entry=entry_point;
 	p->regs_page=allocate();
@@ -86,7 +119,8 @@ Process *new_process(void * entry_point, int pid) {
 	p->kernel = to_stack_address(p->kernel_page);
 	p->regs = fill_stack_frame(entry_point, p->regs);
 	p->state=ACTIVE;
-	p->pid=pid;
+	p->pid=nextpid;
+	nextpid++;
 	return p;
 }
 process_slot * new_process_slot(Process *p)
@@ -141,4 +175,9 @@ void delete(process_slot *p)
 	free(p->process->kernel_page);
 	free(p->process);
 	free(p);
+}
+
+void set_current_fore()
+{
+	set_forepid(current->process->pid);
 }

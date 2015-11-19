@@ -6,6 +6,9 @@ global sys_screen_saver_set
 global sys_malloc
 global sys_free
 global sys_newproc
+global sys_fore
+global sys_kill
+global sys_list
 
 sys_write:
 	push rbp
@@ -115,6 +118,43 @@ sys_newproc:
 	mov rax,9 ;new process
 	mov rcx,rdi
 	mov rdx,rsi
+	int 80h
+	
+	pop rbx
+	mov rsp,rbp
+	pop rbp
+	ret
+sys_fore:
+	push rbp
+	mov rbp,rsp
+	push rbx
+	
+	mov rax,10 ;fore
+	int 80h
+	
+	pop rbx
+	mov rsp,rbp
+	pop rbp
+	ret
+sys_kill:
+	push rbp
+	mov rbp, rsp
+	push rbx
+
+	mov rax,11 ;kill
+	mov rcx,rdi
+	int 80h
+
+	pop rbx
+	mov rsp,rbp
+	pop rbp
+	ret
+sys_list:
+	push rbp
+	mov rbp,rsp
+	push rbx
+	
+	mov rax,12 ;list
 	int 80h
 	
 	pop rbx

@@ -49,14 +49,17 @@ typedef struct slot
 
 
 void next_process();
-void enqueue(Process *p);
+int enqueue(Process *p);
 void remove_process(Process * process);
 void * switch_kernel_to_user();
 void * switch_user_to_kernel(void * esp);
 void * to_stack_address(void * page);
-Process *new_process(void * entry_point, int pid);
+Process *new_process(void * entry_point);
 process_slot * new_process_slot(Process *p);
 void * fill_stack_frame(void * entry_point, void * user_stack);
 int get_forepid();
 void set_forepid (int p);
 void delete(process_slot *p);
+process_slot * get_current();
+void set_current_fore();
+void kill(int pid);

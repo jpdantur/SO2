@@ -11,6 +11,7 @@ void sys_screen_saver_set(int time);
 void shell()
 {
 	//Solves constant space problem
+	fore();
 	char * _sssss = "Bienvenido a la consola de arqui, la mejor consola de todas\n";
 	print(_sssss);
 	//print("\nsss"); printhex((int)_sssss);
@@ -49,7 +50,14 @@ void shell()
 	}
 	remove_new_line(name);
 	tCommand command;
-	newproc(&proc1,1);
+	int p1 = newproc(&proc1);
+	print("Lista 1\n");
+	list();
+	kill(p1);
+	print ("Lista 2\n");
+	list();
+
+
 	while (1)
 	{
 		//Print prompt
