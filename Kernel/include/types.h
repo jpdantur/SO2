@@ -1,5 +1,6 @@
 #ifndef TYPES_H
 #define TYPES_H
+#include <stdint.h>
 
 //typedef short int word;
 //typedef int dword;

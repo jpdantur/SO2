@@ -3,7 +3,7 @@
 
 static uint64 identityCR3;
 
-struct l1_tables L1_TABLE[5];
+/*struct*/ L1_TABLE l1_tables[5];
 
 //Auxiliary
 static uint64 backupCR3;
@@ -28,8 +28,8 @@ void PagingInitialize(){
 
 L1_TABLE* CreateIdentityL1Table(int readWrite, int userSupervisor, int offsetIndex) {
   L1_TABLE* l1t = (L1_table*)allocate();
-
-  for (int i = 0; i < 512; i++) {
+  int i;
+  for (i = 0; i < 512; i++) {
     l1t->table[i].p = 1;
     l1t->table[i].rw = readWrite;
     l1t->table[i].us = userSupervisor;
@@ -61,14 +61,16 @@ L4_TABLE * InitializeIdentityDirectories(){
   	//L2.Addr -> L1
   	//L1.Addr = physical addr ( Identity )
   	//ASK: 257?
-  	for (int i = 0; i < 256; i++) {
+  	int i;
+  	int j;
+  	for (i = 0; i < 256; i++) {
 	    L1_TABLE* l1t = (L1_TABLE*)allocate();
 	    l2t->table[i].p = 1;
 	    l2t->table[i].us = 0;
 	    l2t->table[i].rw = 0;
 	    l2t->table[i].addr = ((unit64)l1t/PAGE_SIZE);
 
-	    for (int j = 0; j < 512; j++) {
+	    for (j = 0; j < 512; j++) {
 	      l1t->table[j].p = 1;
 	      l1t->table[j].us = 0;
 	      l1t->table[j].rw = 0;
@@ -103,8 +105,8 @@ L4_TABLE* NewL4Table(){
   	l3t->table[0].rw = 1;
   	l3t->table[0].us = 0;
   	l3t->table[0].addr = (uint64)((uint64)l2t/PAGE_SIZE);
-
-  	for (int i = 0; i < 5; i++) {
+  	int i;
+  	for (i = 0; i < 5; i++) {
 	    l2t->table[i].p = 1;
 	    l2t->table[i].rw = 1;
 	    l2t->table[i].addr = (uint64)l1_tables[i]/PAGE_SIZE;
@@ -224,8 +226,8 @@ uint64 GetPhysicalPage(L1_TABLE* l1t, unit64 offset, int rw, int us){
 
 void FreeL4(L4_TABLE* l4t){
 	BackUpState();
-
-	for(int i=0; i < 512; i++){
+	int i;
+	for(i=0; i < 512; i++){
 		L4_ENTRY entry = l4t->table[i];
 		if(entry.p != 0){
 			entry.p = 0;
@@ -239,7 +241,8 @@ void FreeL4(L4_TABLE* l4t){
 }
 
 void FreeL3(L3_TABLE* l3t){
-	for(int i=0; i < 512; i++){
+	int i;
+	for(i=0; i < 512; i++){
 		L3_ENTRY entry = l3t->table[i];
 		if(entry.p != 0){
 			entry.p = 0;
@@ -251,7 +254,8 @@ void FreeL3(L3_TABLE* l3t){
 }
 
 void FreeL2(L2_TABLE* l2t){
-	for(int i=0; i < 512; i++){
+	int i;
+	for(i=0; i < 512; i++){
 		L2_ENTRY entry = l2t->table[i];
 		if(entry.p != 0){
 			entry.p = 0;
@@ -263,7 +267,8 @@ void FreeL2(L2_TABLE* l2t){
 }
 
 void FreeL1(L2_TABLE* l2t){
-	for(int i=0; i < 512; i++){
+	int i;
+	for(i=0; i < 512; i++){
 		L2_ENTRY entry = l2t->table[i];
 		if(entry.p != 0){
 			entry.p = 0;
@@ -312,9 +317,10 @@ void l4_table_test() {
 
 void print_l1(PM_L1_TABLE* table, int amount) {
   uint64_t* aux = (uint64_t*)table;
-  for (int i = 488; i < 512; i++) {
+  int i;
+  for (i = 488; i < 512; i++) {
     __print_debug("L1[");
    // __video_debug((char) i);
-    __print_debug("]: ";
+    __print_debug("]: ");
   }
 }

@@ -3,6 +3,7 @@
 #include <types.h>
 #include <kernel.h>
 #include <keyboard.h>
+//#include <stdint.h>
 
 #define PAGE_SIZE       4096U
 
