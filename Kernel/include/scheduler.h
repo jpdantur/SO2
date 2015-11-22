@@ -39,6 +39,7 @@ typedef struct
 	stack_frame * kernel_page;
 	int state;
 	int pid;
+	int ppid;
 } Process;
 
 typedef struct slot
@@ -63,3 +64,5 @@ void delete(process_slot *p);
 process_slot * get_current();
 void set_current_fore();
 void kill(int pid);
+void set_parents(int pid, int ppid);
+void set_state(int pid, int state);

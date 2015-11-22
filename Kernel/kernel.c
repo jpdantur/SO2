@@ -7,6 +7,7 @@
 #include <video.h>
 #include <scheduler.h>
 #include <paging.h>
+#include <shmem.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -109,6 +110,11 @@ int main()
 	//Process *entry =new_process(sampleCodeModuleAddress);
 	//enqueue(entry);
 	//((EntryPoint)sampleCodeModuleAddress)();
+	
+	Process *entry =new_process(sampleCodeModuleAddress);
+	enqueue(entry);
+	shm_init();
+	((EntryPoint)sampleCodeModuleAddress)();
 
 	while(1){
 	}

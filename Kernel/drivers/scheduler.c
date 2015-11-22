@@ -63,6 +63,8 @@ void remove_process(Process * process) {
 }
 void kill(int pid)
 {
+	if (pid==0)
+		return;
 	int flag=0;
 	process_slot * start = current;
 	process_slot * this = current;
@@ -70,13 +72,27 @@ void kill(int pid)
 	{
 		if (this->process->pid==pid)
 		{
+			set_parents(pid,this->process->ppid);
 			remove_process(this->process);
 			flag=1;
 		}
 		this=this->next;
-	}while (this != current && flag == 0);
+	}while (this != start && flag == 0);
 }
 
+void set_parents(int pid, int ppid)
+{
+	process_slot * start = current;
+	process_slot * this = current;
+	do
+	{
+		if (this->process->ppid==pid)
+		{
+			this->process->ppid=ppid;
+		}
+		this=this->next;
+	}while (this != start);	
+}
 void next_process()
 {
 	//__video_debug('h');
@@ -120,6 +136,10 @@ Process *new_process(void * entry_point) {
 	p->regs = fill_stack_frame(entry_point, p->regs);
 	p->state=ACTIVE;
 	p->pid=nextpid;
+	if (nextpid!=0)
+	{
+		p->ppid=current->process->pid;
+	}
 	nextpid++;
 	return p;
 }
@@ -171,6 +191,8 @@ void set_forepid (int p)
 
 void delete(process_slot *p)
 {
+	if (get_forepid()==p->process->pid)
+		set_forepid(p->process->ppid);
 	free(p->process->regs_page);
 	free(p->process->kernel_page);
 	free(p->process);
@@ -180,4 +202,20 @@ void delete(process_slot *p)
 void set_current_fore()
 {
 	set_forepid(current->process->pid);
+}
+
+void set_state(int pid, int state)
+{
+	int flag=0;
+	process_slot * start = current;
+	process_slot * this = current;
+	do
+	{
+		if (this->process->pid==pid)
+		{
+			this->process->state=state;
+			flag=1;
+		}
+		this=this->next;
+	}while (this != start && flag == 0);
 }
