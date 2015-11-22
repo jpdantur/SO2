@@ -6,6 +6,7 @@
 #include <types.h>
 #include <video.h>
 #include <scheduler.h>
+#include <paging.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -24,6 +25,7 @@ DESCR_INT *idt=0;
 void _int80Handler(void);
 void _timerTick(void);
 void _keyboard(void);
+void _pageFaultHandler(void);
 void picMasterMask(char flag);
 void picSlaveMask(char flag);
 void _sti(void);
@@ -102,10 +104,11 @@ int main()
 	picSlaveMask(0xFF);
 	_sti();
 
-	
-	Process *entry =new_process(sampleCodeModuleAddress);
-	enqueue(entry);
-	((EntryPoint)sampleCodeModuleAddress)();
+	PagingInitialize();
+	l4_table_test();
+	//Process *entry =new_process(sampleCodeModuleAddress);
+	//enqueue(entry);
+	//((EntryPoint)sampleCodeModuleAddress)();
 
 	while(1){
 	}
@@ -117,6 +120,8 @@ void set_interrupts()
 	setup_IDT_entry(0x80, 0x08, &_int80Handler, 0x8E);
 	setup_IDT_entry(0x20, 0x08, &_timerTick, 0x8E);
 	setup_IDT_entry(0x21, 0x08, &_keyboard, 0x8E);
+	//TODO: check
+	setup_IDT_entry(0xE, 0x08, &_pageFaultHandler, 0x8E);
 }
 
 void setup_IDT_entry (int index, word selector, ddword offset, byte access)
@@ -128,4 +133,15 @@ void setup_IDT_entry (int index, word selector, ddword offset, byte access)
 	idt[index].access = access;
 	idt[index].cero = 0;
 	idt[index].zero = 0;
+}
+
+bool SetInterruptions(bool on) {
+	uint64 rax = GET_FLAGS();
+
+	if (on)
+		TURN_ON_INTERRUPTS();
+	else
+		TURN_OFF_INTERRUPTS();
+
+	return (rax & INTERRUPTION_BIT) != 0;
 }

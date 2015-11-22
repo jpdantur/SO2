@@ -1,8 +1,10 @@
 global _int80Handler
 global _timerTick
 global _keyboard
+global _pageFaultHandler
 extern int80
 extern timerTick
+extern PageFaultHandler
 ;extern keyboard_buffer_write
 extern keyboard
 extern switch_kernel_to_user
@@ -88,12 +90,22 @@ _timerTick:
 	iretq
 
 _keyboard:
-	pushaq
-	call keyboard
-	mov al,0x20 ;EOI
-	out 0x20,al ;
-	popaq
-	iretq
+    pushaq
+    call keyboard
+    mov al,0x20 ;EOI
+    out 0x20,al ;
+    popaq
+    iretq
+
+_pageFaultHandler:
+    pushaq
+    mov     eax, [rsp+136] ; error code
+    mov     rdi, rax
+    mov     rsi, cr2
+    call    PageFaultHandler
+    popaq
+    add     esp, 8 ; error code
+    iretq
 
 picMasterMask:
 	push rbp

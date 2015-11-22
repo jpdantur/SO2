@@ -1,15 +1,12 @@
 #include <alloc.h>
 #include <video.h>
 
-
-
-
-uint m_numOfBlocks = 20; // Num of blocks
-uint m_sizeOfEachBlock = (uint) 0x1000; // Size of each block
-uint m_numFreeBlocks = 20; // Num of remaining blocks
+uint m_numOfBlocks = 131072; // Num of blocks. 131072 * 4K = 512 MiB
+uint m_sizeOfEachBlock = (uint) 0x1000; // Size of each block. 4K
+uint m_numFreeBlocks = 131072; // Num of remaining blocks
 uint m_numInitialized = 0; // Num of initialized blocks
-uchar* m_memStart = (uchar *)0x600000; // Beginning of memory pool
-uchar* m_next = (uchar *)0x600000; // Num of next free block 
+uchar* m_memStart = (uchar *) (6 * 0x100000); // Beginning of memory pool. 6 MiB
+uchar* m_next = (uchar *)(6 * 0x100000); // Num of next free block 
 
 
 uchar* addr_from_index(uint i)
@@ -26,7 +23,6 @@ void* allocate()
 {
 	if (m_numInitialized < m_numOfBlocks )
  	{
- 		//__video_debug(m_memStart+'0');
 		uint* p = (uint*)addr_from_index( m_numInitialized );
  		*p = m_numInitialized + 1;
  		m_numInitialized++;
@@ -35,7 +31,6 @@ void* allocate()
  	void* ret = NULL;
  	if ( m_numFreeBlocks > 0 )
  	{
- 		//__video_debug('b');
  		ret = (void*)m_next;
  		--m_numFreeBlocks;
  		if (m_numFreeBlocks!=0)
@@ -47,9 +42,6 @@ void* allocate()
  			m_next = NULL;
  		}
  	}
- 	//char * aa = ((char *)0xB8000);
- 	//*aa=ret;
- 	//__video_debug(ret+'0');
  	return ret;
  }
  
