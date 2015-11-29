@@ -116,6 +116,7 @@ sys_newproc:
 	push rbx
 	
 	mov rax,9 ;new process
+	mov rbx,rdx
 	mov rcx,rdi
 	mov rdx,rsi
 	int 80h

@@ -105,13 +105,13 @@ int main()
 	picSlaveMask(0xFF);
 	_sti();
 
-	PagingInitialize();
-	l4_table_test();
+	//PagingInitialize();
+	//l4_table_test();
 	//Process *entry =new_process(sampleCodeModuleAddress);
 	//enqueue(entry);
 	//((EntryPoint)sampleCodeModuleAddress)();
 	
-	Process *entry =new_process(sampleCodeModuleAddress);
+	Process *entry =new_process(sampleCodeModuleAddress, "init");
 	enqueue(entry);
 	shm_init();
 	((EntryPoint)sampleCodeModuleAddress)();
@@ -127,7 +127,7 @@ void set_interrupts()
 	setup_IDT_entry(0x20, 0x08, &_timerTick, 0x8E);
 	setup_IDT_entry(0x21, 0x08, &_keyboard, 0x8E);
 	//TODO: check
-	setup_IDT_entry(0xE, 0x08, &_pageFaultHandler, 0x8E);
+	//setup_IDT_entry(0xE, 0x08, &_pageFaultHandler, 0x8E);
 }
 
 void setup_IDT_entry (int index, word selector, ddword offset, byte access)
@@ -141,7 +141,7 @@ void setup_IDT_entry (int index, word selector, ddword offset, byte access)
 	idt[index].zero = 0;
 }
 
-bool SetInterruptions(bool on) {
+/*bool SetInterruptions(bool on) {
 	uint64 rax = GET_FLAGS();
 
 	if (on)
@@ -151,3 +151,4 @@ bool SetInterruptions(bool on) {
 
 	return (rax & INTERRUPTION_BIT) != 0;
 }
+*/

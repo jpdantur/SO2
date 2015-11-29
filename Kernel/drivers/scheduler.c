@@ -20,6 +20,8 @@ void list()
 		video_write_byte(' ');
 		video_write_byte(this->process->state+'0');
 		video_write_byte('\n');
+		video_print(this->process->name);
+		video_write_byte('\n');
 		this=this->next;
 	}while(this!=current);
 }
@@ -126,7 +128,7 @@ void * to_stack_address(void * page) {
 	return (uint8_t*)page + 4096 - 0x10;
 }
 
-Process *new_process(void * entry_point) {
+Process *new_process(void * entry_point, char *name) {
 	Process *p = allocate();
 	p->entry=entry_point;
 	p->regs_page=allocate();
@@ -136,6 +138,7 @@ Process *new_process(void * entry_point) {
 	p->regs = fill_stack_frame(entry_point, p->regs);
 	p->state=ACTIVE;
 	p->pid=nextpid;
+	p->name=name;
 	if (nextpid!=0)
 	{
 		p->ppid=current->process->pid;

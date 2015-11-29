@@ -40,6 +40,7 @@ typedef struct
 	int state;
 	int pid;
 	int ppid;
+	char *name;
 } Process;
 
 typedef struct slot
@@ -55,7 +56,7 @@ void remove_process(Process * process);
 void * switch_kernel_to_user();
 void * switch_user_to_kernel(void * esp);
 void * to_stack_address(void * page);
-Process *new_process(void * entry_point);
+Process *new_process(void * entry_point, char *name);
 process_slot * new_process_slot(Process *p);
 void * fill_stack_frame(void * entry_point, void * user_stack);
 int get_forepid();

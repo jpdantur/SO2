@@ -48,7 +48,7 @@ void int80(int *p1, int rbx, int rdx)
 			break;
 		case SYSCALL_NEWPROC:
 			//__video_debug('h');
-			newpr = new_process((void*)p1);
+			newpr = new_process((void*)p1, (char*)rbx);
 			*((int *)rdx)=enqueue(newpr);
 			break;
 		case SYSCALL_READ:

@@ -1,8 +1,8 @@
 #include <lib.h>
-int newproc(void *entry)
+int newproc(void *entry, char * name)
 {
     int pid;
-    sys_newproc(entry, &pid);
+    sys_newproc(entry, &pid, name);
     return pid;
 }
 void kill(int pid)

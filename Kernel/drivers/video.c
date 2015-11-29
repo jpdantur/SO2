@@ -233,3 +233,14 @@ void __print_debug(char * str)
 		aux++;
 	}
 }
+
+void video_print(char * str)
+{
+	char * aux = str;
+	
+    while(*aux)
+	{
+		video_write_byte(*aux);
+		aux++;
+	}
+}

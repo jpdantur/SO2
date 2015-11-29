@@ -50,7 +50,7 @@ void shell()
 	}
 	remove_new_line(name);
 	tCommand command;
-	int p1 = newproc(&proc1);
+	int p1 = newproc(&proc1, "p1");
 	print("Lista 1\n");
 	list();
 	kill(p1);
