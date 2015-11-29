@@ -16,6 +16,8 @@
 #define SYSCALL_FORE 10
 #define SYSCALL_KILL 11
 #define SYSCALL_LIST 12
+#define SYSCALL_GETPID 13
+#define SYSCALL_GETPPID 14
 
 char get_call(void);
 char get_rax(void);
@@ -36,6 +38,12 @@ void int80(int *p1, int rbx, int rdx)
 	
 	switch (call)
 	{
+		case SYSCALL_GETPPID:
+			*p1=get_ppid();
+			break;
+		case SYSCALL_GETPID:
+			*p1=get_pid();
+			break;
 		case SYSCALL_LIST:
 			while(get_current()->process->pid!=get_forepid());
 			list();
@@ -44,7 +52,7 @@ void int80(int *p1, int rbx, int rdx)
 			kill((int)p1);
 			break;
 		case SYSCALL_FORE:
-			set_current_fore();
+			set_current_fore((int)p1);
 			break;
 		case SYSCALL_NEWPROC:
 			//__video_debug('h');

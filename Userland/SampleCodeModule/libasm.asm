@@ -9,7 +9,35 @@ global sys_newproc
 global sys_fore
 global sys_kill
 global sys_list
+global sys_getpid
+global sys_getppid
 
+sys_getppid:
+	push rbp
+	mov rbp,rsp
+	push rbx
+	
+	mov rax,14 ;sys_getppid
+	mov rcx,rdi
+	int 80h
+	
+	pop rbx
+	mov rsp,rbp
+	pop rbp
+	ret
+sys_getpid:
+	push rbp
+	mov rbp,rsp
+	push rbx
+	
+	mov rax,13 ;sys_getpid
+	mov rcx,rdi
+	int 80h
+	
+	pop rbx
+	mov rsp,rbp
+	pop rbp
+	ret
 sys_write:
 	push rbp
 	mov rbp,rsp
@@ -131,6 +159,7 @@ sys_fore:
 	push rbx
 	
 	mov rax,10 ;fore
+	mov rcx,rdi
 	int 80h
 	
 	pop rbx

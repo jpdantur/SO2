@@ -7,6 +7,15 @@ process_slot *current=NULL;
 int forepid=0;
 int nextpid=0;
 
+
+int get_pid()
+{
+	return current->process->pid;
+}
+int get_ppid()
+{
+	return current->process->ppid;
+}
 process_slot * get_current()
 {
 	return current;
@@ -16,14 +25,19 @@ void list()
 	process_slot * this = current;
 	do
 	{
+		video_print("PID: ");
 		video_write_byte(this->process->pid+'0');
 		video_write_byte(' ');
+		video_print("Estado: ");
 		video_write_byte(this->process->state+'0');
-		video_write_byte('\n');
+		video_print(" Nombre: ");
 		video_print(this->process->name);
 		video_write_byte('\n');
 		this=this->next;
 	}while(this!=current);
+	video_print("Foreground pid: ");
+	video_write_byte(get_forepid()+'0');
+	video_write_byte('\n');
 }
 int enqueue(Process *p)
 {
@@ -202,9 +216,9 @@ void delete(process_slot *p)
 	free(p);
 }
 
-void set_current_fore()
+void set_current_fore(int pid)
 {
-	set_forepid(current->process->pid);
+	set_forepid(pid);
 }
 
 void set_state(int pid, int state)

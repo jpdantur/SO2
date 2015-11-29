@@ -11,7 +11,7 @@ void sys_screen_saver_set(int time);
 void shell()
 {
 	//Solves constant space problem
-	fore();
+	//fore();
 	char * _sssss = "Bienvenido a la consola de arqui, la mejor consola de todas\n";
 	print(_sssss);
 	//print("\nsss"); printhex((int)_sssss);
@@ -50,12 +50,14 @@ void shell()
 	}
 	remove_new_line(name);
 	tCommand command;
-	int p1 = newproc(&proc1, "p1");
-	print("Lista 1\n");
-	list();
-	kill(p1);
-	print ("Lista 2\n");
-	list();
+	//int p1 = newproc(&proc1, "p1",1);
+	//int i;
+	//for (i=0;i<999999;i++);
+	//print("Lista 1\n");
+	//list();
+	//kill(p1);
+	//print ("Lista 2\n");
+	//list();
 
 
 	while (1)
@@ -144,8 +146,44 @@ int shell_command_execute(tCommand * command)
 	char * primary = command->primary;
 	char * args = command->args;
 	int retval;
-
-	if (strcmp("time", primary) == 0 && *args==0)
+	if (strcmp("kill",primary) == 0)
+	{
+		if (kill_string(args) == -1)
+			retval=-1;
+		else
+			retval=0;
+	}
+	else if (strcmp("stack1",primary) == 0 && *args==0)
+	{
+		int n=newproc(&stack1,"stack1",1);
+		print("listo, ya corrio\n");
+		kill(n);
+		retval = 0;
+	}
+	else if (strcmp("stack1",primary) == 0 && strcmp("&",args)==0)
+	{
+		newproc(&stack1,"stack1",0);
+		retval = 0;
+	}
+	else if (strcmp("stack2",primary) == 0 && *args==0)
+	{
+		int n=newproc(&stack2,"stack2",1);
+		print("listo, ya corrio\n");
+		kill(n);
+		//retval = 0;
+		retval = 0;
+	}
+	else if (strcmp("stack2",primary) == 0 && strcmp("&",args)==0)
+	{
+		newproc(&stack2,"stack2",0);
+		retval = 0;
+	}
+	else if (strcmp("ps",primary) == 0 && *args==0)
+	{
+		list();
+		retval = 0;
+	}
+	else if (strcmp("time", primary) == 0 && *args==0)
 	{
 		shell_print_time();
 		retval = 0;
@@ -274,6 +312,24 @@ int shell_set_screen_saver_time(char * time)
 	if (num == 0)
 		return -1;
 	sys_screen_saver_set((int)(num * 18.18182));
+	return 0;
+}
+void kill_string(char * pid)
+{
+	int num = 0;
+
+	while (*pid){
+		if (*pid < '0' || *pid > '9')
+			return -1;
+
+		num *= 10;
+		num += *pid - '0';
+
+		pid++;
+	}
+	if (num == 0)
+		return -1;
+	kill(num);
 	return 0;
 }
 

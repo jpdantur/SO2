@@ -14,9 +14,11 @@ int htod(int h);
 int strcmp(const char * str1, const char * str2);
 void *malloc();
 void free(void* p);
-int newproc(void * entry, char *name);
-void fore();
+int newproc(void * entry, char *name, int forepid);
+void fore(int pid);
 void kill(int pid);
 void list();
+int newproc2(void *entry, char * name);
+int getpid();
 
 #endif

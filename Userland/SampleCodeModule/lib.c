@@ -1,5 +1,15 @@
 #include <lib.h>
-int newproc(void *entry, char * name)
+
+int newproc(void *entry, char * name, int forepid)
+{
+    int ret=newproc2(entry,name);
+    if (forepid==1)
+    {
+        fore(ret);
+    }
+    return ret;
+}
+int newproc2(void *entry, char * name)
 {
     int pid;
     sys_newproc(entry, &pid, name);
@@ -13,9 +23,9 @@ void list()
 {
     sys_list();
 }
-void fore()
+void fore(int pid)
 {
-    sys_fore();
+    sys_fore(pid);
 }
 void print(char * str)
 {
@@ -223,4 +233,18 @@ void free(void *p)
 {
     sys_free(p);
     return;
+}
+
+int getpid()
+{
+    int pid;
+    sys_getpid(&pid);
+    return pid;
+}
+
+int getppid()
+{
+    int pid;
+    sys_getppid(&pid);
+    return pid;
 }
