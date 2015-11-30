@@ -9,6 +9,8 @@ global 		READ_CR3
 global		GET_FLAGS
 global		TURN_ON_INTERRUPTS
 global		TURN_OFF_INTERRUPTS
+global		switch_u2k
+global 		switch_k2u
 
 loader:
 	call initializeKernelBinary	; Set up the kernel binary, and get thet stack address
@@ -47,4 +49,27 @@ TURN_ON_INTERRUPTS:
 TURN_OFF_INTERRUPTS:
 		cli
 		ret
+switch_u2k:
+		pop 		QWORD[ret_addr] 			;Direccion de retorno
+
+		mov 		QWORD[task_stack], rsp
+		mov 		rsp, [0x300000]
+
+		push 		QWORD[ret_addr]
+		ret
+
+
+switch_k2u:
+		pop 		QWORD[ret_addr] 			;Direccion de retorno
+
+		mov 		[0x300000], rsp
+		mov 		rsp, QWORD[task_stack]
+
+		push 		QWORD[ret_addr]
+		ret
+
+ret_addr:
+	resq 1
+task_stack:
+	resq 1
 

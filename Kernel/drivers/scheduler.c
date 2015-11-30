@@ -54,6 +54,7 @@ int enqueue(Process *p)
 		current->next=proc;
 		proc->next=aux;
 	}
+	//video_write_byte(p->pid+'0');
 	return p->pid;
 }
 
@@ -146,10 +147,10 @@ void * to_stack_address(void * page) {
 }
 
 Process *new_process(void * entry_point, char *name) {
-	Process *p = allocate();
+	Process *p = malloc(sizeof(Process));
 	p->entry=entry_point;
-	p->regs_page=allocate();
-	p->kernel_page=allocate();
+	p->regs_page=malloc(sizeof(stack_frame));
+	p->kernel_page=malloc(sizeof(stack_frame));
 	p->regs=to_stack_address(p->regs_page);
 	p->kernel = to_stack_address(p->kernel_page);
 	p->regs = fill_stack_frame(entry_point, p->regs);
@@ -165,7 +166,7 @@ Process *new_process(void * entry_point, char *name) {
 }
 process_slot * new_process_slot(Process *p)
 {
-	process_slot * ret = allocate();
+	process_slot * ret = malloc(sizeof(process_slot));
 	ret->process=p;
 	return ret;
 }

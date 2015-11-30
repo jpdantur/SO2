@@ -1,6 +1,7 @@
 #ifndef CONST_H
 #define CONST_H
 
+#define PAGE_SIZE       4096U
 #define TRUE    				1
 #define FALSE   				0
 #define NULL    				0

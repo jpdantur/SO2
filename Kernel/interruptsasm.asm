@@ -12,6 +12,7 @@ extern switch_user_to_kernel
 global picMasterMask
 global picSlaveMask
 global _sti
+global switch_context
 
 %macro pushaq 0
     push rax      ;save current rax
@@ -62,6 +63,7 @@ setParams:
 _int80Handler:
 	pushaq
 	sti
+;	mov rsi,rax
 ;	cmp rax,9
 ;	je .a1
 ;	cmp rax,11
@@ -75,6 +77,7 @@ _int80Handler:
 ;	mov rdi,rsp
 ;	call switch_user_to_kernel
 ;	mov rsp,rax
+;	mov rax,rsi
 ;	call setParams
 ;	call int80
 ;	call switch_kernel_to_user
@@ -103,7 +106,24 @@ _timerTick:
 
 	popaq
 	iretq
+switch_context:
+	push rbp
+	mov rbp,rsp
+	mov rdi, rsp
+	call switch_user_to_kernel
 
+	mov rsp, rax
+
+	; schedule, get new process's RSP and load it
+	call switch_kernel_to_user
+	;xchg bx, bx
+	cmp rax,0
+	je .end
+	mov rsp, rax
+.end:
+	mov rsp,rbp
+	pop rbp
+	ret
 _keyboard:
     pushaq
     call keyboard

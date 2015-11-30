@@ -60,6 +60,7 @@ void shell()
 	//list();
 
 
+	//print ("termine");
 	while (1)
 	{
 		//Print prompt
@@ -146,7 +147,19 @@ int shell_command_execute(tCommand * command)
 	char * primary = command->primary;
 	char * args = command->args;
 	int retval;
-	if (strcmp("kill",primary) == 0)
+	if (strcmp("ipc",primary)==0 && *args==0)
+	{
+		print("Lista de IPCS:\n1. Semaforo\n Para testear utilice semtest");
+		retval=0;
+	}
+	else if (strcmp("semtest",primary)==0 && *args==0)
+	{
+		newproc(&semafor_test,"sem_test",1);
+		newproc(&semafor_down,"sem_down",0);
+		retval=0;
+
+	}
+	else if (strcmp("kill",primary) == 0)
 	{
 		if (kill_string(args) == -1)
 			retval=-1;
@@ -261,6 +274,13 @@ int shell_command_execute(tCommand * command)
 		print("Setear hora/min/seg del sistema (Por separado): set_[hour| min|sec] [value]\n");
 		print("Imprimir en pantalla: echo [value]\n");
 		print("Probar funciones de impresion: test\n");
+		print("Stack1 fore: stack1\n");
+		print("Stack1 back: stack1 &\n");
+		print("Stack2 fore: stack2\n");
+		print("Stack2 back: stack2 &\n");
+		print("Matar proceso por pid: kill n\n");
+		print("Ver ipcs: ipc\n");
+		print("Ver procesos: ps \n");
 		retval = 0;
 	}
 	else
@@ -329,7 +349,8 @@ void kill_string(char * pid)
 	}
 	if (num == 0)
 		return -1;
-	kill(num);
+	if (num!=getpid())
+		kill(num);
 	return 0;
 }
 

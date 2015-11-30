@@ -1,8 +1,22 @@
 #include <lib.h>
-
+void sem_up()
+{
+    sys_sem_up();
+}
+void sem_down()
+{
+    sys_sem_down();
+}
+void * get_mem()
+{
+    void *ret;
+    sys_get_mem(&ret);
+    return ret;
+}
 int newproc(void *entry, char * name, int forepid)
 {
     int ret=newproc2(entry,name);
+    //printint(ret);
     if (forepid==1)
     {
         fore(ret);

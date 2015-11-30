@@ -1,62 +1,80 @@
+#include <types.h>
 #include <alloc.h>
 #include <video.h>
+#include <kernel.h>
+#include <const.h>
+#include <paging.h>
 
-uint m_numOfBlocks = 131072; // Num of blocks. 131072 * 4K = 512 MiB
-uint m_sizeOfEachBlock = (uint) 0x1000; // Size of each block. 4K
-uint m_numFreeBlocks = 131072; // Num of remaining blocks
-uint m_numInitialized = 0; // Num of initialized blocks
-uchar* m_memStart = (uchar *) (6 * 0x100000); // Beginning of memory pool. 6 MiB
-uchar* m_next = (uchar *)(6 * 0x100000); // Num of next free block 
+//We're going to map 512 MiB of memory, so we'll use around 1MiB for pages ( 131072 to be precise )
+static uint64* pagesStackStart = (uint64*)(10 * 0x100000);
+static uint64* pagesStackEnd = (uint64*)(12 * 0x100000);
+static uint64* pagesStackCurrent;
 
+//malloc will go from 6 to 10 MiB. This should be enough
+static void* mallocStart = (6 * 0x100000);
+static void* lastMalloc;
 
-uchar* addr_from_index(uint i)
+void* malloc(int length)
 {
-	return m_memStart + ( i * m_sizeOfEachBlock );
+	bool interruptions = SetInterruptions(FALSE);
+
+
+	lastMalloc = mallocStart;
+	if((mallocStart + length) > pagesStackStart){
+		video_print("ERROR ---------> OutOfMemory");
+	}
+	mallocStart += length * sizeof(char);
+
+	SetInterruptions(interruptions);
+
+	return lastMalloc;
 }
-
-uint index_from_addr(const uchar* p)
-{
-	return (((uint)(p - m_memStart)) / m_sizeOfEachBlock);
-}
-
-void* allocate()
-{
-	if (m_numInitialized < m_numOfBlocks )
- 	{
-		uint* p = (uint*)addr_from_index( m_numInitialized );
- 		*p = m_numInitialized + 1;
- 		m_numInitialized++;
- 	}
- 	
- 	void* ret = NULL;
- 	if ( m_numFreeBlocks > 0 )
- 	{
- 		ret = (void*)m_next;
- 		--m_numFreeBlocks;
- 		if (m_numFreeBlocks!=0)
-		{
-	 		m_next = addr_from_index( *((uint*)m_next) );
- 		}
- 		else
- 		{
- 			m_next = NULL;
- 		}
- 	}
- 	return ret;
- }
  
 
  void free(void* p)
  {
- 	if (m_next != NULL)
- 	{
- 		(*(uint*)p) = index_from_addr( m_next );
- 		m_next = (uchar*)p;
-	}
- 	else
- 	{
- 		*((uint*)p) = m_numOfBlocks;
- 		m_next = (uchar*)p;
- 	}
- 	++m_numFreeBlocks;
+ 	//We're doing secuential malloc. So free doesnt make sense ( Not an optimal approach of course )
+ 	//TODO: Change malloc implementation in the future
  } 
+
+void PageManagmentInitialize() {
+
+	uint64 freeMemoryStart = (uint64)pagesStackEnd;
+	pagesStackCurrent = pagesStackStart;
+	uint64 pageAmount = (512 * 0x100000 - freeMemoryStart) / PAGE_SIZE;
+
+	//Initialize page stack pointing to pages ( not yet defined ) of ALL memory available ( 512 MiB )
+	uint64 i;
+	for (i = 0 ; i < pageAmount; i++) {
+		*pagesStackCurrent = freeMemoryStart + (i * PAGE_SIZE);
+		pagesStackCurrent++;
+	}
+
+}
+
+void* PageAlloc() {
+	if (pagesStackCurrent-1 == pagesStackStart)
+		video_print("ERROR ---------> OutOfMemory");
+
+	pagesStackCurrent--;
+
+	//Initialize page with 0's
+	memset_long((void*)*pagesStackCurrent, 0, 512);
+	return (void*)(*pagesStackCurrent);
+}
+
+void PageFree(void* pageDir) {
+	// We asume we're working with already aligned directions here...
+	*pagesStackCurrent = (uint64)pageDir;
+	pagesStackCurrent++;
+}
+
+void * memset_long(void * destiation, uint64 c, uint64 length) {
+	uint64_t * dst = (uint64_t*)destiation;
+
+	for (uint64_t i = 0; i < length; i++) {
+		dst[i] = c;
+	}
+
+	return destiation;
+}

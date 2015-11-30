@@ -1,14 +1,32 @@
 #include <processes.h>
 #include <lib.h>
+#include <time.h>
 
 
-void proc1()
+void semafor_down()
 {
-	char * buf = malloc();
-	print("Estoy en el proceso1");
+	sem_down();
+	//print("Baje semaforo");
+	int i;
+	for (i=0;i<300000000;i++);
+	//int times=0;
+	//while(1);
+	sem_up();
+	//print("Subi");
+	//fore(getppid());
 	while(1);
 }
 
+void semafor_test()
+{
+	print("Intento bajar sem\n");
+	sem_down();
+	print("baje sem\n");
+	sem_up();
+	print("levante sem\n");
+	fore(getppid());
+	while(1);
+}
 void stack1()
 {
 	int a;

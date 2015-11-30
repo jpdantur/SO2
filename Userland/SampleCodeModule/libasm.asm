@@ -11,7 +11,47 @@ global sys_kill
 global sys_list
 global sys_getpid
 global sys_getppid
+global sys_sem_up
+global sys_sem_down
+global sys_get_mem
 
+sys_get_mem:
+	push rbp
+	mov rbp,rsp
+	push rbx
+	
+	mov rax,17 ;get_mem
+	mov rcx,rdi
+	int 80h
+	
+	pop rbx
+	mov rsp,rbp
+	pop rbp
+	ret
+sys_sem_down:
+	push rbp
+	mov rbp,rsp
+	push rbx
+	
+	mov rax,16 ;sem_down
+	int 80h
+	
+	pop rbx
+	mov rsp,rbp
+	pop rbp
+	ret
+sys_sem_up:
+	push rbp
+	mov rbp,rsp
+	push rbx
+	
+	mov rax,15 ;sem_up
+	int 80h
+	
+	pop rbx
+	mov rsp,rbp
+	pop rbp
+	ret
 sys_getppid:
 	push rbp
 	mov rbp,rsp

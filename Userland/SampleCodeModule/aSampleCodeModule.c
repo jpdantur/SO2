@@ -19,7 +19,7 @@ int main() {
 	int pid = newproc(&shell, "shell",1);
 	//printint(pid);
 	//while(1)
-	//	print("Hola");
+		//printint(pid);
 	//shell();
 
 	//Test if BSS is properly set up

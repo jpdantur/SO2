@@ -8,6 +8,8 @@
 #include <scheduler.h>
 #include <paging.h>
 #include <shmem.h>
+#include <alloc.h>
+#include <kernel.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -74,7 +76,8 @@ void * initializeKernelBinary()
 	ncNewline();
 
 	clearBSS(&bss, &endOfKernel - &bss);
-
+	PageManagmentInitialize();
+	PagingInitialize();
 	ncPrint("  text: 0x");
 	ncPrintHex((uint64_t)&text);
 	ncNewline();
@@ -141,7 +144,7 @@ void setup_IDT_entry (int index, word selector, ddword offset, byte access)
 	idt[index].zero = 0;
 }
 
-/*bool SetInterruptions(bool on) {
+bool SetInterruptions(bool on) {
 	uint64 rax = GET_FLAGS();
 
 	if (on)
@@ -151,4 +154,3 @@ void setup_IDT_entry (int index, word selector, ddword offset, byte access)
 
 	return (rax & INTERRUPTION_BIT) != 0;
 }
-*/
