@@ -123,7 +123,6 @@ void next_process()
 		current=current->next;
 	} while(current->process->state==SLEEPING);
 
-	set_process_last_malloc(current->process->malloc_current);
 }
 
 void * switch_kernel_to_user() {
@@ -134,6 +133,8 @@ void * switch_kernel_to_user() {
 	}
 	//__video_debug('o');
 	next_process();
+	set_process_last_malloc(current->process->malloc_current);
+	WRITE_CR3(current->process->cr3);
 	return current->process->regs;
 }
 

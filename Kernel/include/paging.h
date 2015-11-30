@@ -121,6 +121,7 @@ L3_TABLE* GetL3(L4_TABLE* l4t, uint64 offset, int rw, int us);
 L2_TABLE* GetL2(L3_TABLE* l3t, uint64 offset, int rw, int us);
 L1_TABLE* GetL1(L2_TABLE* l2t, uint64 offset, int rw, int us);
 uint64 GetPhysicalPage(L1_TABLE* l1t, uint64 offset, int rw, int us);
-
+void switch_u2k();
+void switch_k2u();
 
 #endif

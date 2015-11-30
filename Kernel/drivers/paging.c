@@ -5,7 +5,7 @@
 #include <const.h>
 #include <kernel.h>
 #include <keyboard.h>
-
+#include <video.h>
 static uint64 identityCR3;
 static L1_TABLE* l1_tables[6];
 
@@ -178,7 +178,8 @@ uint64 AllocNewProcessStack(L4_TABLE* l4t, uint64 entryPoint) {
 
 // FAULT HANDLER
 void PageFaultHandler(uint64 error, uint64 cr2) {
-  BackUpState();
+interruptionsStateBackup = SetInterruptions(FALSE);
+backupCR3 = READ_CR3();
 
   Offsets* off 	= (Offsets*) malloc(sizeof(Offsets));
   off->phyOff 	= cr2      & 0x0000000000000FFF;
@@ -193,13 +194,20 @@ void PageFaultHandler(uint64 error, uint64 cr2) {
   }
   else if (cr2 >= (22 * 0x100000) && cr2 < (30 * 0x100000)) {
     // Proccess needs memory in stack
+    switch_u2k();
+    WRITE_CR3(identityCR3);
     AddPage(backupCR3, off, 1, 1);
     WRITE_CR3(backupCR3);
+    switch_k2u();
   }
   else if (cr2 >= (30 * 0x100000) && cr2 < (32 * 0x100000)) {
   	// Proccess needs memory in heap
+  	switch_u2k();
+  	WRITE_CR3(identityCR3);
     AddPage(backupCR3, off, 1, 1);
     WRITE_CR3(backupCR3);
+    switch_k2u();
+
   }
   else if (cr2 >= (32 * 0x100000)) {
     // Proccess requested memory ourside heap bounds
