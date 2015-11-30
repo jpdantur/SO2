@@ -16,7 +16,7 @@ $(KERNEL): $(LOADEROBJECT) $(OBJECTS) $(ASMOBJECTS) $(STATICLIBS)
 	$(LD) $(LDFLAGS) -T kernel.ld -o $(KERNEL) $(LOADEROBJECT) $(ASMOBJECTS) $(OBJECTS) $(STATICLIBS)
 
 %.o: %.c
-	$(GCC) $(GCCFLAGS) -I./include -c $< -o $@
+	$(GCC) $(GCCFLAGS) -I./include -w -c $< -o $@
 %.o: %.asm
 	$(ASM) $(ASMFLAGS) $< -o $@
 

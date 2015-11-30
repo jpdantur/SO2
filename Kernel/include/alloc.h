@@ -1,11 +1,18 @@
-typedef unsigned int uint;
-typedef unsigned char uchar;
-#define NULL 0
+#ifndef ALLOC_H
+#define ALLOC_H
 
-uchar* addr_from_index(uint i);
+#include <types.h>
 
-uint index_from_addr(const uchar* p);
-
-void* allocate();
+void* malloc(int length);
 
 void free(void* p);
+
+void PageManagmentInitialize();
+
+void* PageAlloc();
+
+void PageFree(void* pageDir);
+
+void * memset_long(void * destiation, uint64 c, uint64 length);
+
+#endif

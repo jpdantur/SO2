@@ -4,6 +4,9 @@
 #include <CMOS.h>
 #include <alloc.h>
 #include <scheduler.h>
+#include <kernel.h>
+#include <interrupts.h>
+#include <const.h>
 
 #define SYSCALL_READ 3
 #define SYSCALL_WRITE 4
@@ -16,12 +19,18 @@
 #define SYSCALL_FORE 10
 #define SYSCALL_KILL 11
 #define SYSCALL_LIST 12
+#define SYSCALL_GETPID 13
+#define SYSCALL_GETPPID 14
 
 char get_call(void);
 char get_rax(void);
 char get_rcx(void);
 void set_rax(char c);
 
+#define PROC_MALLOC_BEGIN (30*0x100000)
+
+static void* mallocBuffer;
+static void* lastMalloc;
 
 void int80(int *p1, int rbx, int rdx)
 {
@@ -36,6 +45,12 @@ void int80(int *p1, int rbx, int rdx)
 	
 	switch (call)
 	{
+		case SYSCALL_GETPPID:
+			*p1=get_ppid();
+			break;
+		case SYSCALL_GETPID:
+			*p1=get_pid();
+			break;
 		case SYSCALL_LIST:
 			while(get_current()->process->pid!=get_forepid());
 			list();
@@ -44,11 +59,12 @@ void int80(int *p1, int rbx, int rdx)
 			kill((int)p1);
 			break;
 		case SYSCALL_FORE:
-			set_current_fore();
+			set_current_fore((int)p1);
 			break;
 		case SYSCALL_NEWPROC:
 			//__video_debug('h');
-			newpr = new_process((void*)p1);
+			//video_print("wassap");
+			newpr = new_process((void*)p1, (char*)rbx);
 			*((int *)rdx)=enqueue(newpr);
 			break;
 		case SYSCALL_READ:
@@ -107,8 +123,9 @@ void int80(int *p1, int rbx, int rdx)
 			break;
 
 		case SYSCALL_MALLOC:
-			*p1=allocate();
-			//video_write_byte(*p);
+			// we should read the size instead of just giving 4k mallocs. This is a legacy issue.
+			// TODO: Change it
+			*p1=sys_malloc(0x1000);
 			break;
 		case SYSCALL_FREE:
 			free((void *)p1);
@@ -128,4 +145,35 @@ void keyboard()
 	video_screen_saver_check_restore();
 
 	keyboard_buffer_write();	
+}
+
+void* sys_malloc(uint64 length) {
+	bool interruptions = SetInterruptions(FALSE);
+	lastMalloc = mallocBuffer;
+	mallocBuffer += length * sizeof(char);
+	SetInterruptions(interruptions);
+	return lastMalloc;
+}
+
+void* sys_calloc(uint64 length) {
+	char* space = (char*)sys_malloc(length);
+	memset((void*) space, 0, length);
+	return (void*)space;
+}
+
+void sys_free(void* m) {
+	// Again. Irrelevent as we're using continuous malloc, free wouldnt make a difference.
+	// TODO: Improve malloc implementation
+}
+
+void* get_sys_malloc() {
+	return PROC_MALLOC_BEGIN;
+}
+
+void set_process_last_malloc(void* last) {
+	mallocBuffer = last;
+}
+
+void* get_process_malloc() {
+	return mallocBuffer;
 }

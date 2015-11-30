@@ -19,5 +19,6 @@ void video_screen_saver_check_restore(void);
 void video_set_screen_saver_timer(int s_time);
 void video_clear_screen(void);
 void __print_debug(char * str);
+void video_print(char * str);
 
 #endif

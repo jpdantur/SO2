@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <lib.h>
+#include <alloc.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <types.h>
@@ -8,6 +9,7 @@
 #include <scheduler.h>
 #include <paging.h>
 #include <shmem.h>
+#include <kernel.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -75,6 +77,9 @@ void * initializeKernelBinary()
 
 	clearBSS(&bss, &endOfKernel - &bss);
 
+	PageManagmentInitialize();
+	PagingInitialize();
+	
 	ncPrint("  text: 0x");
 	ncPrintHex((uint64_t)&text);
 	ncNewline();
@@ -105,13 +110,14 @@ int main()
 	picSlaveMask(0xFF);
 	_sti();
 
-	PagingInitialize();
-	l4_table_test();
+
+	//PagingInitialize();
+	//l4_table_test();
 	//Process *entry =new_process(sampleCodeModuleAddress);
 	//enqueue(entry);
 	//((EntryPoint)sampleCodeModuleAddress)();
 	
-	Process *entry =new_process(sampleCodeModuleAddress);
+	Process *entry =new_process(sampleCodeModuleAddress, "init");
 	enqueue(entry);
 	shm_init();
 	((EntryPoint)sampleCodeModuleAddress)();
@@ -127,7 +133,7 @@ void set_interrupts()
 	setup_IDT_entry(0x20, 0x08, &_timerTick, 0x8E);
 	setup_IDT_entry(0x21, 0x08, &_keyboard, 0x8E);
 	//TODO: check
-	setup_IDT_entry(0xE, 0x08, &_pageFaultHandler, 0x8E);
+	//setup_IDT_entry(0xE, 0x08, &_pageFaultHandler, 0x8E);
 }
 
 void setup_IDT_entry (int index, word selector, ddword offset, byte access)

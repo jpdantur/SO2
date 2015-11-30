@@ -1,6 +1,10 @@
+#ifndef SCHE_H
+#define SCHE_H
+
 #define SLEEPING 0
 #define ACTIVE 1
-#include <stdint.h>
+#include <paging.h>
+
 //typedef unsigned long uint64_t;
 //typedef unsigned char uint8_t;
 typedef struct
@@ -40,6 +44,9 @@ typedef struct
 	int state;
 	int pid;
 	int ppid;
+	L4_TABLE* cr3;
+	void* malloc_current;
+	char *name;
 } Process;
 
 typedef struct slot
@@ -55,14 +62,18 @@ void remove_process(Process * process);
 void * switch_kernel_to_user();
 void * switch_user_to_kernel(void * esp);
 void * to_stack_address(void * page);
-Process *new_process(void * entry_point);
+Process *new_process(void * entry_point, char *name);
 process_slot * new_process_slot(Process *p);
 void * fill_stack_frame(void * entry_point, void * user_stack);
 int get_forepid();
 void set_forepid (int p);
 void delete(process_slot *p);
 process_slot * get_current();
-void set_current_fore();
+void set_current_fore(int pid);
 void kill(int pid);
 void set_parents(int pid, int ppid);
 void set_state(int pid, int state);
+int get_pid();
+int get_ppid();
+#endif
+

@@ -1,12 +1,25 @@
 #include <alloc.h>
 #include <scheduler.h>
 #include <video.h>
+#include <stdint.h>
+#include <interrupts.h>
+#include <const.h>
+#include <paging.h>
 
-//Aca va el scheduler
 process_slot *current=NULL;
+
 int forepid=0;
 int nextpid=0;
 
+
+int get_pid()
+{
+	return current->process->pid;
+}
+int get_ppid()
+{
+	return current->process->ppid;
+}
 process_slot * get_current()
 {
 	return current;
@@ -16,12 +29,19 @@ void list()
 	process_slot * this = current;
 	do
 	{
+		video_print("PID: ");
 		video_write_byte(this->process->pid+'0');
 		video_write_byte(' ');
+		video_print("Estado: ");
 		video_write_byte(this->process->state+'0');
+		video_print(" Nombre: ");
+		video_print(this->process->name);
 		video_write_byte('\n');
 		this=this->next;
 	}while(this!=current);
+	video_print("Foreground pid: ");
+	video_write_byte(get_forepid()+'0');
+	video_write_byte('\n');
 }
 int enqueue(Process *p)
 {
@@ -75,6 +95,8 @@ void kill(int pid)
 			set_parents(pid,this->process->ppid);
 			remove_process(this->process);
 			flag=1;
+			//if (this==current)
+			//	set_rsp(switch_kernel_to_user());
 		}
 		this=this->next;
 	}while (this != start && flag == 0);
@@ -95,11 +117,13 @@ void set_parents(int pid, int ppid)
 }
 void next_process()
 {
-	//__video_debug('h');
+	//__video_debug(current->process->pid+'0');
 	do
 	{
 		current=current->next;
 	} while(current->process->state==SLEEPING);
+
+	set_process_last_malloc(current->process->malloc_current);
 }
 
 void * switch_kernel_to_user() {
@@ -114,28 +138,37 @@ void * switch_kernel_to_user() {
 }
 
 void * switch_user_to_kernel(void * esp) {
+	//video_print("wassap");
 	if (current==NULL)
 		return esp;
 	//__video_debug('h');
 	Process * process = current->process;
 	process->regs = esp;
+	process->malloc_current = get_process_malloc();
+
 	return process->kernel;
 }
 
 void * to_stack_address(void * page) {
-	return (uint8_t*)page + 4096 - 0x10;
+	return (uint8_t*)page + 0x1000 - 0x10;
 }
 
-Process *new_process(void * entry_point) {
-	Process *p = allocate();
+
+Process *new_process(void * entry_point, char *name) {
+	Process *p = malloc(sizeof(Process));
 	p->entry=entry_point;
-	p->regs_page=allocate();
-	p->kernel_page=allocate();
-	p->regs=to_stack_address(p->regs_page);
+	p->regs_page=malloc(sizeof(stack_frame));
+	p->kernel_page=malloc(sizeof(stack_frame));
 	p->kernel = to_stack_address(p->kernel_page);
-	p->regs = fill_stack_frame(entry_point, p->regs);
+
+	p->cr3 = NewProcessPagination();
+	p->regs = AllocNewProcessStack(p->cr3, entry_point);
+
+	p->malloc_current = get_sys_malloc();
+
 	p->state=ACTIVE;
 	p->pid=nextpid;
+	p->name=name;
 	if (nextpid!=0)
 	{
 		p->ppid=current->process->pid;
@@ -143,40 +176,12 @@ Process *new_process(void * entry_point) {
 	nextpid++;
 	return p;
 }
-process_slot * new_process_slot(Process *p)
+
+process_slot* new_process_slot(Process *p)
 {
-	process_slot * ret = allocate();
+	process_slot * ret = malloc(sizeof(process_slot));
 	ret->process=p;
 	return ret;
-}
-
-void * fill_stack_frame(void * entry_point, void * user_stack) {
-	stack_frame * frame = (stack_frame*)user_stack - 1;
-	frame->gs =		0x001;
-	frame->fs =		0x002;
-	frame->r15 =	0x003;
-	frame->r14 =	0x004;
-	frame->r13 =	0x005;
-	frame->r12 =	0x006;
-	frame->r11 =	0x007;
-	frame->r10 =	0x008;
-	frame->r9 =		0x009;
-	frame->r8 =		0x00A;
-	frame->rsi =	0x00B;
-	frame->rdi =	0x00C;
-	frame->rbp =	0x00D;
-	frame->rdx =	0x00E;
-	frame->rcx =	0x00F;
-	frame->rbx =	0x010;
-	frame->rax =	0x011;
-	frame->rip =	(uint64_t)entry_point;
-	frame->cs =		0x008;
-	frame->eflags = 0x202;
-	frame->rsp =	(uint64_t)&(frame->base);
-	frame->ss = 	0x000;
-	frame->base =	0x000;
-
-	return frame;
 }
 
 int get_forepid()
@@ -193,15 +198,16 @@ void delete(process_slot *p)
 {
 	if (get_forepid()==p->process->pid)
 		set_forepid(p->process->ppid);
+	FreeL4(p->process->cr3);
 	free(p->process->regs_page);
 	free(p->process->kernel_page);
 	free(p->process);
 	free(p);
 }
 
-void set_current_fore()
+void set_current_fore(int pid)
 {
-	set_forepid(current->process->pid);
+	set_forepid(pid);
 }
 
 void set_state(int pid, int state)

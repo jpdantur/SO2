@@ -5,7 +5,7 @@ int sem;
 void shm_init()
 {
 	sem=1;
-	shmem = allocate();
+	shmem = malloc(sizeof(void));
 }
 
 void* get_mem()

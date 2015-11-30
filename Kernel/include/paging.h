@@ -1,11 +1,7 @@
-#include <alloc.h>
-#include <const.h>
-#include <types.h>
-#include <kernel.h>
-#include <keyboard.h>
-//#include <stdint.h>
+#ifndef PAG_H
+#define PAG_H
 
-#define PAGE_SIZE       4096U
+#include <types.h>
 
 typedef struct {
   unsigned long res1 	: 3;
@@ -112,4 +108,19 @@ uint64 READ_CR2();
 
 // PAGING FUNCTIONS
 void PagingInitialize();
-void l4_table_test();
+void FreeL4(L4_TABLE* l4t);
+void FreeL3(L3_TABLE* l3t);
+uint64 AllocNewProcessStack(L4_TABLE* l4t, uint64 entryPoint);
+L4_TABLE* NewProcessPagination();
+
+L1_TABLE* CreateIdentityL1Table(int readWrite, int userSupervisor, int offsetIndex);
+L4_TABLE * InitializeIdentityDirectories();
+L4_TABLE* NewL4Table();
+uint64 AddPage(L4_TABLE* l4t, Offsets* offsets, int rw, int us);
+L3_TABLE* GetL3(L4_TABLE* l4t, uint64 offset, int rw, int us);
+L2_TABLE* GetL2(L3_TABLE* l3t, uint64 offset, int rw, int us);
+L1_TABLE* GetL1(L2_TABLE* l2t, uint64 offset, int rw, int us);
+uint64 GetPhysicalPage(L1_TABLE* l1t, uint64 offset, int rw, int us);
+
+
+#endif
