@@ -91,6 +91,8 @@ void kill(int pid)
 			set_parents(pid,this->process->ppid);
 			remove_process(this->process);
 			flag=1;
+			//if (this==current)
+			//	set_rsp(switch_kernel_to_user());
 		}
 		this=this->next;
 	}while (this != start && flag == 0);
@@ -111,7 +113,7 @@ void set_parents(int pid, int ppid)
 }
 void next_process()
 {
-	//__video_debug('h');
+	//__video_debug(current->process->pid+'0');
 	do
 	{
 		current=current->next;
@@ -130,6 +132,7 @@ void * switch_kernel_to_user() {
 }
 
 void * switch_user_to_kernel(void * esp) {
+	//video_print("wassap");
 	if (current==NULL)
 		return esp;
 	//__video_debug('h');

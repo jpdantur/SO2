@@ -62,10 +62,25 @@ setParams:
 _int80Handler:
 	pushaq
 	sti
+;	cmp rax,9
+;	je .a1
+;	cmp rax,11
+;	je .a1
+.a2:
 	call setParams
 	call int80
 	popaq
 	iretq
+;.a1:
+;	mov rdi,rsp
+;	call switch_user_to_kernel
+;	mov rsp,rax
+;	call setParams
+;	call int80
+;	call switch_kernel_to_user
+;	mov rsp,rax
+;	popaq
+;	iretq
 
 _timerTick:
 	pushaq

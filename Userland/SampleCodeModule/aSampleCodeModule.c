@@ -15,6 +15,7 @@ int main() {
 
 	//Clean BSS
 	memset(&bss, 0, &endOfBinary - &bss);
+	//print("hola");
 	int pid = newproc(&shell, "shell",1);
 	//printint(pid);
 	//while(1)
