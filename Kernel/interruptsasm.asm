@@ -107,8 +107,7 @@ _timerTick:
 	popaq
 	iretq
 switch_context:
-	push rbp
-	mov rbp,rsp
+	pushaq
 	mov rdi, rsp
 	call switch_user_to_kernel
 
@@ -121,8 +120,12 @@ switch_context:
 	je .end
 	mov rsp, rax
 .end:
-	mov rsp,rbp
-	pop rbp
+	;call timerTick
+	
+	;mov al,0x20
+	;out 0x20,al
+
+	popaq
 	ret
 _keyboard:
     pushaq

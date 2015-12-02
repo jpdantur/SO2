@@ -1,7 +1,8 @@
 #include <alloc.h>
 #include <scheduler.h>
 #include <shmem.h>
-
+#include <video.h>
+#include <naiveConsole.h>
 void * shmem;
 int sem;
 Nodo * waiting_first;
@@ -23,38 +24,82 @@ void* get_mem()
 
 void down()
 {
+	//return;
+	disable_i();
+	if (sem>0)
+	{
+		__print_debug("Baja sem ");
+		sem--;
+		enable_i();
+		return;
+	}
+	//video_print("Hola");
+	//while(1);
 	Nodo *aux;
 	aux = malloc(sizeof(Nodo));
-	get_current()->process->state=SLEEPING;
+	process_slot *cur =get_current();
+	aux->pid=get_pid();
+	aux->next=NULL;
+	//cur->process->state=SLEEPING;
 	if (waiting_first==NULL)
 	{
-		if (sem==0)
-		{
 			waiting_first = aux;
 			waiting_last = aux;
-		}
-		else
-		{
-			sem=0;
-		}
-
 	}
 	else
 	{
 		waiting_last->next=aux;
 		waiting_last=aux;
 	}
+	cur->process->state=SLEEPING;
+	//list();
+	//while(1);
+	//switch_context();
+	//video_print("Hola");
+	//while(1);
+	//switch_context();
+	enable_i();
 	switch_context();
+	//list();
+	//int i =0;
+	//for (i=0;i<300000000;i++);
+	//switch_context();
+	//video_print("Hola");
+	//while(1);
 }
 
 void up()
 {	
-	sem=1;
-	Nodo * aux = waiting_first;
-	if (waiting_first!=NULL)
+	//return;
+	disable_i();
+	//video_print("Hola");
+	if (waiting_first==NULL)
 	{
+		//video_print("aa");
+		//while(1);
+		sem++;
+	}
+	else
+	{
+		video_print("Llegue aca\n");
+		Nodo * aux = waiting_first;
+		//ncPrintDec(waiting_first->pid);
+		//while(1);
 		set_state(waiting_first->pid,ACTIVE);
+		//video_print("Hola");
+		//while(1);
 		waiting_first=waiting_first->next;
 		free(aux);
+		//video_print("Hola");
+		//while(1);
+		//__print_debug("m");
+		//list();
+		//while(1);
 	}
+	//list();
+	//while(1);
+	//while(1);
+	enable_i();
+	//video_print("Hola");
+	//while(1);
 }

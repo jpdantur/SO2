@@ -6,13 +6,14 @@
 void semafor_down()
 {
 	sem_down();
-	//print("Baje semaforo");
+	print("Baje semaforo");
 	int i;
 	for (i=0;i<300000000;i++);
 	//int times=0;
 	//while(1);
 	sem_up();
-	//print("Subi");
+	//while(1)
+		print("Subi");
 	//fore(getppid());
 	while(1);
 }
@@ -22,7 +23,8 @@ void semafor_test()
 	print("Intento bajar sem\n");
 	sem_down();
 	print("baje sem\n");
-	sem_up();
+	//sem_up();
+	//while(1);
 	print("levante sem\n");
 	fore(getppid());
 	while(1);

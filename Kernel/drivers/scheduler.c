@@ -114,7 +114,7 @@ void set_parents(int pid, int ppid)
 }
 void next_process()
 {
-	//__video_debug(current->process->pid+'0');
+	int i=0;
 	do
 	{
 		current=current->next;
@@ -127,7 +127,7 @@ void * switch_kernel_to_user() {
 		//__video_debug('l');
 		return 0;
 	}
-	//__video_debug('o');
+	__video_debug('o');
 	next_process();
 	return current->process->regs;
 }
@@ -136,7 +136,7 @@ void * switch_user_to_kernel(void * esp) {
 	//video_print("wassap");
 	if (current==NULL)
 		return esp;
-	//__video_debug('h');
+	__video_debug('h');
 	Process * process = current->process;
 	process->regs = esp;
 	return process->kernel;
@@ -236,6 +236,11 @@ void set_state(int pid, int state)
 		{
 			this->process->state=state;
 			flag=1;
+			if (state==SLEEPING)
+				video_print("Lo dormi");
+			else
+				video_print("Lo desperte");
+			//magicflag++;
 		}
 		this=this->next;
 	}while (this != start && flag == 0);

@@ -7,7 +7,15 @@ global set_rax
 global set_rbx
 global set_rcx
 global set_rdx
+global enable_i
+global disable_i
 
+enable_i:
+	sti
+	ret
+disable_i:
+	cli
+	ret
 ;global write_port
 read_port:
 	push rbp

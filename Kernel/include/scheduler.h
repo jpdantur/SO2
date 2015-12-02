@@ -2,6 +2,8 @@
 #define ACTIVE 1
 #include <stdint.h>
 #define NULL 0
+
+//Process_slot sleepy;
 //typedef unsigned long uint64_t;
 //typedef unsigned char uint8_t;
 typedef struct
