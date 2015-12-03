@@ -94,12 +94,11 @@ _timerTick:
 
 	; schedule, get new process's RSP and load it
 	call switch_kernel_to_user
-	;xchg bx, bx
+
 	cmp rax,0
 	je .end
 	mov rsp, rax
 .end:
-	;call timerTick
 	
 	mov al,0x20
 	out 0x20,al
@@ -108,6 +107,18 @@ _timerTick:
 	iretq
     
 switch_context:
+
+        pop         QWORD[ret_addr]             ;Direccion de retorno
+
+        mov         QWORD[ss_addr],     ss      ;Stack Segment
+        push        QWORD[ss_addr]
+
+        push        rsp
+        pushf                                   ;Se pushean los flags
+        mov         QWORD[cs_addr],     cs      ;Code Segment
+        push        QWORD[cs_addr]
+        push        QWORD[ret_addr]             ;Direccion de retorno
+
 	pushaq
 	mov rdi, rsp
 	call switch_user_to_kernel
@@ -119,7 +130,7 @@ switch_context:
 	mov rsp, rax
 
 	popaq
-	ret
+	iretq
 
 _keyboard:
     pushaq
@@ -158,3 +169,10 @@ picSlaveMask:
 _sti:
 	sti
 	ret
+
+ret_addr:
+        resq 1
+cs_addr:
+        resq 1
+ss_addr:
+        resq 1

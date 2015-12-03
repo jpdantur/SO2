@@ -63,6 +63,7 @@ int get_forepid();
 void set_forepid (int p);
 void delete(process_slot *p);
 process_slot * get_current();
+process_slot * get_next();
 void set_current_fore(int pid);
 void kill(int pid);
 void set_parents(int pid, int ppid);

@@ -5,6 +5,7 @@
 #include <alloc.h>
 #include <scheduler.h>
 #include <shmem.h>
+#include <paging.h>
 
 #define SYSCALL_READ 3
 #define SYSCALL_WRITE 4
@@ -31,6 +32,8 @@ void set_rax(char c);
 
 void int80(int *p1, int rbx, int rdx)
 {
+	//switch_u2k();
+
 	char call = get_rax();
 	//video_print("Rax vale: ");
 	//video_write_byte(p1+'0');
@@ -45,6 +48,7 @@ void int80(int *p1, int rbx, int rdx)
 	switch (call)
 	{
 		case SYSCALL_SEM_UP:
+
 			up();
 			//video_print("AAAA");
 			break;
@@ -143,6 +147,8 @@ void int80(int *p1, int rbx, int rdx)
 	 		break;
 	}
 	//video_print("AA");
+
+	//switch_k2u();
 }
 
 void timerTick()

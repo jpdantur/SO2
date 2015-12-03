@@ -6,10 +6,10 @@
 #include <kernel.h>
 #include <const.h>
 
-void * shmem;
-int sem;
-Nodo * waiting_first;
-Nodo * waiting_last;
+static void * shmem;
+static int sem;
+static Nodo * waiting_first;
+static Nodo * waiting_last;
 
 
 void shm_init()
@@ -27,13 +27,16 @@ void* get_mem()
 
 void down()
 {
-	int interruptStatus = SetInterruptions(FALSE);
+
+
 	if (sem == 1)
 	{
 		__print_debug("Baja sem ");
 		sem = 0;
-		SetInterruptions(interruptStatus);
+
 		return;
+	}else{
+		ncPrint("2 PROCESO");
 	}
 	Nodo *aux;
 	aux = malloc(sizeof(Nodo));
@@ -51,24 +54,23 @@ void down()
 		waiting_last=aux;
 	}
 	cur->process->state=SLEEPING;
-	SetInterruptions(interruptStatus);
+
 	switch_context();
 }
 
 void up()
 {	
-	int interruptStatus = SetInterruptions(FALSE);
+
 	if (waiting_first==NULL)
 	{
 		sem = 1;
 	}
 	else
 	{
-		video_print("Llegue aca\n");
+		video_print("\\n");
 		Nodo * aux = waiting_first;
 		set_state(waiting_first->pid,ACTIVE);
 		waiting_first=waiting_first->next;
-		free(aux);
 	}
-	SetInterruptions(interruptStatus);
+
 }

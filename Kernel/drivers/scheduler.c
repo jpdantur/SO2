@@ -24,6 +24,14 @@ process_slot * get_current()
 	return current;
 }
 
+process_slot * get_next(){
+	process_slot * aux = current;
+	do{
+		aux=aux->next;
+	} while(aux->process->state==SLEEPING || aux->process->pid == 0);
+	return aux;
+}
+
 void list()
 {
 	process_slot * this = current;
@@ -96,8 +104,6 @@ void kill(int pid)
 			set_parents(pid,this->process->ppid);
 			remove_process(this->process);
 			flag=1;
-			//if (this==current)
-			//	set_rsp(switch_kernel_to_user());
 		}
 		this=this->next;
 	}while (this != start && flag == 0);
@@ -122,7 +128,7 @@ void next_process()
 	do
 	{
 		current=current->next;
-	} while(current->process->state==SLEEPING);
+	} while(current->process->state==SLEEPING || current->process->pid == 0);
 }
 
 void * switch_kernel_to_user() {
@@ -163,6 +169,7 @@ Process *new_process(void * entry_point, char *name) {
 	nextpid++;
 	return p;
 }
+
 process_slot * new_process_slot(Process *p)
 {
 	process_slot * ret = malloc(sizeof(process_slot));
