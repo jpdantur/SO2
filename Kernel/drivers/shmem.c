@@ -16,7 +16,7 @@ void shm_init()
 {
 	waiting_first=NULL;
 	waiting_last=NULL;
-	sem=1;
+	sem = 1;
 	shmem = malloc(sizeof(int));
 }
 
@@ -28,11 +28,10 @@ void* get_mem()
 void down()
 {
 	int interruptStatus = SetInterruptions(FALSE);
-	disable_i();
-	if (sem>0)
+	if (sem == 1)
 	{
 		__print_debug("Baja sem ");
-		sem--;
+		sem = 0;
 		SetInterruptions(interruptStatus);
 		return;
 	}
@@ -61,7 +60,7 @@ void up()
 	int interruptStatus = SetInterruptions(FALSE);
 	if (waiting_first==NULL)
 	{
-		sem++;
+		sem = 1;
 	}
 	else
 	{

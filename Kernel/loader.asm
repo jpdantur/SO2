@@ -1,6 +1,10 @@
 global loader
 extern main
 extern initializeKernelBinary
+extern stackInit
+
+extern 		kernel_stack
+
 
 global 		WRITE_CR2
 global 		READ_CR2
@@ -13,8 +17,9 @@ global		switch_u2k
 global 		switch_k2u
 
 loader:
-	call initializeKernelBinary	; Set up the kernel binary, and get thet stack address
-	mov rsp, rax				; Set up the stack with the returned address
+	call initializeKernelBinary	
+	call stackInit
+	mov rsp, rax				
 	push rax
 	call main
 hang:
@@ -49,11 +54,12 @@ TURN_ON_INTERRUPTS:
 TURN_OFF_INTERRUPTS:
 		cli
 		ret
+		
 switch_u2k:
 		pop 		QWORD[ret_addr] 			;Direccion de retorno
 
 		mov 		QWORD[task_stack], rsp
-		mov 		rsp, [0x300000]
+		mov 		rsp, QWORD[kernel_stack]
 
 		push 		QWORD[ret_addr]
 		ret
@@ -62,7 +68,7 @@ switch_u2k:
 switch_k2u:
 		pop 		QWORD[ret_addr] 			;Direccion de retorno
 
-		mov 		[0x300000], rsp
+		mov 		QWORD[kernel_stack], rsp
 		mov 		rsp, QWORD[task_stack]
 
 		push 		QWORD[ret_addr]

@@ -37,9 +37,7 @@ typedef struct
 {
 	void * entry;
 	stack_frame * regs;
-	stack_frame * kernel;
 	stack_frame * regs_page;
-	stack_frame * kernel_page;
 	int state;
 	int pid;
 	int ppid;
@@ -51,7 +49,6 @@ typedef struct slot
 	Process * process;
 	struct slot * next;
 } process_slot;
-
 
 void next_process();
 int enqueue(Process *p);

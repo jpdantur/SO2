@@ -106,6 +106,7 @@ _timerTick:
 
 	popaq
 	iretq
+    
 switch_context:
 	pushaq
 	mov rdi, rsp
@@ -115,18 +116,11 @@ switch_context:
 
 	; schedule, get new process's RSP and load it
 	call switch_kernel_to_user
-	;xchg bx, bx
-	cmp rax,0
-	je .end
 	mov rsp, rax
-.end:
-	;call timerTick
-	
-	;mov al,0x20
-	;out 0x20,al
 
 	popaq
 	ret
+
 _keyboard:
     pushaq
     call keyboard

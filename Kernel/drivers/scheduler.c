@@ -3,23 +3,27 @@
 #include <video.h>
 
 //Aca va el scheduler
-process_slot *current=NULL;
-int forepid=0;
-int nextpid=0;
+static process_slot *current=NULL;
+static int forepid=0;
+static int nextpid=0;
 
+extern void* kernel_stack;
 
 int get_pid()
 {
 	return current->process->pid;
 }
+
 int get_ppid()
 {
 	return current->process->ppid;
 }
+
 process_slot * get_current()
 {
 	return current;
 }
+
 void list()
 {
 	process_slot * this = current;
@@ -124,22 +128,19 @@ void next_process()
 void * switch_kernel_to_user() {
 	if (current==NULL)
 	{
-		//__video_debug('l');
 		return 0;
 	}
-	__video_debug('o');
 	next_process();
 	return current->process->regs;
 }
 
-void * switch_user_to_kernel(void * esp) {
-	//video_print("wassap");
+void * switch_user_to_kernel(void * rsp) {
 	if (current==NULL)
-		return esp;
-	__video_debug('h');
+		return rsp;
 	Process * process = current->process;
-	process->regs = esp;
-	return process->kernel;
+	process->regs = rsp;
+
+	return kernel_stack;
 }
 
 void * to_stack_address(void * page) {
@@ -149,10 +150,8 @@ void * to_stack_address(void * page) {
 Process *new_process(void * entry_point, char *name) {
 	Process *p = malloc(sizeof(Process));
 	p->entry=entry_point;
-	p->regs_page=malloc(sizeof(stack_frame));
-	p->kernel_page=malloc(sizeof(stack_frame));
+	p->regs_page=malloc(4096);
 	p->regs=to_stack_address(p->regs_page);
-	p->kernel = to_stack_address(p->kernel_page);
 	p->regs = fill_stack_frame(entry_point, p->regs);
 	p->state=ACTIVE;
 	p->pid=nextpid;
@@ -215,7 +214,6 @@ void delete(process_slot *p)
 	if (get_forepid()==p->process->pid)
 		set_forepid(p->process->ppid);
 	free(p->process->regs_page);
-	free(p->process->kernel_page);
 	free(p->process);
 	free(p);
 }

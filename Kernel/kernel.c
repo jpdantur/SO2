@@ -38,21 +38,24 @@ void setup_IDT_entry (int index, word selector, ddword offset, byte access);
 
 typedef int (*EntryPoint)();
 
+void *kernel_stack = NULL;
+
+#define KB(s) ((s) << 10)
+#define STACK_SIZE KB(128)
+
+void* stackInit() {
+	kernel_stack = malloc(STACK_SIZE);
+	kernel_stack = kernel_stack + STACK_SIZE;
+
+	return kernel_stack;
+}
+
 void clearBSS(void * bssAddress, uint64_t bssSize)
 {
 	memset(bssAddress, 0, bssSize);
 }
 
-void * getStackBase()
-{
-	return (void*)(
-		(uint64_t)&endOfKernel
-		+ PageSize * 8				//The size of the stack itself, 32KiB
-		- sizeof(uint64_t)			//Begin at the top of the stack
-	);
-}
-
-void * initializeKernelBinary()
+void initializeKernelBinary()
 {
 	ncPrint("[x64BareBones]");
 	ncNewline();
@@ -76,8 +79,10 @@ void * initializeKernelBinary()
 	ncNewline();
 
 	clearBSS(&bss, &endOfKernel - &bss);
+
 	PageManagmentInitialize();
 	PagingInitialize();
+
 	ncPrint("  text: 0x");
 	ncPrintHex((uint64_t)&text);
 	ncNewline();
@@ -94,7 +99,7 @@ void * initializeKernelBinary()
 	ncPrint("[Done]");
 	ncNewline();
 	ncNewline();
-	return getStackBase();
+	return;
 }
 
 int main()
