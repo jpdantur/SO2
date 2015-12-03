@@ -91,6 +91,7 @@ _timerTick:
 	call switch_user_to_kernel
 
 	mov rsp, rax
+    call timerTick
 
 	; schedule, get new process's RSP and load it
 	call switch_kernel_to_user

@@ -6,9 +6,36 @@
 static process_slot *current=NULL;
 static int forepid=0;
 static int nextpid=0;
+static int sleeping_pid;
+static int sleep_time;
+static int sleep_flag=0;
 
 extern void* kernel_stack;
 
+void sched_sleep(int param_time, int pid)
+{
+	sleeping_pid=pid;
+	sleep_time=param_time;
+	//video_write_byte(param_time+'0');
+	sleep_flag=1;
+	set_state(pid,SLEEPING);
+	//__print_debug("Entra aca");
+	//__video_debug(pid+'0');
+	switch_context();
+}
+void sched_check_sleep()
+{
+	if (sleep_flag==1)
+	{
+		sleep_time--;
+		//__video_debug(sleep_time+'0');
+		if (sleep_time==0)
+		{
+			set_state(sleeping_pid,ACTIVE);
+			sleep_flag=0;
+		}
+	}
+}
 int get_pid()
 {
 	return current->process->pid;

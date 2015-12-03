@@ -20,5 +20,5 @@ void kill(int pid);
 void list();
 int newproc2(void *entry, char * name);
 int getpid();
-
+void sleep(int time);
 #endif

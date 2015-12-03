@@ -7,8 +7,8 @@ void semafor_down()
 {
 	sem_down();
 	//print("\nP1: Baje semaforo\n");
-	int i;
-	for (i=0;i<300000000;i++);
+	//int i;
+	sleep(5);
 	//int times=0;
 	//while(1);
 	sem_up();

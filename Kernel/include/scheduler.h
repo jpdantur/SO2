@@ -70,3 +70,5 @@ void set_parents(int pid, int ppid);
 void set_state(int pid, int state);
 int get_pid();
 int get_ppid();
+void sched_sleep(int param_time, int pid);
+void sched_check_sleep();

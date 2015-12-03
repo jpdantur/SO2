@@ -1,4 +1,12 @@
 #include <lib.h>
+
+void sleep(int time)
+{
+    int pid=getpid();
+    //print("Pid es: ");
+    //putchar(pid+'0');
+    sys_sleep(pid,(int)(time*18.18182));
+}
 void sem_up()
 {
     sys_sem_up();

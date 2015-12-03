@@ -14,6 +14,25 @@ global sys_getppid
 global sys_sem_up
 global sys_sem_down
 global sys_get_mem
+global sys_sleep
+
+
+sys_sleep:
+	push rbp
+	mov rbp,rsp
+	push rax
+	push rdx
+
+	mov rax, 18 ; sys_call_sleep
+	mov rdx, rdi
+	mov rcx, rsi
+	int 80h
+
+	pop rdx
+	pop rax
+	mov rsp,rbp
+	pop rbp
+	ret
 
 sys_get_mem:
 	push rbp

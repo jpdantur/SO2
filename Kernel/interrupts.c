@@ -23,6 +23,7 @@
 #define SYSCALL_SEM_UP 15
 #define SYSCALL_SEM_DOWN 16
 #define SYSCALL_GET_MEM 17
+#define SYSCALL_SLEEP 18
 
 char get_call(void);
 char get_rax(void);
@@ -47,6 +48,10 @@ void int80(int *p1, int rbx, int rdx)
 	
 	switch (call)
 	{
+		case SYSCALL_SLEEP:
+			//video_write_byte(rdx+'0');
+			sched_sleep((int)p1,rdx);
+			break;
 		case SYSCALL_SEM_UP:
 
 			up();
@@ -153,7 +158,8 @@ void int80(int *p1, int rbx, int rdx)
 
 void timerTick()
 {
-	video_screen_saver_check_count();
+	//video_screen_saver_check_count();
+	sched_check_sleep();
 }
 
 void keyboard()
