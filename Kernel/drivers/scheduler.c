@@ -241,10 +241,10 @@ void set_state(int pid, int state)
 		{
 			this->process->state=state;
 			flag=1;
-			if (state==SLEEPING)
-				video_print("Lo dormi");
+			/*if (state==SLEEPING)
+				//video_print("Lo dormi");
 			else
-				video_print("Lo desperte");
+				//video_print("Lo desperte");*/
 			//magicflag++;
 		}
 		this=this->next;

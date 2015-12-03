@@ -149,7 +149,7 @@ int shell_command_execute(tCommand * command)
 	int retval;
 	if (strcmp("ipc",primary)==0 && *args==0)
 	{
-		print("Lista de IPCS:\n1. Semaforo\n Para testear utilice semtest");
+		print("Lista de IPCS:\n1. Semaforo\n Para testear utilice semtest\n");
 		retval=0;
 	}
 	else if (strcmp("semtest",primary)==0 && *args==0)

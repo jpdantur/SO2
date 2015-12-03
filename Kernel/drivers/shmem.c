@@ -31,12 +31,12 @@ void down()
 
 	if (sem == 1)
 	{
-		__print_debug("Baja sem ");
+		//__print_debug("Baja sem ");
 		sem = 0;
 
 		return;
 	}else{
-		ncPrint("2 PROCESO");
+		//ncPrint("2 PROCESO");
 	}
 	Nodo *aux;
 	aux = malloc(sizeof(Nodo));
@@ -67,7 +67,7 @@ void up()
 	}
 	else
 	{
-		video_print("\\n");
+		//video_print("\\n");
 		Nodo * aux = waiting_first;
 		set_state(waiting_first->pid,ACTIVE);
 		waiting_first=waiting_first->next;

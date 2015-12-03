@@ -116,7 +116,7 @@ void int80(int *p1, int rbx, int rdx)
 			break;
 
 		case SYSCALL_WRITE:
-			//while(get_current()->process->pid!=get_forepid());
+			while(get_current()->process->pid!=get_forepid());
 			for (i = 0; i < rdx; i++)
 			{
 				video_write_byte(*p);
