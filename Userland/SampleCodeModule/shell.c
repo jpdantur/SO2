@@ -169,7 +169,7 @@ int shell_command_execute(tCommand * command)
 	else if (strcmp("dummy",primary) == 0 && *args==0)
 	{
 		int n=newproc(&stack1,"stack1",1);
-		kill(n);
+		//kill(n);
 		retval = 0;
 	}
 	else if (strcmp("dummy",primary) == 0 && strcmp("&",args)==0)
@@ -267,7 +267,7 @@ int shell_command_execute(tCommand * command)
 		print("  test\n");
 		print("      Probar funciones de impresion\n");
 		print("  dummy\n");
-		print("       Funcion que imprime "dummy" en pantalla. Se utiliza para testear el argumento &\n");
+		print("       Funcion que imprime \'dummy\' en pantalla. Se utiliza para testear el argumento &\n");
 		print("  kill [pid]\n");
 		print("      Matar proceso por pid\n");
 		print("  ipc\n");

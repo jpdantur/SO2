@@ -63,7 +63,7 @@ void semafor_test()
 }
 void stack1()
 {
-	print("dummy");
+	print("dummy\n");
 	fore(getppid());
 	while(1);
 }
