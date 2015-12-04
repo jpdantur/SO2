@@ -5,40 +5,65 @@
 
 void semafor_down()
 {
+	int* shmem = get_mem();
+
+	fore(getpid());
+	print("Proceso 1 intenta bajar semaforo\n");
+
 	sem_down();
-	//print("\nP1: Baje semaforo\n");
-	//int i;
+
+	fore(getpid());
+	print("Proceso 1 baja semaforo:\n");
+	print("    Variable en shared memory tiene valor:\n");
+	print("    ");
+	printint(*shmem);
+	*shmem = *shmem + 2;
+	print("\n    Se le suma 2 y ahora tiene valor:\n");
+	print("    ");
+	printint(*shmem);
+	print("\n");
+
 	sleep(5);
-	//int times=0;
-	//while(1);
+
 	sem_up();
-	//while(1)
-	//print("P1: Subi sem \n");
-	//fore(getppid());
+	fore(getpid());
+	print("Proceso 1 levanta semaforo\n");
+
+	fore(getppid());
 	while(1);
 }
 
 void semafor_test()
 {
-	print("P2: Intento bajar sem\n");
+	int* shmem = get_mem();
+
+	fore(getpid());
+	print("Proceso 2 intenta bajar semaforo\n");
+
 	sem_down();
-	print("P2: baje sem\n");
+
+	fore(getpid());
+	print("Proceso 2 baja semaforo:\n");
+	print("    Variable en shared memory tiene valor:\n");
+	print("    ");
+	printint(*shmem);
+	*shmem = *shmem + 3;
+	print("\n    Se le suma 3 y ahora tiene valor:\n");
+	print("    ");
+	printint(*shmem);
+	print("\n");
 	sem_up();
-	//while(1);
-	print("P2: levante sem\n");
+	fore(getpid());
+	print("Proceso 2 levanta semaforo\n");
+
 	fore(getppid());
 	while(1);
+
+
 }
 void stack1()
 {
-	int a;
-	print("a vale: ");
-	printint(a);
-	print("\n");
-	a=10;
-	print("ahora a vale: ");
-	printint(a);
-	print("\n");
+	print("dummy");
 	fore(getppid());
 	while(1);
 }

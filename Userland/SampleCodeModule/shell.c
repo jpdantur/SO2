@@ -12,7 +12,7 @@ void shell()
 {
 	//Solves constant space problem
 	//fore();
-	char * _sssss = "Bienvenido a la consola de arqui, la mejor consola de todas\n";
+	char * _sssss = "Bienvenido\n";
 	print(_sssss);
 	//print("\nsss"); printhex((int)_sssss);
 	//print("\nbss"); printhex((int)&bss);
@@ -39,7 +39,7 @@ void shell()
 	*h5=2;
 	printint(*h5);*/
 	//while(1);
-	print ("Introducir nombre de usuario (Max 20 caracteres)>");
+	print ("Introducir nombre de usuario:");
 	a = scan(name, 21);
 	
 	while(a==0)
@@ -149,7 +149,7 @@ int shell_command_execute(tCommand * command)
 	int retval;
 	if (strcmp("ipc",primary)==0 && *args==0)
 	{
-		print("Lista de IPCS:\n1. Semaforo\n Para testear utilice semtest\n");
+		print("Lista de IPCS:\n1. Semaforo  -  Para testear utilice el comando semtest. Esta funcion imprime en pantalla siempre.\n");
 		retval=0;
 	}
 	else if (strcmp("semtest",primary)==0 && *args==0)
@@ -166,29 +166,15 @@ int shell_command_execute(tCommand * command)
 		else
 			retval=0;
 	}
-	else if (strcmp("stack1",primary) == 0 && *args==0)
+	else if (strcmp("dummy",primary) == 0 && *args==0)
 	{
 		int n=newproc(&stack1,"stack1",1);
-		print("listo, ya corrio\n");
 		kill(n);
 		retval = 0;
 	}
-	else if (strcmp("stack1",primary) == 0 && strcmp("&",args)==0)
+	else if (strcmp("dummy",primary) == 0 && strcmp("&",args)==0)
 	{
 		newproc(&stack1,"stack1",0);
-		retval = 0;
-	}
-	else if (strcmp("stack2",primary) == 0 && *args==0)
-	{
-		int n=newproc(&stack2,"stack2",1);
-		print("listo, ya corrio\n");
-		kill(n);
-		//retval = 0;
-		retval = 0;
-	}
-	else if (strcmp("stack2",primary) == 0 && strcmp("&",args)==0)
-	{
-		newproc(&stack2,"stack2",0);
 		retval = 0;
 	}
 	else if (strcmp("ps",primary) == 0 && *args==0)
@@ -268,19 +254,26 @@ int shell_command_execute(tCommand * command)
 	else if (strcmp("help", primary) == 0 && *args==0)
 	{
 		print("Menu de Ayuda\n");
-		print("Configurar screensaver: set_screensaver [segs]\n");
-		print("Ver la hora del sistema: time\n");
-		print("Setear la hora del sistema: set_time [hora - HH:MM:SS]\n");
-		print("Setear hora/min/seg del sistema (Por separado): set_[hour| min|sec] [value]\n");
-		print("Imprimir en pantalla: echo [value]\n");
-		print("Probar funciones de impresion: test\n");
-		print("Stack1 fore: stack1\n");
-		print("Stack1 back: stack1 &\n");
-		print("Stack2 fore: stack2\n");
-		print("Stack2 back: stack2 &\n");
-		print("Matar proceso por pid: kill n\n");
-		print("Ver ipcs: ipc\n");
-		print("Ver procesos: ps \n");
+		print("  set_screensaver [segs]\n");
+		print("      Configurar screensaver\n");
+		print("  time\n");
+		print("      Ver la hora del sistema\n");
+		print("  set_time [hora - HH:MM:SS]\n");
+		print("      Setear la hora del sistema\n");
+		print("  set_[hour|min|sec] [value]\n");
+		print("      Setear hora/min/seg del sistema\n");
+		print("  echo [value]\n");
+		print("      Imprimir en pantalla\n");
+		print("  test\n");
+		print("      Probar funciones de impresion\n");
+		print("  dummy\n");
+		print("       Funcion que imprime "dummy" en pantalla. Se utiliza para testear el argumento &\n");
+		print("  kill [pid]\n");
+		print("      Matar proceso por pid\n");
+		print("  ipc\n");
+		print("      Ver ipcs implementados junto con su funcion de test\n");
+		print("  ps\n");
+		print("      Ver procesos junto con su estado\n");
 		retval = 0;
 	}
 	else

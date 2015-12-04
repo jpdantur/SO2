@@ -21,4 +21,5 @@ void list();
 int newproc2(void *entry, char * name);
 int getpid();
 void sleep(int time);
+void * get_mem();
 #endif
