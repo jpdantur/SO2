@@ -7,6 +7,3 @@ nasm qemu gcc make
 2- Execute following command in project folder (builds and runs kernel)
 
   user@linux:$ ./run.sh
-
-
-Authors: Wally Dantur (jpdantur), Juan Pascale (jpascale)
